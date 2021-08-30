@@ -1,16 +1,19 @@
 const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 require("dotenv").config();
+
 const env = process.env;
 
-router.post("/signup", async (req, res) => {
+const userService = require("../service/userServices");
+
+router.post("/usersignup", async (req, res) => {
 	try {
 		var { firstname, lastname, phone, email, adharNo, password } = req.body;
 
-		var check = await User.find({ email: email });
+		var check = await userService.findByEmail(email);
 
-		if (check != []) {
-			res.send({ success: false, message: "Account already exist" });
+		if (Object.keys(check).length) {
+			res.send({ success: true, message: "User already exists" });
 		}
 
 		var hashedPassword = bcrypt.hash(password, process.env.saltRounds);
@@ -22,11 +25,13 @@ router.post("/signup", async (req, res) => {
 			phone: phone,
 			email: email,
 			adharNo: adharNo,
+			panNo: pan_no,
+			voterId: voter_id,
+			passportId: passport_id,
+			createdAt: new Date(),
 		};
 
-		var data = new User(modelData);
-
-		var resp = await User.create(data);
+		var resp = userService.createUser(modelData);
 
 		console.log(resp, "\nIam the resp\n");
 
@@ -35,25 +40,24 @@ router.post("/signup", async (req, res) => {
 		console.log(err, "\nError in signup\n");
 		res.send({ success: false, message: err.message });
 	}
-  
 });
 
-router.post("/login", async (req, res) => {
+router.post("/userlogin", async (req, res) => {
 	try {
 		var { email, password } = req.body;
 
-		var check = await User.find({ email: email });
+		var check = await userService.findByEmail(email);
 
-		if (check != []) {
+		if (Object.keys(check).length == 0) {
 			res.send({
 				success: false,
-				message: "Account doesn't exist, Please create a new one",
+				message: "No account found with that email Id",
 			});
 		}
 
-		var resp = await bcrypt.compare(password, check.password);
+		var resp = await userService.findByCredentials(email, password);
 
-		if (resp == true) {
+		if (Object.keys(resp).length == 0) {
 			res.send({ success: true, message: "You are Logged in" });
 		} else {
 			res.send({ success: false, message: "Invalid Credentials" });
@@ -67,4 +71,3 @@ router.post("/login", async (req, res) => {
 module.exports = exports = {
 	router,
 };
-
