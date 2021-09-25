@@ -2,51 +2,66 @@ const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 require("dotenv").config();
 
-const env = process.env;
+//Models
+const userModel = require("../models/userModel");
 
+// Services
 const userService = require("../service/userServices");
+const utilService = require("../service/utilService");
 
-router.post("/usersignup", async (req, res) => {
+router.post("/signup", async (req, res) => {
 	try {
-		var { firstname, lastname, phone, email, adharNo, password } = req.body;
+		var {
+			firstName,
+			lastName,
+			phone,
+			email,
+			adharNo,
+			password,
+			passportId,
+			voterId,
+			panNo,
+		} = req.body;
 
-		var check = await userService.findByEmail(email);
+		// UUID --> Every Bank will generate this UUID for every user-
 
-		if (Object.keys(check).length) {
-			res.send({ success: true, message: "User already exists" });
+		var check = await utilService.findByEmail(email, userModel);
+
+		console.log(check, "Iam the check");
+
+		if (check != null && Object.keys(check).length) {
+			res.send({ success: false, message: "User already exists" });
+		} else {
+			const hashedPassword = await utilService.hashUtil(password);
+
+			var modelData = {
+				firstname: firstName,
+				lastname: lastName,
+				password: hashedPassword,
+				phone: phone,
+				email: email,
+				adharNo: adharNo,
+				panNo: panNo,
+				voterId: voterId,
+				passportId: passportId,
+				createdAt: new Date(),
+			};
+
+			var resp = await userService.createUser(modelData);
+
+			res.send({ success: true, message: "Account created successfully" });
 		}
-
-		var hashedPassword = bcrypt.hash(password, process.env.saltRounds);
-
-		var modelData = {
-			firstname: firstname,
-			lastname: lastname,
-			password: hashedPassword,
-			phone: phone,
-			email: email,
-			adharNo: adharNo,
-			panNo: pan_no,
-			voterId: voter_id,
-			passportId: passport_id,
-			createdAt: new Date(),
-		};
-
-		var resp = userService.createUser(modelData);
-
-		console.log(resp, "\nIam the resp\n");
-
-		res.send({ success: true, message: "Account created successfully" });
 	} catch (err) {
 		console.log(err, "\nError in signup\n");
-		res.send({ success: false, message: err.message });
+		res.send({ success: false, message: err });
 	}
 });
 
-router.post("/userlogin", async (req, res) => {
+router.post("/login", async (req, res) => {
 	try {
 		var { email, password } = req.body;
 
-		var check = await userService.findByEmail(email);
+		var check = await utilService.findByEmail(email);
 
 		if (Object.keys(check).length == 0) {
 			res.send({
@@ -55,9 +70,11 @@ router.post("/userlogin", async (req, res) => {
 			});
 		}
 
-		var resp = await userService.findByCredentials(email, password);
+		var resp = await utilService.findByCredentials(email, password, userModel);
 
-		if (Object.keys(resp).length == 0) {
+		console.log(resp);
+
+		if (Object.keys(resp).length > 0) {
 			res.send({ success: true, message: "You are Logged in" });
 		} else {
 			res.send({ success: false, message: "Invalid Credentials" });
