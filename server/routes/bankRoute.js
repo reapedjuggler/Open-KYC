@@ -10,6 +10,7 @@ const bankModel = require("../models/bankModel");
 // Services:-
 const bankService = require("../service/bankService");
 const utilService = require("../service/utilService");
+const mail = require("../service/mail");
 
 router.post("/signup", async (req, res) => {
 	try {
@@ -55,9 +56,10 @@ router.post("/login", async (req, res) => {
 			});
 		}
 
-		var resp = await utilService.findByCredentials(email, password, bankdModel);
+		var resp = await utilService.findByCredentials(email, password, bankModel);
 
 		if (Object.keys(resp).length > 0) {
+			await mail.mailService();
 			res.send({ success: true, message: "You are Logged in" });
 		} else {
 			res.send({ success: false, message: "Invalid Credentials" });
@@ -71,3 +73,12 @@ router.post("/login", async (req, res) => {
 module.exports = exports = {
 	router,
 };
+// firstName:Reaped
+// lastName:Juggler
+// email:tomarvibhav55@gmail.com
+// password:Hello123
+// phone:7000305373
+// adharNo:234324234
+// panNo:1234
+// voterId:234234
+// passportId:23463287
