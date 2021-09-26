@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+require("dotenv").config();
 
 const mailService = async (receivers, sender) => {
 	// Generate test SMTP service account from ethereal.email
@@ -6,8 +7,8 @@ const mailService = async (receivers, sender) => {
 
 	try {
 		let testAccount = {
-			user: "dedrick.labadie90@ethereal.email",
-			pass: "DS2M6vpKjwmHrUmZY2",
+			user: process.env.user,
+			pass: process.env.password,
 			// user: "e5tn6exfkn22rlv3@ethereal.email",
 			srtp: { host: "smtp.ethereal.email", port: 587, secure: false },
 			imap: { host: "imap.ethereal.email", port: 993, secure: true },
