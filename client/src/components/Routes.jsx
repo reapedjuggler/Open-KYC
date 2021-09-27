@@ -1,0 +1,46 @@
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
+import SecuredRoute from '../elements/SecureRoute';
+import Dashboard from './Dashboard';
+import Login from './Login';
+import Register from './Register';
+import Forget from './Forget';
+import Reset from './Reset';
+
+export default function Routes({loggedin,setloggedin}) {
+    return (
+        <div>
+        <Router>
+            <Switch>
+            <Route exact path='/'>
+                {loggedin ?<Redirect to='/dashboard'/>:<Redirect to='/login'/>}
+            </Route>
+            <Route exact path='/login'>
+            {loggedin && <Redirect to='/dashboard'/>}
+                <Login setloggedin={setloggedin}/>
+            </Route>
+            <Route exact path='/register'>
+            {loggedin && <Redirect to='/dashboard'/>}
+                <Register/>
+            </Route>
+            <Route exact path='/forget'>
+            {loggedin && <Redirect to='/dashboard'/>}
+                <Forget/>
+            </Route>
+            <Route exact path='/reset'>
+            {loggedin && <Redirect to='/dashboard'/>}
+                <Reset/>
+            </Route>
+            <SecuredRoute 
+                loggedstate={loggedin} 
+                goto="/dashboard" 
+                goback="/" 
+                Component={Dashboard}
+            />
+            <Route>
+                <Redirect to='/' />
+            </Route>
+            </Switch>
+        </Router>
+        </div>
+    );
+}
