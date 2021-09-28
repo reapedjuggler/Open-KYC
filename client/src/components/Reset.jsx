@@ -7,7 +7,7 @@ import FormError from '../elements/FormError';
 
 export default function Loginform() {
     return (
-        <div className="min-h-screen flex bg-gray-50 justify-center items-center">
+        <div className="flex mt-4 justify-center items-center">
             <div className="w-4/5 md:w-2/5 p-5 m-6 bg-white rounded shadow-lg">
                 <Formik
                     initialValues={initialvalue}

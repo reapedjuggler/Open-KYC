@@ -11,7 +11,7 @@ export default function Loginform({setloggedin}) {
     const history = useHistory();
 
     return (
-        <div className="min-h-screen flex bg-gray-50 justify-center items-center">
+        <div className="flex mt-4 justify-center items-center">
             <div className="w-4/5 md:w-2/5 p-5 m-6 bg-white rounded shadow-lg">
                 <Formik
                     initialValues={initialvalue}
@@ -19,6 +19,7 @@ export default function Loginform({setloggedin}) {
                     validationSchema={schema}
                     onSubmit={(values, { setSubmitting, resetForm }) => {
                         console.log("hey", values, url);
+                        localStorage.setItem('amexloggedin',true);
                         setloggedin(true);
                         // setSubmitting(true);
                         // resetForm({ values: '' });
