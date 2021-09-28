@@ -1,20 +1,22 @@
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 
-const mailService = async (receivers, sender) => {
+const mailService = async (receivers, sender, data) => {
 	// Generate test SMTP service account from ethereal.email
 	// Only needed if you don't have a real mail account for testing
 
 	try {
-		let testAccount = {
-			user: process.env.user,
-			pass: process.env.password,
-			// user: "e5tn6exfkn22rlv3@ethereal.email",
-			srtp: { host: "smtp.ethereal.email", port: 587, secure: false },
-			imap: { host: "imap.ethereal.email", port: 993, secure: true },
-			pop3: { host: "pop3.ethereal.email", port: 995, secure: true },
-			web: "https://ethereal.email",
-		};
+		// let testAccount = {
+		// 	user: process.env.user,
+		// 	pass: process.env.password,
+		// 	// user: "e5tn6exfkn22rlv3@ethereal.email",
+		// 	srtp: { host: "smtp.ethereal.email", port: 587, secure: false },
+		// 	imap: { host: "imap.ethereal.email", port: 993, secure: true },
+		// 	pop3: { host: "pop3.ethereal.email", port: 995, secure: true },
+		// 	web: "https://ethereal.email",
+		// };
+
+		let testAccount = await nodemailer.createTestAccount();
 
 		// create reusable transporter object using the default SMTP transport
 		let transporter = nodemailer.createTransport({
@@ -27,13 +29,14 @@ const mailService = async (receivers, sender) => {
 			},
 		});
 
-		// send mail with defined transport object
+		console.log(sender, " ", receivers, "  ", data);
+
 		let info = await transporter.sendMail({
-			from: '"Reaped Juggler 👻" <dedrick.labadie90@ethereal.email>', // sender address
+			from: `"Reaped Juggler 👻" <${sender}>`, // sender address
 			to: "dedrick.labadie@ethereal.com, tomarvibhav@yahoo.in", // list of receivers
 			subject: "Hello ✔", // Subject line
 			text: "Hello world?", // plain text body
-			html: "<b>Hello world?</b>", // html body
+			html: data, // html body
 		});
 
 		console.log("Message sent: %s", info.messageId);

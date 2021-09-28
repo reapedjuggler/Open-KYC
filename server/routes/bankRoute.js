@@ -23,6 +23,8 @@ router.post("/signup", async (req, res) => {
 		} else {
 			const hashedPassword = await utilService.hashUtil(password);
 
+			// modelData = jo await axios.post()
+
 			var modelData = {
 				name: req.body.name,
 				ifsc_code: req.body.ifsc_code,
@@ -33,7 +35,7 @@ router.post("/signup", async (req, res) => {
 
 			modelData.password = hashedPassword;
 
-			var resp = await bankService.createBank(modelData);
+			await bankService.createBank(modelData);
 
 			res.send({ success: true, message: "Account created successfully" });
 		}

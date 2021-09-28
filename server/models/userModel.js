@@ -16,35 +16,16 @@ const userSchema = new mongoose.Schema({
 	password: {
 		type: String,
 	},
-	phone: {
-		type: Number,
-	},
-	adharNo: {
-		type: String,
-		default: "",
-	},
 	createdAt: {
 		type: Date,
 		default: "",
 	},
-
-	panNo: {
-		type: String,
-		default: "",
-	},
-	passportId: {
-		type: String,
-		default: "",
-	},
-
-	voterId: {
-		type: String,
-		default: "",
-	},
-
+	
+	// phone: {
+	// 	type: Number,
+	// },
 	// forgetToken: {
 	// 	type: Schema.Types.ObjectId,
-	// 	ref: "otps",
 	// 	default: "",
 	// },
 });

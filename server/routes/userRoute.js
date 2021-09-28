@@ -11,23 +11,11 @@ const utilService = require("../service/utilService");
 
 router.post("/signup", async (req, res) => {
 	try {
-		var {
-			firstName,
-			lastName,
-			phone,
-			email,
-			adharNo,
-			password,
-			passportId,
-			voterId,
-			panNo,
-		} = req.body;
+		var { firstName, lastName, email, password } = req.body;
 
 		// UUID --> Every Bank will generate this UUID for every user-
 
 		var check = await utilService.findByEmail(email, userModel);
-
-		console.log(check, "Iam the check");
 
 		if (check != null && Object.keys(check).length) {
 			res.send({ success: false, message: "User already exists" });
@@ -38,12 +26,7 @@ router.post("/signup", async (req, res) => {
 				firstname: firstName,
 				lastname: lastName,
 				password: hashedPassword,
-				phone: phone,
 				email: email,
-				adharNo: adharNo,
-				panNo: panNo,
-				voterId: voterId,
-				passportId: passportId,
 				createdAt: new Date(),
 			};
 
@@ -81,6 +64,25 @@ router.post("/login", async (req, res) => {
 		}
 	} catch (err) {
 		console.log(err, "\nError in login\n");
+		res.send({ success: false, message: err.message });
+	}
+});
+
+router.post("/kyc", async (req, res, next) => {
+	try {
+		const { bank, email, adharNo, panNo } = req.body;
+
+		let dataForCorda = {
+			bank: bank,
+			adharNo: adharNo,
+			panNo: panNo,
+			email: email,
+		};
+
+		let respFromCord = await userService.sendUserDataToCorda(dataForCorda);
+
+		res.send({ success: true, message: "Requested for Kyc" });
+	} catch (err) {
 		res.send({ success: false, message: err.message });
 	}
 });
