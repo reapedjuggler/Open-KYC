@@ -68,42 +68,6 @@ router.post("/login", async (req, res) => {
 	}
 });
 
-router.post("/kyc", async (req, res, next) => {
-	try {
-		const { bank, email, aadhar, pan } = req.body;
-
-		// whether this email exists or not in mongo
-
-		// whether this email already exists in corda
-
-		const cordaData = {
-			aadhar: aadhar,
-			pan: pan,
-			email: email,
-			bank: bank == "A" ? 50006 : 50033,
-			partyName: "",
-		};
-
-		console.log(req.body);
-
-		let partyName = await userService.getPartyNameFromCorda(bank);
-		console.info(partyName)
-		// partyName = partyName.message;
-
-		cordaData.partyName = partyName.message.me;
-
-		let respFromCord = await userService.sendUserDataToCorda(cordaData);
-		console.log("bsdk ye le",respFromCord)
-		if (respFromCord.success == false) throw new Error(respFromCord.message);
-
-		// console.log(respFromCord, "Iam the corda data\n");
-
-		res.send({ success: true, message: "Requested for Kyc" });
-	} catch (err) {
-		res.send({ success: false, message: err.message });
-	}
-});
-
 module.exports = exports = {
 	router,
 };

@@ -1,8 +1,11 @@
 const bcrypt = require("bcryptjs");
-const UserModel = require("../models/userModel");
 const customError = require("../utils/customError");
+
+// Models
+const UserModel = require("../models/userModel");
+
+// Constants
 const axios = require("axios");
-// let url = "http://localhost:50006/create-iou?iouValue=89&";
 class User {
 	createUser = async data => {
 		try {
@@ -25,14 +28,9 @@ class User {
 
 	sendUserDataToCorda = async data => {
 		try {
-			// http://localhost:50006/create-iou?iouValue=89&partyName=<partyName>&aadhar=<aadhar>&pan=<pan>&email=<email>
-
-			// url =
-			// 	url +
-			// 	`partyName=${data.bank}&aadhar=${data.adharNo}&pan=${data.pan}&email=${data.email}`;
-			var val = data.bank
+			var val = data.bank;
 			var url = `http://localhost:${val}/create-iou`;
-			console.log("lol",typeof url)
+			console.log("lol", typeof url);
 
 			const params = new URLSearchParams();
 			params.append("email", data.email);
@@ -48,23 +46,23 @@ class User {
 				},
 			};
 
-			console.log("bas data",data)
-			//const resp={}
+			console.log("bas data", data);
 			const resp = await axios.post(url, params, config);
-			//const resp=await axios({ method: "POST", params, config });
-			console.log(resp)
+			console.log(resp);
 			return { success: true, data: resp };
 		} catch (err) {
-			console.log(err)
-			return { success: false, message: "Problem in sending data\n"+err };
+			console.log(err);
+			return { success: false, message: "Problem in sending data\n" + err };
 		}
 	};
 
 	getPartyNameFromCorda = async data => {
 		try {
-			let url = `http://localhost:${data == "A" ? 50033 : 50006}/me`;
+			let val = data == "A" ? 50033 : 50006;
+			let url = `http://localhost:${val}/me`;
+
 			const resp = await axios({ method: "GET", url: url });
-			console.log("hat bsdk",(resp.data))
+			// console.log("Iam the data\n", resp.data);
 			return { success: true, message: resp.data };
 		} catch (err) {
 			return { success: false, message: err.message };
@@ -73,13 +71,8 @@ class User {
 
 	getUserDatafromCorda = async data => {
 		try {
-			// append adhar no pan no and email to the url
-
-			// http://localhost:50006/create-iou?iouValue=89&partyName=<partyName>&aadhar=<aadhar>&pan=<pan>&email=<email>
-
-			url =
-				url +
-				`partyName=${data.bank}&aadhar=${data.adharNo}&pan=${data.pan}&email=${data.email}`;
+			let val = data == "A" ? 50033 : 50006;
+			var url = `http://localhost:${val}/ious`;
 
 			let resp = await axios({ method: "GET", url: url });
 			return { success: true, data: resp };
