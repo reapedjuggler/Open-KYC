@@ -87,13 +87,13 @@ router.post("/kyc", async (req, res, next) => {
 		console.log(req.body);
 
 		let partyName = await userService.getPartyNameFromCorda(bank);
-
+		console.info(partyName)
 		// partyName = partyName.message;
 
-		cordaData.partyName = partyName;
+		cordaData.partyName = partyName.message.me;
 
 		let respFromCord = await userService.sendUserDataToCorda(cordaData);
-
+		console.log("bsdk ye le",respFromCord)
 		if (respFromCord.success == false) throw new Error(respFromCord.message);
 
 		// console.log(respFromCord, "Iam the corda data\n");
