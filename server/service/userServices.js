@@ -2,7 +2,6 @@ const bcrypt = require("bcryptjs");
 const UserModel = require("../models/userModel");
 const customError = require("../utils/customError");
 
-let url = "http://localhost:50006/create-iou?iouValue=89&";
 class User {
 	createUser = async data => {
 		try {
