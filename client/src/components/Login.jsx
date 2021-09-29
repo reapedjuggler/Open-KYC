@@ -15,14 +15,24 @@ export default function Loginform({setloggedin}) {
             <div className="w-4/5 md:w-2/5 p-5 m-6 bg-white rounded shadow-lg">
                 <Formik
                     initialValues={initialvalue}
-                    enableReinitialize={true}
                     validationSchema={schema}
                     onSubmit={(values, { setSubmitting, resetForm }) => {
-                        console.log("hey", values, url);
-                        localStorage.setItem('amexloggedin',true);
-                        setloggedin(true);
-                        // setSubmitting(true);
-                        // resetForm({ values: '' });
+
+                        fetch(`${url}/bank/login`,{
+                            method:'POST',
+                            headers:{'Content-Type':'application/json'},
+                            body: JSON.stringify({
+                                email:values.uuid,
+                                password:values.password
+                            })
+                        }).then(response => response.json())
+                        .then(data => {
+                            if(data.success){
+                                localStorage.setItem('amexloggedin',true);
+                                setloggedin(true);
+                            }
+                        })
+                        resetForm({ password: '' });
                     }}
                 >
                     {props => {

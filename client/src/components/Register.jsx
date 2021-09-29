@@ -5,7 +5,7 @@ import { regformvalues as initialvalue } from '../util/initial-data';
 import { regformvalidation as schema } from '../util/validations';
 import FormError from '../elements/FormError';
 
-export default function Registerform() {
+export default function Registerform({setloggedin}) {
     return (
         <div className="flex mt-4 justify-center items-center">
             <div className="w-4/5 md:w-3/5 p-5 m-6 bg-white rounded shadow-lg">
@@ -14,8 +14,22 @@ export default function Registerform() {
                     enableReinitialize={true}
                     validationSchema={schema}
                     onSubmit={(values, { setSubmitting, resetForm }) => {
-                        console.log("hey", values, url);
-                        // setSubmitting(true);
+                        fetch(`${url}/bank/signup`,{
+                            method:'POST',
+                            headers:{'Content-Type':'application/json'},
+                            body: JSON.stringify({
+                                name:values.firstname + " " + values.lastname,
+                                ifsc_code:"xyz",
+                                email:values.email,
+                                password:values.password
+                            })
+                        }).then(response => response.json())
+                        .then(data => {
+                            if(data.success){
+                                localStorage.setItem('amexloggedin',true);
+                                setloggedin(true);
+                            }
+                        })
                         // resetForm({ values: '' });
                     }}
                 >
@@ -43,6 +57,12 @@ export default function Registerform() {
                                     <FormError name="email" />
                                     <Form.Input name="phone" onChange={handleChange} onBlur={handleBlur} value={values.phone} fluid label='Phone Number' placeholder='Phone Number' />
                                     <FormError name="phone" />
+                                </Form.Group>
+                                <Form.Group widths='equal'>
+                                    <Form.Input type="password" name="password" onChange={handleChange} onBlur={handleBlur} value={values.password} fluid label='Password' placeholder='Password' />
+                                    <FormError name="password" />
+                                    <Form.Input name="confirm_password" onChange={handleChange} onBlur={handleBlur} value={values.confirm_password} fluid label='Confirm Password' placeholder='Confirm Password' />
+                                    <FormError name="confirm_password" />
                                 </Form.Group>
                                 <Form.Checkbox name="istrue" onChange={handleChange} onBlur={handleBlur} value={values.istrue} label='I agree all the information provided is true' />
                                 <FormError name="istrue" />
