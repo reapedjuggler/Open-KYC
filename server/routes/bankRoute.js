@@ -25,7 +25,7 @@ router.post("/signup", async (req, res) => {
 
 			// modelData = jo await axios.post()
 
-			var modelData = {
+			const modelData = {
 				name: req.body.name,
 				ifsc_code: req.body.ifsc_code,
 				email: req.body.email,
@@ -35,7 +35,7 @@ router.post("/signup", async (req, res) => {
 
 			modelData.password = hashedPassword;
 
-			await bankService.createBank(modelData);
+			const respFromMongo = bankService.createBank(modelData);
 
 			res.send({ success: true, message: "Account created successfully" });
 		}

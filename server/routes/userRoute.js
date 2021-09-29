@@ -29,7 +29,7 @@ router.post("/signup", async (req, res) => {
 				email: email,
 				createdAt: new Date(),
 			};
-
+			modelData.password = hashedPassword;
 			var resp = await userService.createUser(modelData);
 
 			res.send({ success: true, message: "Account created successfully" });
@@ -70,16 +70,33 @@ router.post("/login", async (req, res) => {
 
 router.post("/kyc", async (req, res, next) => {
 	try {
-		const { bank, email, adharNo, panNo } = req.body;
+		const { bank, email, aadhar, pan } = req.body;
 
-		let dataForCorda = {
-			bank: bank,
-			adharNo: adharNo,
-			panNo: panNo,
+		// whether this email exists or not in mongo
+
+		// whether this email already exists in corda
+
+		const cordaData = {
+			aadhar: aadhar,
+			pan: pan,
 			email: email,
+			bank: bank == "A" ? 50006 : 50033,
+			partyName: "",
 		};
 
-		let respFromCord = await userService.sendUserDataToCorda(dataForCorda);
+		console.log(req.body);
+
+		let partyName = await userService.getPartyNameFromCorda(bank);
+
+		// partyName = partyName.message;
+
+		cordaData.partyName = partyName;
+
+		let respFromCord = await userService.sendUserDataToCorda(cordaData);
+
+		if (respFromCord.success == false) throw new Error(respFromCord.message);
+
+		// console.log(respFromCord, "Iam the corda data\n");
 
 		res.send({ success: true, message: "Requested for Kyc" });
 	} catch (err) {

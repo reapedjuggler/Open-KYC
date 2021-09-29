@@ -6,8 +6,7 @@ const bankModel = require("../models/bankModel");
 const customError = require("../utils/customError");
 
 // constants
-let url = "http://localhost:50006/";
-
+let url = "http://localhost:50006/create-iou";
 class Bank {
 	createBank = async data => {
 		const user = new bankModel({
@@ -22,16 +21,38 @@ class Bank {
 	};
 
 	sendBankDataToCorda = async data => {
-		let url = "";
-		// axios request for posting the data to CordA
-		// append adhar no pan no and email to the url
+		try {
+			// http://localhost:50006/create-iou?iouValue=89&partyName=<partyName>&aadhar=<aadhar>&pan=<pan>&email=<email>
 
-		// http://localhost:50006/create-iou?iouValue=89&partyName=<partyName>&aadhar=<aadhar>&pan=<pan>&email=<email>
+			// url =
+			// 	url +
+			// 	`partyName=${data.bank}&aadhar=${data.adharNo}&pan=${data.pan}&email=${data.email}`;
 
-		url = url + `&${data.panNo}&${data.adharNo}&${data.email}`;
+			url = `http://localhost:${data.bank}/create-iou`;
 
-		let resp = await axios({ method: "GET", url: url });
-		return { success: true, data: resp };
+			const params = new URLSearchParams();
+			params.append("email", data.email);
+			params.append("pan", data.pan);
+			params.append("aadhar", data.aadhar);
+			params.append("approval", "false");
+
+			params.append("partyName", data.bank);
+			params.append("iouValue", 17);
+			const config = {
+				headers: {
+					"Content-Type": "application/x-www-form-urlencoded",
+				},
+			};
+
+			console.log(url);
+
+			const resp = await axios.post(url, params, config);
+
+			
+			return { success: true, data: resp };
+		} catch (err) {
+			return { sucess: false, message: "Problem in sending data" };
+		}
 	};
 }
 

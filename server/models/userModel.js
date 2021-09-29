@@ -20,14 +20,6 @@ const userSchema = new mongoose.Schema({
 		type: Date,
 		default: "",
 	},
-	
-	// phone: {
-	// 	type: Number,
-	// },
-	// forgetToken: {
-	// 	type: Schema.Types.ObjectId,
-	// 	default: "",
-	// },
 });
 
 module.exports = mongoose.model("user", userSchema);
