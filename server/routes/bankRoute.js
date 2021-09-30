@@ -51,7 +51,7 @@ router.post("/login", async (req, res) => {
 
 		var check = await utilService.findByEmail(email, bankModel);
 
-		if (Object.keys(check).length == 0) {
+		if (check == null || Object.keys(check).length == 0) {
 			res.send({
 				success: false,
 				message: "No account found with that email Id",
