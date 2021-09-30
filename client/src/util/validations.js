@@ -15,6 +15,15 @@ export const regformvalidation = Yup.object().shape({
     phone: Yup.string()
         .required("Required")
         .matches(/^(?:(?:\+|0{0,2})91(\s*[\ -]\s*)?|[0]?)?[789]\d{9}|(\d[ -]?){10}\d$/,"Invalid Number!"),//eslint-disable-line
+    password: Yup.string()
+        .trim()
+        .required("Required")
+        .min(8, "Too short - minimum 8 characters required")
+        .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/, "Password Must contain number & uppercase letters"),
+    confirm_password: Yup.string("*Please confirm the password.")
+		.trim()
+		.required("*Please confirm the password.")
+		.oneOf([ref('password'), null], 'Passwords must match'), 
     istrue: Yup.bool()
         .required("Required"),
 

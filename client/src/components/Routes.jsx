@@ -20,7 +20,7 @@ export default function Routes({loggedin,setloggedin,data}) {
                 </Route>
                 <Route exact path='/register'>
                 {loggedin && <Redirect to='/dashboard'/>}
-                    <Register/>
+                    <Register setloggedin={setloggedin}/>
                 </Route>
                 <Route exact path='/forget'>
                 {loggedin && <Redirect to='/dashboard'/>}

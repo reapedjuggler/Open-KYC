@@ -3,6 +3,8 @@ export const regformvalues = {
     lastname: "",
     phone: "",
     email: "",
+    password: "",
+    confirm_password: "",
     istrue: false,
 };
 
