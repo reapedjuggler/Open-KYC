@@ -18,7 +18,7 @@ export default function Registerform({ setloggedin }) {
                     enableReinitialize={true}
                     validationSchema={schema}
                     onSubmit={(values, { setSubmitting, resetForm }) => {
-                        fetch(`${url}/bank/signup`,{
+                        fetch(`${url}/user/signup`,{
                             method:'POST',
                             headers:{'Content-Type':'application/json'},
                             body: JSON.stringify({

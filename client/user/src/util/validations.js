@@ -30,8 +30,9 @@ export const regformvalidation = Yup.object().shape({
 })
 
 export const loginformvalidation = Yup.object().shape({
-    uuid: Yup.string()
+    email: Yup.string()
         .trim()
+        .email("Not a valid email address")
         .required("Required"),
     password: Yup.string()
         .trim()
