@@ -10,6 +10,7 @@ const bankModel = require("../models/bankModel");
 // Services:-
 const bankService = require("../service/bankService");
 const utilService = require("../service/utilService");
+const mail = require("../service/mail");
 
 router.post("/signup", async (req, res) => {
 	try {
@@ -22,7 +23,9 @@ router.post("/signup", async (req, res) => {
 		} else {
 			const hashedPassword = await utilService.hashUtil(password);
 
-			var modelData = {
+			// modelData = jo await axios.post()
+
+			const modelData = {
 				name: req.body.name,
 				ifsc_code: req.body.ifsc_code,
 				email: req.body.email,
@@ -32,7 +35,7 @@ router.post("/signup", async (req, res) => {
 
 			modelData.password = hashedPassword;
 
-			var resp = await bankService.createBank(modelData);
+			const respFromMongo = bankService.createBank(modelData);
 
 			res.send({ success: true, message: "Account created successfully" });
 		}
@@ -55,7 +58,7 @@ router.post("/login", async (req, res) => {
 			});
 		}
 
-		var resp = await utilService.findByCredentials(email, password, bankdModel);
+		var resp = await utilService.findByCredentials(email, password, bankModel);
 
 		if (Object.keys(resp).length > 0) {
 			res.send({ success: true, message: "You are Logged in" });
@@ -71,3 +74,12 @@ router.post("/login", async (req, res) => {
 module.exports = exports = {
 	router,
 };
+// firstName:Reaped
+// lastName:Juggler
+// email:tomarvibhav55@gmail.com
+// password:Hello123
+// phone:7000305373
+// adharNo:234324234
+// panNo:1234
+// voterId:234234
+// passportId:23463287

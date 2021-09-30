@@ -4,8 +4,22 @@ require("dotenv").config();
 class UtilService {
 	constructor() {}
 
+	findByEmail = async (email, model) => {
+		const user = await model.findOne({ email: email });
+		console.log(user, " yo");
+		return user;
+	};
+
+	findById = async (userId, model) => {
+		const user = await model.findOne({ _id: userId });
+		if (!user)
+			throw customError(401, `user not found with this ${userId} user id`);
+
+		return user;
+	};
+
 	findByCredentials = async (email, password, model) => {
-		const user = await findByEmail(email, model);
+		const user = await this.findByEmail(email, model);
 		if (!user)
 			throw customError(401, `user does not exist with this ${email} email`);
 
@@ -25,20 +39,6 @@ class UtilService {
 		const hashedPassword = await bcrypt.hash(password, salt);
 
 		return hashedPassword;
-	};
-
-	findById = async (userId, model) => {
-		const user = await model.findOne({ _id: userId });
-		if (!user)
-			throw customError(401, `user not found with this ${userId} user id`);
-
-		return user;
-	};
-
-	findByEmail = async (email, model) => {
-		const user = await model.findOne({ email: email });
-		console.log(user, " yo");
-		return user;
 	};
 }
 module.exports = exports = new UtilService();
