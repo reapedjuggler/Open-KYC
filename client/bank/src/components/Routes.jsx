@@ -6,7 +6,7 @@ import Forget from './Forget';
 import Reset from './Reset';
 import Details from './Detail';
 
-export default function Routes({loggedin,setloggedin,data}) {
+export default function Routes({loggedin,setloggedin}) {
     return (
         <div>
         <Router>
@@ -32,11 +32,11 @@ export default function Routes({loggedin,setloggedin,data}) {
                 </Route>
                 <Route exact path="/dashboard" >
                     {!loggedin && <Redirect to='/' />}
-                    <Dashboard approved={false} data={data}/>
+                    <Dashboard approved={false}/>
                 </Route>
                 <Route exact path="/dashboard/approved" >
                     {!loggedin && <Redirect to='/' />}
-                    <Dashboard approved={true} data={data}/>
+                    <Dashboard approved={true}/>
                 </Route>
                 <Route exact path="/user/:userid" >
                     {!loggedin && <Redirect to='/' />}
