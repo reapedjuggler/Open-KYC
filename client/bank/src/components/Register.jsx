@@ -4,8 +4,12 @@ import { Formik } from 'formik';
 import { regformvalues as initialvalue } from '../util/initial-data';
 import { regformvalidation as schema } from '../util/validations';
 import FormError from '../elements/FormError';
+import {useHistory} from 'react-router-dom';
 
-export default function Registerform({setloggedin}) {
+export default function Registerform({ setloggedin }) {
+
+    const history = useHistory();
+
     return (
         <div className="flex mt-4 justify-center items-center">
             <div className="w-4/5 md:w-3/5 p-5 m-6 bg-white rounded shadow-lg">
@@ -66,6 +70,7 @@ export default function Registerform({setloggedin}) {
                                 </Form.Group>
                                 <Form.Checkbox name="istrue" onChange={handleChange} onBlur={handleBlur} value={values.istrue} label='I agree all the information provided is true' />
                                 <FormError name="istrue" />
+                                <p onClick={() => history.push('/login')} className="f7 m-0 cursor-pointer hover:text-blue-400 text-gray-600">Already have an account?</p>
                                 <div className="flex justify-center"><Form.Button disabled={isSubmitting} onClick={handleSubmit} color="blue">Submit</Form.Button></div>
                             </Form>
                         )
