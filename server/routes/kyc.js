@@ -88,14 +88,12 @@ router.post("/pendinglist", async (req, res) => {
 			ele => ele.state.approval == "false"
 		);
 
-		await for (let i = 0; i < pendingArray.length; i++) {
-
+		for (let i = 0; i < pendingArray.length; i++) {
 			let prevEle = pendingArray[i];
 
 			let newEle = { aadhar: "", pan: "", email: "", timestamp: "" };
 
 			pendingArray[i] = newEle;
-
 		}
 	} catch (err) {
 		console.log(err);

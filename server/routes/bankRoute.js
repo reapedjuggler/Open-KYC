@@ -61,7 +61,6 @@ router.post("/login", async (req, res) => {
 		var resp = await utilService.findByCredentials(email, password, bankModel);
 
 		if (Object.keys(resp).length > 0) {
-			await mail.mailService();
 			res.send({ success: true, message: "You are Logged in" });
 		} else {
 			res.send({ success: false, message: "Invalid Credentials" });
