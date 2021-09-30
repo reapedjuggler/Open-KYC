@@ -1,7 +1,9 @@
 const bcrypt = require("bcryptjs");
+const { CURSOR_FLAGS } = require("mongodb");
 
 //Models
 const bankModel = require("../models/bankModel");
+const userModel = require("../models/userModel");
 
 const customError = require("../utils/customError");
 
@@ -22,12 +24,6 @@ class Bank {
 
 	sendBankDataToCorda = async data => {
 		try {
-			// http://localhost:50006/create-iou?iouValue=89&partyName=<partyName>&aadhar=<aadhar>&pan=<pan>&email=<email>
-
-			// url =
-			// 	url +
-			// 	`partyName=${data.bank}&aadhar=${data.adharNo}&pan=${data.pan}&email=${data.email}`;
-
 			url = `http://localhost:${data.bank}/create-iou`;
 
 			const params = new URLSearchParams();
@@ -44,14 +40,79 @@ class Bank {
 				},
 			};
 
-			console.log(url);
-
 			const resp = await axios.post(url, params, config);
 
-			
 			return { success: true, data: resp };
 		} catch (err) {
 			return { sucess: false, message: "Problem in sending data" };
+		}
+	};
+
+	getApprovalLists = async respFromCorda => {
+		try {
+			let visSet = new Set();
+
+			let ans = []; // Array to store approval lists
+
+			await respFromCorda.sort(async (ele, ele1) => {
+				let keyA = new Date(ele.timestamp),
+					keyB = new Date(ele1.timestamp);
+
+				if (keyA < keyB) return -1;
+
+				if (keyA > keyB) return 1;
+
+				return 0;
+			});
+
+			for (let i = respFromCorda.length - 1; i >= 0; i--) {
+				if (visSet.has(respFromCorda[i].aadhar) == true) continue;
+				ans.push(respFromCorda[i]);
+				visSet.add(respFromCorda[i].aadhar);
+			}
+
+			for (let i = 0; i < ans.length; i++) {
+				let newEle = {
+					email: "",
+					name: "Test",
+					aadhar: true,
+					pan: true,
+					id: "",
+				};
+
+				newEle.email = ans[i].email;
+				let id = await userModel.findOne({ email: newEle.email });
+
+				let name = id == null ? "Batman" : id.firstName + id.lastName;
+
+				id = id == null ? "default" : id._id;
+
+				newEle.name = name;
+				newEle.id = id;
+				newEle.aadhar = ans[i].aadhar;
+				newEle.pan = ans[i].pan;
+
+				ans[i] = newEle;
+			}
+
+			let approved = [],
+				pending = [];
+
+			approved = ans.filter(ele => ele.approval == "true");
+			pending = ans.filter(ele => ele.approval != "true");
+
+			console.log(approved, "\n\n");
+			console.log(pending, "\n\n");
+			return {
+				success: true,
+				message: {
+					approved: approved,
+					pending: pending,
+				},
+			};
+		} catch (err) {
+			console.log(err);
+			return { success: false, message: err.message };
 		}
 	};
 }

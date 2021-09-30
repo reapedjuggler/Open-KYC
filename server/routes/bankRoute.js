@@ -23,8 +23,6 @@ router.post("/signup", async (req, res) => {
 		} else {
 			const hashedPassword = await utilService.hashUtil(password);
 
-			// modelData = jo await axios.post()
-
 			const modelData = {
 				name: req.body.name,
 				ifsc_code: req.body.ifsc_code,

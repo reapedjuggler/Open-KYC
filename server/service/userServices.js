@@ -75,7 +75,7 @@ class User {
 			var url = `http://localhost:${val}/ious`;
 
 			let resp = await axios({ method: "GET", url: url });
-			return { success: true, data: resp };
+			return { success: true, data: resp.data };
 		} catch (err) {
 			console.log(err, "\n Iam error in senduserDataToCorda service");
 			return { success: false, message: err };
