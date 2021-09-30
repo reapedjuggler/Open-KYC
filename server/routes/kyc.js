@@ -84,17 +84,21 @@ router.post("/pendinglist", async (req, res) => {
 
 		let respFromCorda = await userService.getUserDatafromCorda(data);
 
-		let pendingArray = respFromCorda.message.filter(
-			ele => ele.state.approval == "false"
-		);
+		let visSet = new Set();
 
-		for (let i = 0; i < pendingArray.length; i++) {
-			let prevEle = pendingArray[i];
+		for (let i = 0; i < respFromCorda.length; i++) {
 
-			let newEle = { aadhar: "", pan: "", email: "", timestamp: "" };
+			let ele = respFromCorda[i].state.data ;
 
-			pendingArray[i] = newEle;
+			// if (ele != undefined && ele.approval == "false") {
+
+			// 	if (visSet.has)
+
+			// }
+
+
 		}
+
 	} catch (err) {
 		console.log(err);
 		res.send({ success: false, message: err });
@@ -106,7 +110,9 @@ router.post("/approvedlist", async (req, res) => {
 	} catch (err) {}
 });
 
-module.exports = exports = router;
+module.exports = exports = {
+	router;
+}
 
 // [ {
 //   "state" : {
