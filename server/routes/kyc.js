@@ -7,7 +7,7 @@ const userModel = require("../models/userModel");
 const userService = require("../service/userServices");
 const bankService = require("../service/bankService");
 
-const fileData = require("../data.json");
+//const fileData = require("../data.json");
 
 router.post("/apply", async (req, res, next) => {
 	try {
@@ -17,10 +17,11 @@ router.post("/apply", async (req, res, next) => {
 
 		let resp = await userModel.find({ email: email });
 
-		if (Object.keys(resp).length == 0) {
-			res.send({ success: false, message: "Already applied for KYC" });
-		}
-
+		// if (Object.keys(resp).length == 0) {
+		// 	res.send({ success: false, message: "Already applied for KYC" });
+		// }
+		//check for cordaData already exists or not either approved or not yet approved kyc
+		
 		// whether this email already exists in corda
 		const cordaData = {
 			aadhar: aadhar,
@@ -47,7 +48,9 @@ router.post("/apply", async (req, res, next) => {
 		res.send({ success: false, message: err.message });
 	}
 });
-
+router.post("/approve", async (req, res) => {
+//if false then approve
+})
 router.post("/getapprovals", async (req, res) => {
 	try {
 		let data = bank == "A" ? 50006 : 50033;
