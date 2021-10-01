@@ -79,13 +79,24 @@ router.post("/approve", async (req, res) => {
 
 		console.log(getLatestTransaction, "  sad\n\n");
 
-		if (getLatestTransaction.success == false) {
+		const cordaData = {
+			aadhar: getLatestTransaction[0].aadhar,
+			pan: getLatestTransaction[i].pan,
+			email: email,
+			bank: data == "A" ? 50006 : 50033,
+			partyName: "",
+			approval: "true",
+		};
+
+		let respCorda = await bankService.sendBankDataToCorda(cordaData);
+
+		if (respFromCorda.success == false) {
 			res.send({
 				success: false,
 				message: "Error in api of getting latest transaction",
 			});
 		} else {
-			res.send({ success: true, message: getLatestTransaction.message });
+			res.send({ success: true, message: respFromCorda.message });
 		}
 	} catch (err) {
 		res.send({ success: false, message: err.message });
