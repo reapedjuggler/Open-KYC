@@ -127,6 +127,47 @@ class Bank {
 			return { success: false, message: err };
 		}
 	};
+
+	getLatestTransaction = async (data, email) => {
+		try {
+			let visSet = new Set();
+
+			let ans = []; // Array to store approval lists
+
+			await data.sort(async (ele, ele1) => {
+				let keyA = new Date(ele.timestamp),
+					keyB = new Date(ele1.timestamp);
+
+				if (keyA < keyB) return -1;
+
+				if (keyA > keyB) return 1;
+
+				return 0;
+			});
+
+			for (let i = data.length - 1; i >= 0; i--) {
+				if (visSet.has(data[i].aadhar) == true) continue;
+
+				if (email == data[i].email) ans.push(data[i]);
+
+				visSet.add(data[i].aadhar);
+			}
+
+			// console.log(ans, "\ndata\n");
+
+			ans.filter(async ele => ele.email == email);
+
+			let id = await userModel.findOne({ email: email });
+
+			ans[0].id = id === undefined || id == null ? "default" : id._id;
+
+			// console.log(ans, "\nI'm ans");
+
+			return { success: true, message: ans };
+		} catch (err) {
+			return { success: false, message: err };
+		}
+	};
 }
 
 module.exports = exports = new Bank();
