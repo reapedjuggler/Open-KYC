@@ -22,16 +22,6 @@ export default function Header({ loggedin, setloggedin }) {
                             <MenuIcon className="h-6 w-6" aria-hidden="true" />
                         </Popover.Button>
                     </div>
-                    {loggedin &&
-                        <Popover.Group as="nav" className="hidden md:flex space-x-10">
-                            <a href="/dashboard" className="text-base font-medium text-gray-500 hover:text-gray-900">
-                                Pending Users
-                            </a>
-                            <a href="/dashboard/approved" className="text-base font-medium text-gray-500 hover:text-gray-900">
-                                Approved Users
-                            </a>
-                        </Popover.Group>
-                    }
                     {loggedin ?
                         <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
                             <a
@@ -86,17 +76,6 @@ export default function Header({ loggedin, setloggedin }) {
                             </div>
                         </div>
                         <div className="py-6 px-5 space-y-6">
-                            {loggedin &&
-                                <div className="grid grid-cols-2 gap-y-4 gap-x-8">
-                                    <a href="/dashboard" className="text-base font-medium text-gray-900 hover:text-gray-700">
-                                        Pending Users
-                                    </a>
-
-                                    <a href="/dashboard/approved" className="text-base font-medium text-gray-900 hover:text-gray-700">
-                                        Approved Users
-                                    </a>
-                                </div>
-                            }
                             {loggedin ?
                                 <a
                                     href="/"

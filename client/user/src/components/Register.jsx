@@ -40,7 +40,6 @@ export default function Registerform({ setloggedin }) {
                     {props => {
                         const {
                             values,// eslint-disable-line
-                            isSubmitting,
                             handleChange,// eslint-disable-line
                             handleBlur,// eslint-disable-line
                             handleSubmit,// eslint-disable-line
@@ -71,7 +70,7 @@ export default function Registerform({ setloggedin }) {
                                 <Form.Checkbox name="istrue" onChange={handleChange} onBlur={handleBlur} value={values.istrue} label='I agree all the information provided is true' />
                                 <FormError name="istrue" />
                                 <p onClick={() => history.push('/login')} className="f7 m-0 cursor-pointer hover:text-blue-400 text-gray-600">Already have an account?</p>
-                                <div className="flex justify-center"><Form.Button disabled={isSubmitting} onClick={handleSubmit} color="blue">Submit</Form.Button></div>
+                                <div className="flex justify-center"><Form.Button onClick={handleSubmit} color="blue">Submit</Form.Button></div>
                             </Form>
                         )
                     }}

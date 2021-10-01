@@ -17,7 +17,7 @@ export default function Dashboard({approved}) {
       .then(res => {
           approved?setdata(res.message.approved):setdata(res.message.pending);
       })
-      }, [])
+      }, [approved])
 
     return (
         <div>

@@ -29,6 +29,29 @@ export const regformvalidation = Yup.object().shape({
 
 })
 
+export const kycformvalidation = Yup.object().shape({
+    email: Yup.string()
+        .trim()
+        .email("Not a valid email address")
+        .required("Required"),
+    phone: Yup.string()
+        .required("Required")
+        .matches(/^(?:(?:\+|0{0,2})91(\s*[\ -]\s*)?|[0]?)?[789]\d{9}|(\d[ -]?){10}\d$/,"Invalid Number!"),//eslint-disable-line
+    aadhar: Yup.string()
+        .trim()
+        .required("Required")
+        .max(16, "Not a valid Aadhar Number"),
+    // aadhar_file: Yup.mixed().required('File is required'),
+    pan: Yup.string()
+        .trim()
+        .required("Required")
+        .max(10, "Not a valid Pan Number"),
+    // pan_file: Yup.mixed().required('File is required'),
+    istrue: Yup.bool()
+        .required("Required"),
+
+})
+
 export const loginformvalidation = Yup.object().shape({
     email: Yup.string()
         .trim()

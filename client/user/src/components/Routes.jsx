@@ -4,9 +4,9 @@ import Login from './Login';
 import Register from './Register';
 import Forget from './Forget';
 import Reset from './Reset';
-import Details from './Detail';
+import KYC from './KYC';
 
-export default function Routes({loggedin,setloggedin,data}) {
+export default function Routes({loggedin,setloggedin}) {
     return (
         <div>
         <Router>
@@ -32,15 +32,11 @@ export default function Routes({loggedin,setloggedin,data}) {
                 </Route>
                 <Route exact path="/dashboard" >
                     {!loggedin && <Redirect to='/' />}
-                    <Dashboard approved={false} data={data}/>
+                    <Dashboard/>
                 </Route>
-                <Route exact path="/dashboard/approved" >
+                <Route exact path="/kyc" >
                     {!loggedin && <Redirect to='/' />}
-                    <Dashboard approved={true} data={data}/>
-                </Route>
-                <Route exact path="/user/:userid" >
-                    {!loggedin && <Redirect to='/' />}
-                    <Details/>
+                    <KYC/>
                 </Route>
                 <Route><Redirect to='/' /></Route>
             </Switch>

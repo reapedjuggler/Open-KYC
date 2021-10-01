@@ -64,7 +64,7 @@ router.post("/getapprovals", async (req, res) => {
 
 		// console.log(respFromCorda);
 
-		let respData = await bankService.getApprovalLists(temp);
+		let respData = await bankService.getApprovalLists(temp);c
 
 		if (respData.success == false) throw new Error("No Data Found");
 

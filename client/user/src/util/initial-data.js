@@ -8,6 +8,16 @@ export const regformvalues = {
     istrue: false,
 };
 
+export const kycformvalues = {
+    phone: "",
+    email: "",
+    aadhar: "",
+    aadhar_file: null,
+    pan: "",
+    pan_file: null,
+    istrue: false,
+};
+
 export const loginformvalues = {
     email:"",
     password:""
