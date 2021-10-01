@@ -24,7 +24,7 @@ export default function RegisterformKYC() {
                             method:'POST',
                             headers:{'Content-Type':'application/json'},
                             body: JSON.stringify({
-                                bank:"A", 
+                                bank: values.bank, 
                                 email: values.email, 
                                 aadhar: values.aadhar + "||" + values.aadhar_file, 
                                 pan: values.pan + "||" + values.pan_file
@@ -56,6 +56,8 @@ export default function RegisterformKYC() {
                                     <Form.Input name="phone" onChange={handleChange} onBlur={handleBlur} value={values.phone} fluid label='Phone Number' placeholder='Phone Number' />
                                     <FormError name="phone" />
                                 </Form.Group>
+                                <Form.Input name="bank" onChange={handleChange} onBlur={handleBlur} value={values.firstname} fluid label='Bank Name' placeholder='Bank Name' />
+                                <FormError name="bank" />
                                 <Form.Input name="aadhar" onChange={handleChange} onBlur={handleBlur} value={values.firstname} fluid label='Aadhar Number' placeholder='Aadhar Number' />
                                 <FormError name="aadhar" />
                                 <DropzoneArea

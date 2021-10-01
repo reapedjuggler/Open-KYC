@@ -11,6 +11,7 @@ export const regformvalues = {
 export const kycformvalues = {
     phone: "",
     email: "",
+    bank:"",
     aadhar: "",
     aadhar_file: null,
     pan: "",

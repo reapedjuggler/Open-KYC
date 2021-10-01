@@ -37,6 +37,9 @@ export const kycformvalidation = Yup.object().shape({
     phone: Yup.string()
         .required("Required")
         .matches(/^(?:(?:\+|0{0,2})91(\s*[\ -]\s*)?|[0]?)?[789]\d{9}|(\d[ -]?){10}\d$/,"Invalid Number!"),//eslint-disable-line
+    bank: Yup.string()
+        .trim()
+        .required("Required"),
     aadhar: Yup.string()
         .trim()
         .required("Required")
