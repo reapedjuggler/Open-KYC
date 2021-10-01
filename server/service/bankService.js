@@ -1,4 +1,5 @@
 const bcrypt = require("bcryptjs");
+const axios = require("axios")
 
 //Models
 const bankModel = require("../models/bankModel");
@@ -129,9 +130,10 @@ class Bank {
 	};
 
 	getLatestTransaction = async (data, email) => {
+		// for loop ke liye wait ni krri ans=[] return ho jaara
 		try {
 			let visSet = new Set();
-
+console.log(data)
 			let ans = []; // Array to store approval lists
 
 			await data.sort(async (ele, ele1) => {
@@ -153,13 +155,13 @@ class Bank {
 				visSet.add(data[i].aadhar);
 			}
 
-			// console.log(ans, "\ndata\n");
+			console.log( ans, "\ndata\n");
 
 			ans.filter(async ele => ele.email == email);
 
 			let id = await userModel.findOne({ email: email });
-
-			ans[0].id = id === undefined || id == null ? "default" : id._id;
+			//console.log(id)
+			ans[0].id = (!id || id == null) ? "default" : id._id;
 
 			// console.log(ans, "\nI'm ans");
 
