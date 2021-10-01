@@ -22,7 +22,7 @@ export default function Loginform({setloggedin}) {
                             method:'POST',
                             headers:{'Content-Type':'application/json'},
                             body: JSON.stringify({
-                                email:values.uuid,
+                                email:values.email,
                                 password:values.password
                             })
                         }).then(response => response.json())

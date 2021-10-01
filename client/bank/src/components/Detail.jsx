@@ -1,9 +1,25 @@
-import React from 'react'
+import React, {useEffect} from 'react'
+import { url } from '../util/data';
 // import { useParams } from 'react-router-dom';
 
 export default function Detail() {
+    
 
-    // const { userid } = useParams();
+    useEffect(() => {
+        fetch(`${url}/kyc/approve`,{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({
+            bank:"A",
+            id:""
+          })
+      }).then(response => response.json())
+      .then(res => {
+          if(res.success) {
+            
+          }
+      })
+      }, [])
 
     return (
         <>
