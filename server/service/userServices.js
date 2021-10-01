@@ -25,10 +25,39 @@ class User {
 			return { success: false, message: err.message };
 		}
 	};
+	// approveUserDataToCorda = async data => {
+	// 	try {
+	// 		let val = data == "A" ? 50006 : 50033;
+	// 		var url = `http://localhost:${val}/create-iou`;
+	// 		console.log("lol", typeof url);
+
+	// 		const params = new URLSearchParams();
+	// 		params.append("email", data.email);
+	// 		params.append("pan", data.pan);
+	// 		params.append("aadhar", data.aadhar);
+	// 		params.append("approval", "true");
+	// 		params.append("timestamp", "date");
+	// 		params.append("partyName", data.partyName);
+	// 		params.append("iouValue", 17);
+	// 		const config = {
+	// 			headers: {
+	// 				"Content-Type": "application/x-www-form-urlencoded",
+	// 			},
+	// 		};
+
+	// 		console.log("bas data", data);
+	// 		const resp = await axios.post(url, params, config);
+	// 		console.log(resp);
+	// 		return { success: true, data: resp };
+	// 	} catch (err) {
+	// 		console.log(err);
+	// 		return { success: false, message: "Problem in sending data\n" + err };
+	// 	}
+	// };
 
 	sendUserDataToCorda = async data => {
 		try {
-			var val = data.bank;
+			var val = 50011;
 			var url = `http://localhost:${val}/create-iou`;
 			console.log("lol", typeof url);
 
@@ -58,7 +87,7 @@ class User {
 
 	getPartyNameFromCorda = async data => {
 		try {
-			let val = data == "A" ? 50033 : 50006;
+			let val = data == "A" ? 50006 : 50033;
 			let url = `http://localhost:${val}/me`;
 
 			const resp = await axios({ method: "GET", url: url });
@@ -66,19 +95,6 @@ class User {
 			return { success: true, message: resp.data };
 		} catch (err) {
 			return { success: false, message: err.message };
-		}
-	};
-
-	getUserDatafromCorda = async data => {
-		try {
-			let val = data == "A" ? 50033 : 50006;
-			var url = `http://localhost:${val}/ious`;
-
-			let resp = await axios({ method: "GET", url: url });
-			return { success: true, data: resp.data };
-		} catch (err) {
-			console.log(err, "\n Iam error in senduserDataToCorda service");
-			return { success: false, message: err };
 		}
 	};
 }

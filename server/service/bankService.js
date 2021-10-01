@@ -1,5 +1,5 @@
 const bcrypt = require("bcryptjs");
-const { CURSOR_FLAGS } = require("mongodb");
+const axios = require("axios");
 
 //Models
 const bankModel = require("../models/bankModel");
@@ -30,7 +30,7 @@ class Bank {
 			params.append("email", data.email);
 			params.append("pan", data.pan);
 			params.append("aadhar", data.aadhar);
-			params.append("approval", "false");
+			params.append("approval", data.approval);
 
 			params.append("partyName", data.bank);
 			params.append("iouValue", 17);
@@ -113,6 +113,61 @@ class Bank {
 		} catch (err) {
 			console.log(err);
 			return { success: false, message: err.message };
+		}
+	};
+
+	getUserDatafromCorda = async data => {
+		try {
+			let val = data == "A" ? 50033 : 50006;
+			var url = `http://localhost:${val}/ious`;
+
+			let resp = await axios({ method: "GET", url: url });
+			return { success: true, data: resp.data };
+		} catch (err) {
+			console.log(err, "\n Iam error in senduserDataToCorda service");
+			return { success: false, message: err };
+		}
+	};
+
+	getLatestTransaction = async (data, email) => {
+		// for loop ke liye wait ni krri ans=[] return ho jaara
+		try {
+			let visSet = new Set();
+			console.log(data);
+			let ans = []; // Array to store approval lists
+
+			await data.sort(async (ele, ele1) => {
+				let keyA = new Date(ele.timestamp),
+					keyB = new Date(ele1.timestamp);
+
+				if (keyA < keyB) return -1;
+
+				if (keyA > keyB) return 1;
+
+				return 0;
+			});
+
+			for (let i = data.length - 1; i >= 0; i--) {
+				if (visSet.has(data[i].aadhar) == true) continue;
+
+				if (email == data[i].email) ans.push(data[i]);
+
+				visSet.add(data[i].aadhar);
+			}
+
+			console.log(ans, "\ndata\n");
+
+			ans.filter(async ele => ele.email == email);
+
+			let id = await userModel.findOne({ email: email });
+			//console.log(id)
+			ans[0].id = !id || id == null ? "default" : id._id;
+
+			// console.log(ans, "\nI'm ans");
+
+			return { success: true, message: ans };
+		} catch (err) {
+			return { success: false, message: err };
 		}
 	};
 }

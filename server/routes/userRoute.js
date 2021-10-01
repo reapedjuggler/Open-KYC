@@ -44,7 +44,7 @@ router.post("/login", async (req, res) => {
 	try {
 		var { email, password } = req.body;
 
-		var check = await utilService.findByEmail(email);
+		var check = await utilService.findByEmail(email, userModel);
 
 		if (Object.keys(check).length == 0) {
 			res.send({
@@ -54,8 +54,6 @@ router.post("/login", async (req, res) => {
 		}
 
 		var resp = await utilService.findByCredentials(email, password, userModel);
-
-		console.log(resp);
 
 		if (Object.keys(resp).length > 0) {
 			res.send({ success: true, message: "You are Logged in" });
