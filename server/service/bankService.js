@@ -1,5 +1,4 @@
 const bcrypt = require("bcryptjs");
-const { CURSOR_FLAGS } = require("mongodb");
 
 //Models
 const bankModel = require("../models/bankModel");
@@ -113,6 +112,19 @@ class Bank {
 		} catch (err) {
 			console.log(err);
 			return { success: false, message: err.message };
+		}
+	};
+
+	getUserDatafromCorda = async data => {
+		try {
+			let val = data == "A" ? 50033 : 50006;
+			var url = `http://localhost:${val}/ious`;
+
+			let resp = await axios({ method: "GET", url: url });
+			return { success: true, data: resp.data };
+		} catch (err) {
+			console.log(err, "\n Iam error in senduserDataToCorda service");
+			return { success: false, message: err };
 		}
 	};
 }

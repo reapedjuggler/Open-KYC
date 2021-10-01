@@ -11,6 +11,9 @@ const fileData = require("../data.json");
 
 router.post("/apply", async (req, res, next) => {
 	try {
+		// whether this email already exists in corda
+		// your email exists so you need to authorize only
+
 		const { bank, email, aadhar, pan } = req.body;
 
 		// whether this email exists or not in mongo
@@ -21,7 +24,6 @@ router.post("/apply", async (req, res, next) => {
 			res.send({ success: false, message: "Already applied for KYC" });
 		}
 
-		// whether this email already exists in corda
 		const cordaData = {
 			aadhar: aadhar,
 			pan: pan,
@@ -38,7 +40,9 @@ router.post("/apply", async (req, res, next) => {
 		cordaData.partyName = partyName.message.me;
 
 		let respFromCord = await userService.sendUserDataToCorda(cordaData);
-		if (respFromCord.success == false) throw new Error(respFromCord.message);
+
+		if (respFromCord.success == false)
+			throw new Error({ success: false, message: respFromCord.message });
 
 		// console.log(respFromCord, "Iam the corda data\n");
 
@@ -50,12 +54,12 @@ router.post("/apply", async (req, res, next) => {
 
 router.post("/getapprovals", async (req, res) => {
 	try {
-		let data = bank == "A" ? 50006 : 50033;
+		// let data = bank == "A" ? 50006 : 50033;
 
-		let respFromCorda = await userService.getUserDatafromCorda(data);
-		respFromCorda = respFromCorda.message;
+		// let respFromCorda = await bankService.getUserDatafromCorda(data);
+		// respFromCorda = respFromCorda.message;
 
-		// let respFromCorda = fileData;
+		let respFromCorda = fileData;
 
 		for (let i = 0; i < respFromCorda.length; i++) {
 			respFromCorda[i] = respFromCorda[i].state.data;
