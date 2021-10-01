@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const axios = require("axios")
+const axios = require("axios");
 // Models
 const userModel = require("../models/userModel");
 
@@ -32,7 +32,7 @@ router.post("/apply", async (req, res, next) => {
 				email: email,
 				bank: bank == "A" ? 50006 : 50033,
 				partyName: "",
-				approval: "false"
+				approval: "false",
 			};
 
 			// console.log(req.body);
@@ -65,14 +65,14 @@ router.post("/approve", async (req, res) => {
 		let email = req.body.email;
 
 		let resp = await bankService.getUserDatafromCorda(data);
-		resp=resp.data
+		resp = resp.data;
 		// let resp = fileData;
 		let temp = [];
 
 		for (let i = 0; i < resp.length; i++) {
 			temp.push(resp[i].state.data);
 		}
-		console.log(resp)
+		console.log(resp);
 		let getLatestTransaction = await bankService.getLatestTransaction(
 			temp,
 			email
@@ -110,11 +110,11 @@ router.post("/getapprovals", async (req, res) => {
 		let data = req.body.bank == "A" ? 50006 : 50033;
 
 		let respFromCorda = await bankService.getUserDatafromCorda(data);
-		console.log(respFromCorda)
+		console.log(respFromCorda);
 		respFromCorda = respFromCorda.data;
 
 		// let respFromCorda = fileData;
-		 let temp = [];
+		let temp = [];
 
 		for (let i = 0; i < respFromCorda.length; i++) {
 			temp.push(respFromCorda[i].state.data);
