@@ -15,7 +15,9 @@ export default function Dashboard({approved}) {
           })
       }).then(response => response.json())
       .then(res => {
-          approved?setdata(res.message.approved):setdata(res.message.pending);
+          if(res.success) {
+            approved?setdata(res.message.approved):setdata(res.message.pending);
+          }
       })
       }, [approved])
 
