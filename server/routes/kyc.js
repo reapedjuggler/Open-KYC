@@ -7,7 +7,7 @@ const userModel = require("../models/userModel");
 const userService = require("../service/userServices");
 const bankService = require("../service/bankService");
 
-const fileData = require("../data.json");
+//const fileData = require("../data.json");
 
 router.post("/apply", async (req, res, next) => {
 	try {
@@ -21,7 +21,7 @@ router.post("/apply", async (req, res, next) => {
 		let resp = await userModel.find({ email: email });
 
 		if (Object.keys(resp).length == 0) {
-			res.send({ success: false, message: "Already applied for KYC" });
+			res.send({ success: false, message: "Please signup before proceeding for KYC" });
 		}
 
 		const cordaData = {
@@ -52,26 +52,31 @@ router.post("/apply", async (req, res, next) => {
 	}
 });
 
+router.post("/approve", async (req, res) => {
+//if false then approve
+})
+
 router.post("/getapprovals", async (req, res) => {
 	try {
-		// let data = bank == "A" ? 50006 : 50033;
+		let data = req.body.bank == "A" ? 50006 : 50033;
 
-		// let respFromCorda = await bankService.getUserDatafromCorda(data);
+		// let respFromCorda = await userService.getUserDatafromCorda(data);
 		// respFromCorda = respFromCorda.message;
 
 		let respFromCorda = fileData;
+		let temp = []
 
 		for (let i = 0; i < respFromCorda.length; i++) {
-			respFromCorda[i] = respFromCorda[i].state.data;
+			temp.push(respFromCorda[i].state.data);
 		}
 
 		// console.log(respFromCorda);
 
-		let respData = await bankService.getApprovalLists(respFromCorda);
+		let respData = await bankService.getApprovalLists(temp);
 
 		if (respData.success == false) throw new Error("No Data Found");
 
-		res.send({ success: true, message: respData });
+		res.send({ success: true, message: respData.message });
 	} catch (err) {
 		console.log(err);
 		res.send({ success: false, message: err });

@@ -18,7 +18,7 @@ export default function Loginform({setloggedin}) {
                     validationSchema={schema}
                     onSubmit={(values, { setSubmitting, resetForm }) => {
 
-                        fetch(`${url}/bank/login`,{
+                        fetch(`${url}/user/login`,{
                             method:'POST',
                             headers:{'Content-Type':'application/json'},
                             body: JSON.stringify({
@@ -47,9 +47,9 @@ export default function Loginform({setloggedin}) {
                         } = props;
                         return (
                             <Form>
-                                <h1 className="gray-600 text-3xl my-6 text-center font-bold">Bank Login</h1>
-                                <Form.Input name="uuid" onChange={handleChange} onBlur={handleBlur} value={values.uuid} fluid label='Bank UUID' placeholder='Bank UUID' />
-                                <FormError name="uuid" />
+                                <h1 className="gray-600 text-3xl my-6 text-center font-bold">User Login</h1>
+                                <Form.Input name="email" onChange={handleChange} onBlur={handleBlur} value={values.uuid} fluid label='Email' placeholder='Email' />
+                                <FormError name="email" />
                                 <Form.Input name="password" onChange={handleChange} onBlur={handleBlur} value={values.password} fluid label='Password' placeholder='Password' />
                                 <FormError name="password" />
                                 <div className="flex justify-around my-5">

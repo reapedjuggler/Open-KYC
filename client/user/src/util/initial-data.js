@@ -9,7 +9,7 @@ export const regformvalues = {
 };
 
 export const loginformvalues = {
-    uuid:"",
+    email:"",
     password:""
 };
 
