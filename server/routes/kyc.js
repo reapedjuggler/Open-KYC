@@ -60,7 +60,18 @@ router.post("/status", async (req, res) => {
 	try {
 		let email = req.body.email;
 
-		let resp = await userService.checkKycStatus(email);
+		let data = 50011;
+
+		let resp = await userService.getUserDatafromCorda(data);
+		resp = resp.message;
+		// let resp = fileData;
+		let temp = [];
+
+		for (let i = 0; i < resp.length; i++) {
+			temp.push(resp[i].state.data);
+		}
+
+		let resp = await userService.checkKycStatus(temp, email);
 
 		if (resp.success == true) {
 			res.send({ success: true, message: resp });
@@ -80,7 +91,7 @@ router.post("/approve", async (req, res) => {
 
 		let email = req.body.email;
 
-		let resp = await bankService.getUserDatafromCorda(data);
+		let resp = await userService.getUserDatafromCorda(data);
 		resp = resp.message;
 		// let resp = fileData;
 		let temp = [];
@@ -89,7 +100,7 @@ router.post("/approve", async (req, res) => {
 			temp.push(resp[i].state.data);
 		}
 		// console.log("sfhsfhsfhshsh\n", temp);
-		let getLatestTransaction = await bankService.getLatestTransaction(
+		let getLatestTransaction = await userService.getLatestTransaction(
 			temp,
 			email
 		);
@@ -132,7 +143,7 @@ router.post("/getdetails", async (req, res) => {
 	try {
 		let email = req.body.email;
 
-		let resp = await bankService.getUserDatafromCorda(data);
+		let resp = await userService.getUserDatafromCorda(data);
 		resp = resp.message;
 		// let resp = fileData;
 		let temp = [];
@@ -141,7 +152,7 @@ router.post("/getdetails", async (req, res) => {
 			temp.push(resp[i].state.data);
 		}
 		// console.log("sfhsfhsfhshsh\n", temp);
-		let getLatestTransaction = await bankService.getLatestTransaction(
+		let getLatestTransaction = await userService.getLatestTransaction(
 			temp,
 			email
 		);
@@ -160,7 +171,7 @@ router.post("/getapprovals", async (req, res) => {
 	try {
 		let data = req.body.bank == "A" ? 50006 : 50033;
 
-		let respFromCorda = await bankService.getUserDatafromCorda(data);
+		let respFromCorda = await userService.getUserDatafromCorda(data);
 		//console.log(respFromCorda);
 		respFromCorda = respFromCorda.message;
 

@@ -26,6 +26,20 @@ class User {
 		}
 	};
 
+	getUserDatafromCorda = async data => {
+		try {
+			let val = 50011;
+			var url = `http://localhost:${val}/ious`;
+
+			let resp = await axios({ method: "GET", url: url });
+			console.log("datadgagagagaa", resp.data);
+			return { success: true, message: resp.data };
+		} catch (err) {
+			console.log(err, "\n Iam error in senduserDataToCorda service");
+			return { success: false, message: err };
+		}
+	};
+
 	sendUserDataToCorda = async data => {
 		try {
 			var val = 50011;
@@ -56,7 +70,51 @@ class User {
 		}
 	};
 
-	checkKycStatus = async data => {
+	getLatestTransaction = async (data, email) => {
+		// for loop ke liye wait ni krri ans=[] return ho jaara
+		try {
+			let visSet = new Set();
+			console.log(data);
+			let ans = []; // Array to store approval lists
+
+			await data.sort(async (ele, ele1) => {
+				let keyA = new Date(ele.timestamp),
+					keyB = new Date(ele1.timestamp);
+
+				if (keyA < keyB) return -1;
+
+				if (keyA > keyB) return 1;
+
+				return 0;
+			});
+
+			for (let i = data.length - 1; i >= 0; i--) {
+				if (visSet.has(data[i].aadhar) == true) continue;
+
+				if (email == data[i].email) ans.push(data[i]);
+
+				visSet.add(data[i].aadhar);
+			}
+
+			console.log(ans, "\ndata\n");
+
+			ans.filter(async ele => ele.email == email);
+
+			let id = await userModel.findOne({ email: email });
+			//console.log(id)
+			if (ans && ans.length) {
+				ans[0].id = !id || id == null ? "default" : id._id;
+			}
+
+			// console.log(ans, "\nI'm ans");
+
+			return { success: true, message: ans };
+		} catch (err) {
+			return { success: false, message: err };
+		}
+	};
+
+	checkKycStatus = async (data, email) => {
 		// [ { user: email, bank: BankA , status: "pending" }]
 		// Cope and Seethe
 
@@ -77,18 +135,21 @@ class User {
 			});
 
 			for (let i = data.length - 1; i >= 0; i--) {
-				if (visSet.has(data[i].aadhar) == true) continue;
 
 				let index = data[i].borrower.find("=");
+				let borrower = data[i].borrower.substring(index + 1),
+
+				if (visSet.has(borrower) == true) continue;
+
 
 				if (email == data[i].email)
 					ans.push({
 						user: email,
-						bank: data[i].borrower.substring(index + 1),
+						bank: borrower,
 						approval: data[i].approval,
 					});
 
-				visSet.add(data[i].aadhar);
+				visSet.add(borrower);
 			}
 
 			// console.log(ans, "\nI'm ans");
