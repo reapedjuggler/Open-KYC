@@ -31,6 +31,7 @@ export default function Registerform({ setloggedin }) {
                         .then(data => {
                             if(data.success){
                                 localStorage.setItem('amexloggedin',true);
+                                localStorage.setItem('email',values.email);
                                 setloggedin(true);
                             }
                         })

@@ -1,11 +1,7 @@
 const express = require("express");
-
-// Database configuration file
 require("./database/db");
-
-// Dotenv configuration
 require("dotenv").config();
-
+var cors = require("cors");
 const app = express();
 
 // CORS
