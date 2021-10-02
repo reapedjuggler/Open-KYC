@@ -42,7 +42,7 @@ router.post("/apply", async (req, res, next) => {
 
 			cordaData.partyName = partyName.message.me;
 
-			let respFromCord = await userService.sendUserDataToCorda(cordaData);
+			let respFromCord = await userService.sendUserDataToCorda(cordaData,0);
 
 			if (respFromCord.success == false)
 				throw new Error({ success: false, message: respFromCord.message });
@@ -70,9 +70,9 @@ router.post("/status", async (req, res) => {
 		for (let i = 0; i < resp.length; i++) {
 			temp.push(resp[i].state.data);
 		}
-
-		let resp = await userService.checkKycStatus(temp, email);
-
+		console.log("rerw",temp)
+		resp = await userService.checkKycStatus(temp, email);
+		console.log("etete",resp)
 		if (resp.success == true) {
 			res.send({ success: true, message: resp });
 		} else {
@@ -80,6 +80,7 @@ router.post("/status", async (req, res) => {
 		}
 	} catch (err) {
 		res.send({ success: false, message: err });
+
 	}
 });
 
@@ -143,19 +144,21 @@ router.post("/getdetails", async (req, res) => {
 	try {
 		let email = req.body.email;
 
-		let resp = await userService.getUserDatafromCorda(data);
+		let resp = await userService.getUserDatafromCorda(email);
 		resp = resp.message;
 		// let resp = fileData;
 		let temp = [];
+		console.log("aa toh raha h\n", resp);
 
 		for (let i = 0; i < resp.length; i++) {
 			temp.push(resp[i].state.data);
 		}
-		// console.log("sfhsfhsfhshsh\n", temp);
+		console.log("sfhsfhsfhshsh\n", temp);
 		let getLatestTransaction = await userService.getLatestTransaction(
 			temp,
 			email
 		);
+		console.log("sfhsfhsfhshsh\n", getLatestTransaction);
 
 		if (getLatestTransaction.success == false) {
 			res.send({ success: false, message: getLatestTransaction.message });
