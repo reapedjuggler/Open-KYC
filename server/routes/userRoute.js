@@ -40,19 +40,19 @@ router.post("/signup", async (req, res) => {
 	}
 });
 
-router.post("/userdetails", async (req, res) => {
-	try {
-		let resp = await utilService.findByEmail(req.body.email);
+// router.post("/userdetails", async (req, res) => {
+// 	try {
+// 		let resp = await utilService.findByEmail(req.body.id);
 
-		if (resp == null || resp == {}) {
-			res.send({ success: false, message: "No Such User" });
-		} else {
-			res.send({ success: true, message: "Found User" });
-		}
-	} catch (err) {
-		res.send({ success: false, message });
-	}
-});
+// 		if (resp == null || resp == {}) {
+// 			res.send({ success: false, message: "No Such User" });
+// 		} else {
+// 			res.send({ success: true, message: resp });
+// 		}
+// 	} catch (err) {
+// 		res.send({ success: false, message });
+// 	}
+// });
 
 router.post("/login", async (req, res) => {
 	try {
