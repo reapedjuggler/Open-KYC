@@ -1,28 +1,13 @@
 import React, {useEffect,useState} from 'react'
 import { url } from '../util/data';
-import { useParams } from 'react-router-dom';
+// import { useParams } from 'react-router-dom';
 
 export default function Detail() {
     
-    const [email, setemail] = useState("");
+    const [email] = useState(localStorage.getItem("email"));
     const [approve, setapprove] = useState(false);
     const [data, setdata] = useState({aadhar:"jedncjinedjc",pan:"ceoimciencur"});
-    let {userid} = useParams();
-
-    useEffect(() => {
-        fetch(`${url}/util/getuserdetails`,{
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({
-            id: userid,
-          })
-      }).then(response => response.json())
-      .then(res => {
-          if(res.success) {
-            setemail(res.message)
-          }
-      })
-      }, [userid])
+    // let {userid} = useParams();
 
     useEffect(() => {
         if(!email) return;
