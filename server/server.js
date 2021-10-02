@@ -1,9 +1,18 @@
 const express = require("express");
+
+// Database configuration file
 require("./database/db");
+
+// Dotenv configuration
 require("dotenv").config();
-var cors = require("cors");
-const app = express();
+
+// CORS
 app.use(cors());
+var cors = require("cors");
+
+const app = express();
+
+
 const userRouter = require("./routes/userRoute").router;
 const bankRouter = require("./routes/bankRoute").router;
 const utilRouter = require("./routes/utilRoute").router;
