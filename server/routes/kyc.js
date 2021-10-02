@@ -103,6 +103,7 @@ router.post("/status", async (req, res) => {
 		}
 	} catch (err) {
 		res.send({ success: false, message: err });
+
 	}
 });
 
