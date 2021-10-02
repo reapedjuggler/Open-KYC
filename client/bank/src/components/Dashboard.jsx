@@ -18,8 +18,8 @@ export default function Dashboard({approved}) {
           if(res.success) {
             approved?setdata(res.message.approved):setdata(res.message.pending);
           }
-      })
-      }, [approved])
+      }).catch(() => {setdata([])})
+      }, [approved]);
 
     return (
         <div>

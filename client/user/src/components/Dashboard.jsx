@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Apply from '../assets/apply';
 import Inprogress from '../assets/inprogress';
 import Completed from '../assets/completed';
@@ -7,6 +7,24 @@ import {useHistory} from 'react-router-dom';
 export default function Dashboard({ type = "apply" }) {
 
     const history = useHistory();
+
+    useEffect(()=>{
+        fetch(`${url}/status`,{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({
+                bank: values.bank, 
+                email: values.email, 
+                aadhar: values.aadhar + "||" + values.aadhar_file, 
+                pan: values.pan + "||" + values.pan_file
+            })
+        }).then(response => response.json())
+        .then(data => {
+            if(data.success){
+                history.push('/');
+            }
+        })
+    },[])
 
     return (
         <div>

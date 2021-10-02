@@ -19,7 +19,6 @@ export default function RegisterformKYC() {
                     enableReinitialize={true}
                     validationSchema={schema}
                     onSubmit={(values, { setSubmitting, resetForm }) => {
-                        console.log("hh");
                         fetch(`${url}/kyc/apply`,{
                             method:'POST',
                             headers:{'Content-Type':'application/json'},
