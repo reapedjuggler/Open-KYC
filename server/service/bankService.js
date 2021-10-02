@@ -74,9 +74,7 @@ class Bank {
 
 			for (let i = respFromCorda.length - 1; i >= 0; i--) {
 				if (visSet.has(respFromCorda[i].aadhar) == true) continue;
-
 				ans.push(respFromCorda[i]);
-
 				visSet.add(respFromCorda[i].aadhar);
 			}
 
@@ -93,10 +91,9 @@ class Bank {
 				newEle.email = ans[i].email;
 				let id = await userModel.findOne({ email: newEle.email });
 
-				let name =
-					id == null || id == undefined ? "Batman" : id.firstName + id.lastName;
+				let name = id == null ? "Batman" : id.firstName + id.lastName;
 
-				id = id == null || id == undefined ? "default" : id._id;
+				id = id == null ? "default" : id._id;
 
 				newEle.name = name;
 				newEle.id = id;

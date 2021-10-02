@@ -25,7 +25,7 @@ export default function Card({data}) {
                 <p className="text-center">Biometrics</p>
                 {data.bio === undefined ?<BiCheckCircle className="mx-auto w-6 h-6" color={"green"}/>:<AiOutlineIssuesClose className="mx-auto w-6 h-6" color={"red"}/>}
             </div>
-            <button onClick={() => {history.push(`/user/${data.id}`)}} class="ui active blue button">
+            <button onClick={() => {history.push(`/user/${data.id}`);localStorage.setItem('user_email',data.email)}} class="ui active blue button">
                 <i class="address card outline icon" />
                 View Details
             </button>

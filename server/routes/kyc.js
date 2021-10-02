@@ -1,8 +1,5 @@
 const router = require("express").Router();
 const axios = require("axios");
-
-require("dotenv").config();
-
 // Models
 const userModel = require("../models/userModel");
 
@@ -33,35 +30,26 @@ router.post("/apply", async (req, res, next) => {
 				aadhar: aadhar,
 				pan: pan,
 				email: email,
-				bank:
-					bank == "A"
-						? 50006 || process.env.bankFirst
-						: 50033 || process.env.bankSe,
+				bank: bank == "A" ? 50006 : 50033,
 				partyName: "",
 				approval: "false",
 			};
 
+			// console.log(req.body);
+
 			let partyName = await userService.getPartyNameFromCorda(bank);
+			console.info(partyName);
 
-			if (partyName.success == false) {
-				res.send({
-					success: false,
-					message: "Error in apply route and partyName service",
-				});
-			} else {
-				cordaData.partyName = partyName.message.me;
+			cordaData.partyName = partyName.message.me;
 
-				let respFromCord = await userService.sendUserDataToCorda(cordaData);
+			let respFromCord = await userService.sendUserDataToCorda(cordaData,0);
 
-				if (respFromCord.success == false) {
-					res.send({
-						success: false,
-						message: "Error in /kyc/apply and sendUserDataToCorda Service",
-					});
-				} else {
-					res.send({ success: true, message: "Requested for Kyc" });
-				}
-			}
+			if (respFromCord.success == false)
+				throw new Error({ success: false, message: respFromCord.message });
+
+			// console.log(respFromCord, "Iam the corda data\n");
+
+			res.send({ success: true, message: "Requested for Kyc" });
 		}
 	} catch (err) {
 		res.send({ success: false, message: err.message });
@@ -72,10 +60,9 @@ router.post("/status", async (req, res) => {
 	try {
 		let email = req.body.email;
 
-		let data = 50011 || process.env.userPort;
+		let data = 50011;
 
 		let resp = await userService.getUserDatafromCorda(data);
-
 		if (resp.success == false) {
 			res.send({
 				success: false,
@@ -112,10 +99,7 @@ router.post("/approve", async (req, res) => {
 	//if false then approve
 
 	try {
-		let data =
-			req.body.bank == "A"
-				? process.env.bankFirst || 50006
-				: process.env.bankSec || 50033;
+		let data = req.body.bank == "A" ? 50006 : 50033;
 
 		let email = req.body.email;
 
@@ -133,42 +117,33 @@ router.post("/approve", async (req, res) => {
 			email
 		);
 
-		if (getLatestTransaction.success == false) {
-			res.send({
-				success: false,
-				message: "Error in /kyc/approve and getLatestTransaction Service",
-			});
+		// console.log(getLatestTransaction, "  sad\n\n");
+		getLatestTransaction = getLatestTransaction.message;
+
+		if (getLatestTransaction == []) {
+			res.send({ success: false, message: "not applied for kyc" });
 		} else {
-			// console.log(getLatestTransaction, "  sad\n\n");
-			getLatestTransaction = getLatestTransaction.message;
+			let partyName = 50011;
 
-			if (getLatestTransaction == []) {
-				res.send({ success: false, message: "not applied for kyc" });
+			const cordaData = {
+				aadhar: getLatestTransaction[0].aadhar,
+				pan: getLatestTransaction[0].pan,
+				email: email,
+				bank: data,
+				partyName: partyName,
+				approval: "true",
+			};
+			// console.log("cordadata", cordaData);
+			let respFromCorda = await bankService.sendBankDataToCorda(cordaData);
+
+			if (respFromCorda.success == false) {
+				res.send({
+					success: false,
+					message: "Error in api of getting latest transaction",
+				});
 			} else {
-				let partyName = process.env.userPort || 50011;
-
-				const cordaData = {
-					aadhar: getLatestTransaction[0].aadhar,
-					pan: getLatestTransaction[0].pan,
-					email: email,
-					bank: data,
-					partyName: partyName,
-					approval: "true",
-				};
-
-				let respFromCorda = await bankService.sendBankDataToCorda(cordaData);
-
-				// Service did not approved the user
-				if (respFromCorda.success == false) {
-					res.send({
-						success: false,
-						message:
-							"Error in api of getting latest transaction in /kyc/approve in service sendBankDataToCorda",
-					});
-				} else {
-					//approve call approveUsertoCorda etc
-					res.send({ success: true, message: "User approved by Bank" });
-				}
+				//approve call approveUsertoCorda etc
+				res.send({ success: true, message: "approved" });
 			}
 		}
 	} catch (err) {
@@ -180,35 +155,26 @@ router.post("/getdetails", async (req, res) => {
 	try {
 		let email = req.body.email;
 
-		let resp = await userService.getUserDatafromCorda(data);
+		let resp = await userService.getUserDatafromCorda(email);
+		resp = resp.message;
+		// let resp = fileData;
+		let temp = [];
+		console.log("aa toh raha h\n", resp);
 
-		if (resp.success == false) {
-			res.send({
-				success: false,
-				message: "Error in /kyc/getdetails and getUserDataFromCorda Service",
-			});
+		for (let i = 0; i < resp.length; i++) {
+			temp.push(resp[i].state.data);
+		}
+		console.log("sfhsfhsfhshsh\n", temp);
+		let getLatestTransaction = await userService.getLatestTransaction(
+			temp,
+			email
+		);
+		console.log("sfhsfhsfhshsh\n", getLatestTransaction);
+
+		if (getLatestTransaction.success == false) {
+			res.send({ success: false, message: getLatestTransaction.message });
 		} else {
-			resp = resp.message;
-			// let resp = fileData;
-			let temp = [];
-
-			for (let i = 0; i < resp.length; i++) {
-				temp.push(resp[i].state.data);
-			}
-			// console.log("sfhsfhsfhshsh\n", temp);
-			let getLatestTransaction = await userService.getLatestTransaction(
-				temp,
-				email
-			);
-
-			if (getLatestTransaction.success == false) {
-				res.send({
-					success: false,
-					message: "Error in /kyc/getdetails and getLatestTransaction service",
-				});
-			} else {
-				res.send({ success: true, message: getLatestTransaction.message });
-			}
+			res.send({ success: true, message: getLatestTransaction.message });
 		}
 	} catch (err) {
 		res.send({ success: false, message: err.message });
@@ -217,38 +183,26 @@ router.post("/getdetails", async (req, res) => {
 
 router.post("/getapprovals", async (req, res) => {
 	try {
-		let data =
-			req.body.bank == "A"
-				? process.env.bankFirst || 50006
-				: process.env.bankSec || 50033;
+		let data = req.body.bank == "A" ? 50006 : 50033;
 
 		let respFromCorda = await userService.getUserDatafromCorda(data);
-		if (respFromCorda.success == false) {
-			res.send({
-				success: false,
-				message: "Error in /kyc/getdetails and getUserDataFromCorda Service",
-			});
-		} else {
-			respFromCorda = respFromCorda.message;
+		//console.log(respFromCorda);
+		respFromCorda = respFromCorda.message;
 
-			let temp = [];
+		// let respFromCorda = fileData;
+		let temp = [];
 
-			for (let i = 0; i < respFromCorda.length; i++) {
-				temp.push(respFromCorda[i].state.data);
-			}
-
-			let respData = await bankService.getApprovalLists(temp);
-
-			if (respData.success == false) {
-				res.send({
-					success: false,
-					message:
-						"Error in /kyc/getapprovals route and getApprovalList service",
-				});
-			} else {
-				res.send({ success: true, message: respData.message });
-			}
+		for (let i = 0; i < respFromCorda.length; i++) {
+			temp.push(respFromCorda[i].state.data);
 		}
+
+		// console.log(respFromCorda);
+
+		let respData = await bankService.getApprovalLists(temp);
+
+		if (respData.success == false) throw new Error("No Data Found");
+
+		res.send({ success: true, message: respData.message });
 	} catch (err) {
 		console.log(err);
 		res.send({ success: false, message: err });
