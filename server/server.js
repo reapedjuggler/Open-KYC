@@ -6,13 +6,13 @@ require("./database/db");
 // Dotenv configuration
 require("dotenv").config();
 
+const app = express();
+
 // CORS
 app.use(cors());
 var cors = require("cors");
 
-const app = express();
-
-
+//Routes:
 const userRouter = require("./routes/userRoute").router;
 const bankRouter = require("./routes/bankRoute").router;
 const utilRouter = require("./routes/utilRoute").router;
