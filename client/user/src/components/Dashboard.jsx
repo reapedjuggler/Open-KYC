@@ -30,9 +30,9 @@ export default function Dashboard({ type = "apply" }) {
     return (
         <div>
             {
-                data.map((val, idx) => {
+                // data.map((val, idx) => {
                     <div>
-                        <h1 className="text-gray-800 text-center p-4">{val.bank}</h1>
+                        <h1 className="text-gray-800 text-center p-4">{"KYC"}</h1>
                         <div>
                             {type === "apply" && <div className="h-1/4 w-1/4 mx-auto"><Apply /></div>}
                             {type === "pending" && <div className="h-1/4 w-1/4 mx-auto"><Inprogress /></div>}
@@ -45,7 +45,7 @@ export default function Dashboard({ type = "apply" }) {
                         </div>
                     </div>
                 })
-            }
+            {/* } */}
         </div>
     )
 }
