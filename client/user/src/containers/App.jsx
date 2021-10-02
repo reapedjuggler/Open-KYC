@@ -8,7 +8,7 @@ export default function App() {
   const [data, setdata] = useState([{id:"101",profile:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1F7sotb1p-9YuR_1IFYP_nAizS5RpQoiE2g&usqp=CAU",name:"Test", aadhar:true,pan:true,bio:true}, {id:"104",profile:"url2",profile:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1F7sotb1p-9YuR_1IFYP_nAizS5RpQoiE2g&usqp=CAU",name:"Test2",aadhar:true,pan:false,bio:true}, {id:"105",profile:"url3",profile:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1F7sotb1p-9YuR_1IFYP_nAizS5RpQoiE2g&usqp=CAU",name:"Test3",aadhar:true,pan:true,bio:false}]);
 
   return (
-    <div className="App min-h-screen">
+    <div className="bg-gray-100 App min-h-screen">
       <Header loggedin={isloggedin} setloggedin={setisloggedin}/>
       <Routes loggedin={isloggedin} setloggedin={setisloggedin} data={data}/>
     </div>
