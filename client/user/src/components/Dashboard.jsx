@@ -10,17 +10,7 @@ export default function Dashboard() {
     const history = useHistory();
 
     const [email] = useState(localStorage.getItem("email"));
-    const [data, setdata] = useState([{
-        "user": "test@test.com",
-        "bank": "BankB, L=Mumbai, C=IN",
-        "approval": "false"
-    },
-    {
-        "user": "test@test.com",
-        "bank": "BankA, L=New York, C=US",
-        "approval": "true"
-    }
-    ]);
+    const [data, setdata] = useState([]);
 
     useEffect(() => {
         fetch(`${url}/kyc/status`, {
@@ -41,7 +31,7 @@ export default function Dashboard() {
         <div>
             {
                 data.length <= 0 ?
-                    <div className="rounded-xl p-4 m-4 bg-white min-h-screen flex items-center">
+                    <div className="rounded-xl py-20 w-11/12 mx-auto mt-10 drop-shadow-md bg-white ">
                         <div>
                             <h1 className="text-gray-800 text-center p-4">KYC</h1>
                             <div>
@@ -53,23 +43,27 @@ export default function Dashboard() {
                         </div>
                     </div>
                     :
-                    data.map((val, idx) => {
-                        return (
-                            <div className="rounded-xl p-4 m-4 bg-white min-h-screen flex items-center">
-                                <div>
-                                    <h1 className="text-gray-800 text-center p-4">{val.bank}</h1>
-                                    <div>
-                                        {val.approval === "false" && <div className="h-1/4 w-1/4 mx-auto"><Inprogress /></div>}
-                                        {val.approval === "true" && <div className="h-1/4 w-1/4 mx-auto"><Completed /></div>}
-                                        <div className="mt-12 flex justify-center">
-                                            {val.approval === "false" && <h3 className="text-gray-800 text-center p-4">{"Your KYC details is being Verified. (Please wait for 2-3 buisness days)"}</h3>}
-                                            {val.approval === "true" && <h3 className="text-green-600 text-center p-4">{"KYC Completed!"}</h3>}
+                    <div>
+                        {
+                            data.map((val, idx) => {
+                                return (
+                                    <div className="rounded-xl m-4 drop-shadow-md bg-white w-10/12 h-96 mx-auto">
+                                        <div >
+                                            <h1 className="text-gray-800 text-center p-4">{val.bank}</h1>
+                                            <div>
+                                                {val.approval === "false" && <div className="h-1/4 w-1/4 mx-auto"><Inprogress /></div>}
+                                                {val.approval === "true" && <div className="h-1/4 w-1/4 mx-auto"><Completed /></div>}
+                                                <div className="mt-12 flex justify-center">
+                                                    {val.approval === "false" && <h3 className="text-gray-800 text-center">{"Your KYC details is being Verified. (Please wait for 2-3 buisness days)"}</h3>}
+                                                    {val.approval === "true" && <h3 className="text-green-600 text-center">{"KYC Completed!"}</h3>}
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        );
-                    })
+                                );
+                            })
+                        }
+                    </div>
             }
         </div>
     )
