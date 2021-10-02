@@ -75,7 +75,6 @@ router.post("/status", async (req, res) => {
 		let data = 50011 || process.env.userPort;
 
 		let resp = await userService.getUserDatafromCorda(data);
-
 		if (resp.success == false) {
 			res.send({
 				success: false,
@@ -90,10 +89,11 @@ router.post("/status", async (req, res) => {
 				temp.push(resp[i].state.data);
 			}
 
-			let resp = await userService.checkKycStatus(temp, email);
+			let respo = await userService.checkKycStatus(temp, email);
+			console.log("er",respo)
 
-			if (resp.success == true) {
-				res.send({ success: true, message: resp });
+			if (respo.success == true) {
+				res.send({ success: true, message: respo });
 			} else {
 				res.send({
 					success: false,
