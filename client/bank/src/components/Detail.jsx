@@ -15,12 +15,12 @@ export default function Detail() {
           method:'POST',
           headers:{'Content-Type':'application/json'},
           body: JSON.stringify({
-            email: "test@test.com",
+            email: email,
           })
       }).then(response => response.json())
       .then(res => {
           if(res.success) {
-            setdata(res.message)
+            setdata(res.message[0])
           }
       })
       }, [email])
