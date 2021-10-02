@@ -4,7 +4,7 @@ import { url } from '../util/data';
 
 export default function Detail() {
     
-    const [email] = useState(localStorage.getItem("email"));
+    const [email] = useState(localStorage.getItem("user_email"));
     const [approve, setapprove] = useState(false);
     const [data, setdata] = useState({aadhar:"jedncjinedjc",pan:"ceoimciencur"});
     // let {userid} = useParams();
@@ -15,7 +15,7 @@ export default function Detail() {
           method:'POST',
           headers:{'Content-Type':'application/json'},
           body: JSON.stringify({
-            email: email,
+            email: "test@test.com",
           })
       }).then(response => response.json())
       .then(res => {
