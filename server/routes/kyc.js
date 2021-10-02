@@ -90,10 +90,12 @@ router.post("/status", async (req, res) => {
 				temp.push(resp[i].state.data);
 			}
 
-			let resp = await userService.checkKycStatus(temp, email);
+			resp = await userService.checkKycStatus(temp, email);
+
+			resp = resp.message;
 
 			if (resp.success == true) {
-				res.send({ success: true, message: resp });
+				res.send({ success: true, message: resp.message });
 			} else {
 				res.send({
 					success: false,
@@ -103,7 +105,6 @@ router.post("/status", async (req, res) => {
 		}
 	} catch (err) {
 		res.send({ success: false, message: err });
-
 	}
 });
 
