@@ -5,12 +5,37 @@ import Completed from '../assets/completed';
 import { useHistory } from 'react-router-dom';
 import { url } from '../util/data';
 
-export default function Dashboard({ type = "apply" }) {
+export default function Dashboard() {
 
     const history = useHistory();
 
     const [email] = useState(localStorage.getItem("email"));
-    const [data, setdata] = useState([]);
+    const [data, setdata] = useState([{
+        "user": "test@test.com",
+        "bank": "BankB, L=Mumbai, C=IN",
+        "approval": "false"
+    },
+    {
+        "user": "test@test.com",
+        "bank": "BankA, L=New York, C=US",
+        "approval": "true"
+    }
+    ]);
+
+    const [type, settype] = useState("apply");
+
+    // "message": [
+    //     {
+    //         "user": "test@test.com",
+    //         "bank": "BankB, L=Mumbai, C=IN",
+    //         "approval": "false"
+    //     },
+    //     {
+    //         "user": "test@test.com",
+    //         "bank": "BankA, L=New York, C=US",
+    //         "approval": "true"
+    //     }
+    // ]
 
     useEffect(() => {
         fetch(`${url}/kyc/status`, {
@@ -23,6 +48,8 @@ export default function Dashboard({ type = "apply" }) {
             .then(data => {
                 if (data.success) {
                     setdata(data.message)
+                    data.message.approval ? settype("done") : settype("pending");
+                    data.length <= 0 && settype("apply");
                 }
             })
     }, [email])
@@ -30,22 +57,35 @@ export default function Dashboard({ type = "apply" }) {
     return (
         <div>
             {
-                // data.map((val, idx) => {
+                data.length <= 0 ?
                     <div>
-                        <h1 className="text-gray-800 text-center p-4">{"KYC"}</h1>
+                        <h1 className="text-gray-800 text-center p-4">KYC</h1>
                         <div>
                             {type === "apply" && <div className="h-1/4 w-1/4 mx-auto"><Apply /></div>}
-                            {type === "pending" && <div className="h-1/4 w-1/4 mx-auto"><Inprogress /></div>}
-                            {type === "done" && <div className="h-1/4 w-1/4 mx-auto"><Completed /></div>}
                             <div className="mt-12 flex justify-center">
                                 {type === "apply" && <button onClick={() => history.push('/kyc')} className="ui primary button">Complete your KYC now!</button>}
-                                {type === "pending" && <h3 className="text-gray-800 text-center p-4">{"Your KYC details is being Verified. (Please wait for 2-3 buisness days)"}</h3>}
-                                {type === "done" && <h3 className="text-green-600 text-center p-4">{"KYC Completed!"}</h3>}
                             </div>
                         </div>
                     </div>
-                })
-            {/* } */}
+                    :
+                    data.map((val, idx) => {
+                        return (
+                            <div>
+                                <h1 className="text-gray-800 text-center p-4">{val.bank}</h1>
+                                <div>
+                                    {type === "apply" && <div className="h-1/4 w-1/4 mx-auto"><Apply /></div>}
+                                    {type === "pending" && <div className="h-1/4 w-1/4 mx-auto"><Inprogress /></div>}
+                                    {type === "done" && <div className="h-1/4 w-1/4 mx-auto"><Completed /></div>}
+                                    <div className="mt-12 flex justify-center">
+                                        {type === "apply" && <button onClick={() => history.push('/kyc')} className="ui primary button">Complete your KYC now!</button>}
+                                        {type === "pending" && <h3 className="text-gray-800 text-center p-4">{"Your KYC details is being Verified. (Please wait for 2-3 buisness days)"}</h3>}
+                                        {type === "done" && <h3 className="text-green-600 text-center p-4">{"KYC Completed!"}</h3>}
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    })
+            }
         </div>
     )
 }
