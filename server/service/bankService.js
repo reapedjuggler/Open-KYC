@@ -31,8 +31,8 @@ class Bank {
 			params.append("pan", data.pan);
 			params.append("aadhar", data.aadhar);
 			params.append("approval", data.approval);
-
-			params.append("partyName", data.bank);
+			params.append("timestamp", "date");
+			params.append("partyName", (data.partyName=="50011"? "O=UserA,L=London,C=GB": "O=UserB,L=London,C=GB"));
 			params.append("iouValue", 17);
 			const config = {
 				headers: {
@@ -41,9 +41,11 @@ class Bank {
 			};
 
 			const resp = await axios.post(url, params, config);
-
+			console.log("snedBankdnadg",url)
 			return { success: true, data: resp };
 		} catch (err) {
+			console.log(err)
+
 			return { sucess: false, message: "Problem in sending data" };
 		}
 	};
@@ -78,6 +80,7 @@ class Bank {
 					aadhar: true,
 					pan: true,
 					id: "",
+					approval: "false"
 				};
 
 				newEle.email = ans[i].email;
@@ -91,13 +94,13 @@ class Bank {
 				newEle.id = id;
 				newEle.aadhar = ans[i].aadhar;
 				newEle.pan = ans[i].pan;
-
+				newEle.approval = ans[i].approval;
 				ans[i] = newEle;
 			}
 
 			let approved = [],
 				pending = [];
-
+			console.log("ans",ans)
 			approved = ans.filter(ele => ele.approval == "true");
 			pending = ans.filter(ele => ele.approval != "true");
 
@@ -118,11 +121,12 @@ class Bank {
 
 	getUserDatafromCorda = async data => {
 		try {
-			let val = data == "A" ? 50033 : 50006;
+			let val =50011;
 			var url = `http://localhost:${val}/ious`;
 
 			let resp = await axios({ method: "GET", url: url });
-			return { success: true, data: resp.data };
+			console.log("datadgagagagaa",resp.data)
+			return { success: true, message: resp.data };
 		} catch (err) {
 			console.log(err, "\n Iam error in senduserDataToCorda service");
 			return { success: false, message: err };
@@ -161,8 +165,10 @@ class Bank {
 
 			let id = await userModel.findOne({ email: email });
 			//console.log(id)
-			ans[0].id = !id || id == null ? "default" : id._id;
-
+			if(ans && ans.length){
+				ans[0].id = !id || id == null ? "default" : id._id;
+			}
+			
 			// console.log(ans, "\nI'm ans");
 
 			return { success: true, message: ans };

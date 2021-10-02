@@ -65,31 +65,35 @@ router.post("/approve", async (req, res) => {
 		let email = req.body.email;
 
 		let resp = await bankService.getUserDatafromCorda(data);
-		resp = resp.data;
+		resp = resp.message;
 		// let resp = fileData;
 		let temp = [];
 
 		for (let i = 0; i < resp.length; i++) {
 			temp.push(resp[i].state.data);
 		}
-		console.log(resp);
+		console.log("sfhsfhsfhshsh\n",temp);
 		let getLatestTransaction = await bankService.getLatestTransaction(
 			temp,
 			email
 		);
 
-		// console.log(getLatestTransaction, "  sad\n\n");
-
+		console.log(getLatestTransaction, "  sad\n\n");
+		getLatestTransaction=getLatestTransaction.message
+		if(getLatestTransaction == []){
+			res.send({ success: false, message:"not applied for kyc" });
+		}else{
+		let partyName=50011
 		const cordaData = {
 			aadhar: getLatestTransaction[0].aadhar,
-			pan: getLatestTransaction[i].pan,
+			pan: getLatestTransaction[0].pan,
 			email: email,
-			bank: data == "A" ? 50006 : 50033,
-			partyName: "",
+			bank: data,
+			partyName: partyName,
 			approval: "true",
 		};
-
-		let respCorda = await bankService.sendBankDataToCorda(cordaData);
+		console.log("cordadata",cordaData)
+		let respFromCorda = await bankService.sendBankDataToCorda(cordaData);
 
 		if (respFromCorda.success == false) {
 			res.send({
@@ -99,6 +103,7 @@ router.post("/approve", async (req, res) => {
 		} else {
 			//approve call approveUsertoCorda etc
 			res.send({ success: true, message: "approved" });
+		}
 		}
 	} catch (err) {
 		res.send({ success: false, message: err.message });
@@ -110,8 +115,8 @@ router.post("/getapprovals", async (req, res) => {
 		let data = req.body.bank == "A" ? 50006 : 50033;
 
 		let respFromCorda = await bankService.getUserDatafromCorda(data);
-		console.log(respFromCorda);
-		respFromCorda = respFromCorda.data;
+		//console.log(respFromCorda);
+		respFromCorda = respFromCorda.message;
 
 		// let respFromCorda = fileData;
 		let temp = [];
