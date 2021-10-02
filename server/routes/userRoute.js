@@ -40,12 +40,26 @@ router.post("/signup", async (req, res) => {
 	}
 });
 
+router.post("/userdetails", async (req, res) => {
+	try {
+		let resp = await utilService.findByEmail(req.body.email);
+
+		if (resp == null || resp == {}) {
+			res.send({ success: false, message: "No Such User" });
+		} else {
+			res.send({ success: true, message: "Found User" });
+		}
+	} catch (err) {
+		res.send({ success: false, message });
+	}
+});
+
 router.post("/login", async (req, res) => {
 	try {
 		var { email, password } = req.body;
 
 		var check = await utilService.findByEmail(email, userModel);
-		console.log(check)
+		console.log(check);
 		if (Object.keys(check).length == 0) {
 			res.send({
 				success: false,
@@ -54,7 +68,7 @@ router.post("/login", async (req, res) => {
 		}
 
 		var resp = await utilService.findByCredentials(email, password, userModel);
-		console.log(resp)
+		console.log(resp);
 		if (Object.keys(resp).length > 0) {
 			res.send({ success: true, message: "You are Logged in" });
 		} else {

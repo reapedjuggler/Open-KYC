@@ -56,6 +56,23 @@ router.post("/apply", async (req, res, next) => {
 	}
 });
 
+router.post("/status", async (req, res) => {
+	try {
+
+		let email = req.body.email;
+
+		let resp = await userService.checkKycStatus(email);
+
+		if (resp.success == true) {
+			res.send({ success: true, message: resp });
+		} else {
+			throw new Error({ success: false, message: resp.message });
+		}
+	} catch (err) {
+		res.send({ success: false, message: err });
+	}
+});
+
 router.post("/approve", async (req, res) => {
 	//if false then approve
 
@@ -65,7 +82,6 @@ router.post("/approve", async (req, res) => {
 		let email = req.body.email;
 
 		let resp = await bankService.getUserDatafromCorda(data);
-		resp = resp.data;
 		// let resp = fileData;
 		let temp = [];
 
@@ -89,7 +105,7 @@ router.post("/approve", async (req, res) => {
 			approval: "true",
 		};
 
-		let respCorda = await bankService.sendBankDataToCorda(cordaData);
+		let respFromCorda = await bankService.sendBankDataToCorda(cordaData);
 
 		if (respFromCorda.success == false) {
 			res.send({
