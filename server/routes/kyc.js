@@ -42,7 +42,7 @@ router.post("/apply", async (req, res, next) => {
 
 			cordaData.partyName = partyName.message.me;
 
-			let respFromCord = await userService.sendUserDataToCorda(cordaData,0);
+			let respFromCord = await userService.sendUserDataToCorda(cordaData, 0);
 
 			if (respFromCord.success == false)
 				throw new Error({ success: false, message: respFromCord.message });
@@ -195,8 +195,6 @@ router.post("/getapprovals", async (req, res) => {
 		for (let i = 0; i < respFromCorda.length; i++) {
 			temp.push(respFromCorda[i].state.data);
 		}
-
-		// console.log(respFromCorda);
 
 		let respData = await bankService.getApprovalLists(temp);
 
