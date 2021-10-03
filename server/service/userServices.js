@@ -4,6 +4,8 @@ const customError = require("../utils/customError");
 // Models
 const userModel = require("../models/userModel");
 
+// const fileData1 = require("../data1.json");
+
 // Constants
 const axios = require("axios");
 class User {
@@ -28,18 +30,19 @@ class User {
 
 	getUserDatafromCorda = async data => {
 		try {
-			let val = 50011;
-			var url = `http://localhost:${val}/ious`;
+			var url = `http://localhost:${data}/ious`;
+
+			// let resp = { data: fileData1 }; // When testing locally uncomment
 
 			let resp = await axios({ method: "GET", url: url });
-			console.log("datadgagagagaa", resp.data);
+			// console.log("Iam resp data", resp.data);
 			return { success: true, message: resp.data };
 		} catch (err) {
 			console.log(err, "\n Iam error in senduserDataToCorda service");
 			return { success: false, message: err };
 		}
 	};
-	sendUserDataToCorda = async( data,num) => {
+	sendUserDataToCorda = async (data, num) => {
 		try {
 			var val = 50011;
 			var url = `http://localhost:${val}/create-iou`;
@@ -112,7 +115,7 @@ class User {
 			return { success: false, message: err };
 		}
 	};
-// approval==true & lender == bank    ||   approval==false & lender ==user
+	// approval==true & lender == bank    ||   approval==false & lender ==user
 
 	checkKycStatus = async (data, email) => {
 		// [ { user: email, bank: BankA , status: "pending" }]
@@ -135,30 +138,35 @@ class User {
 			});
 
 			for (let i = data.length - 1; i >= 0; i--) {
-
 				let index = data[i].borrower.indexOf("=");
-				let borrower = data[i].borrower.substring(index + 1)
-				let lender = data[i].lender.substring(index + 1)
-				let x = (data[i].approval=="true" && lender[0] == "B")?lender : borrower;
+				let borrower = data[i].borrower.substring(index + 1);
+				let lender = data[i].lender.substring(index + 1);
+				let x =
+					data[i].approval == "true" && lender[0] == "B" ? lender : borrower;
 				if (visSet.has(x) == true) continue;
 
-
-				if (email == data[i].email){
-						//bank has approved											//applied but not approved  --new approval:rejected
-				 if((data[i].approval=="true" && lender[0] == "B") || (data[i].approval=="false" & lender[0]=="U")){
-					ans.push({
-						user: email,
-						bank: (data[i].approval=="true" && lender[0] == "B")?lender : borrower,
-						approval: data[i].approval,
-					});
+				if (email == data[i].email) {
+					//bank has approved											//applied but not approved  --new approval:rejected
+					if (
+						(data[i].approval == "true" && lender[0] == "B") ||
+						(data[i].approval == "false") & (lender[0] == "U")
+					) {
+						ans.push({
+							user: email,
+							bank:
+								data[i].approval == "true" && lender[0] == "B"
+									? lender
+									: borrower,
+							approval: data[i].approval,
+						});
+					}
 				}
-				}
-				visSet.add(x)
+				visSet.add(x);
 			}
-			visSet.forEach(e =>{
-				console.log(e,'\n')
-			})	
-			console.log(ans, "\nI'm ans");
+			// visSet.forEach(e => {
+			// 	console.log(e, "\n");
+			// });
+			// console.log(ans, "\nI'm ans");
 			return { success: true, message: ans };
 		} catch (err) {
 			return { success: false, message: err.message };
