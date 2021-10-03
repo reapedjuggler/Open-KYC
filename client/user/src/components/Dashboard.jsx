@@ -54,7 +54,7 @@ export default function Dashboard() {
                     </div>
                     :
                     <>
-                    {<button onClick={() => history.push('/kyc')} className="fixed bottom-4 right-4 ui primary button">Apply for KYC!</button>}
+                    {<button onClick={() => history.push('/consent')} className="fixed bottom-4 right-4 ui primary button">Apply for KYC!</button>}
                     <div className="grid grid-cols-1 md:grid-cols-2">
                         {
                             data.map((val, idx) => {

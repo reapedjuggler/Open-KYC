@@ -5,6 +5,7 @@ import Register from './Register';
 import Forget from './Forget';
 import Reset from './Reset';
 import KYC from './KYC';
+import UserConsent from './UserConsent';
 
 export default function Routes({loggedin,setloggedin}) {
     return (
@@ -37,6 +38,10 @@ export default function Routes({loggedin,setloggedin}) {
                 <Route exact path="/kyc" >
                     {!loggedin && <Redirect to='/' />}
                     <KYC/>
+                </Route>
+                <Route exact path="/consent" >
+                    {!loggedin && <Redirect to='/' />}
+                    <UserConsent/>
                 </Route>
                 <Route><Redirect to='/' /></Route>
             </Switch>
