@@ -15,7 +15,8 @@ lerna-debug.log*
 /coverage
 
 data.json
-
+.env
+node_modules
 # production
 /build
 
