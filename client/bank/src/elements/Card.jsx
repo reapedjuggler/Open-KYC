@@ -1,11 +1,31 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { BiCheckCircle } from 'react-icons/bi';
 import { AiOutlineIssuesClose } from 'react-icons/ai';
 import {useHistory} from 'react-router-dom';
+import { url } from '../util/data';
 
 export default function Card({data}) {
 
     const history = useHistory();
+
+    const [kycapprove, setkycapprove] = useState(false);
+
+    useEffect(() => {
+        if (!kycapprove) return;
+        fetch(`${url}/kyc/approve`,{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({
+            bank:"A",
+            email:data.email
+          })
+      }).then(response => response.json())
+      .then(res => {
+          if(res.success) {
+            history.push('/dashboard/approved')
+          }
+      })
+      }, [data,kycapprove,history])
 
     return (
         <div className="flex justify-around items-center w-2/3 m-4 p-2 rounded-md bg-white">
@@ -25,9 +45,19 @@ export default function Card({data}) {
                 <p className="text-center text-md">Biometrics</p>
                 {data.bio === undefined ?<BiCheckCircle className="mx-auto w-6 h-6" color={"green"}/>:<AiOutlineIssuesClose className="mx-auto w-6 h-6" color={"red"}/>}
             </div>
-            <button onClick={() => {history.push(`/user/${data.id}`);localStorage.setItem('user_email',data.email)}} class="ui active blue button">
-                <i class="address card outline icon" />
-                View Details
+            <button onClick={() => {
+                if(data.approval === "true"){
+                    setkycapprove(true);
+                }
+                else{
+                    history.push(`/user/${data.id}`);
+                    localStorage.setItem('user_email',data.email)
+                }
+            }} 
+                class="ui active blue button">
+                <i class="address card outline icon" 
+            />
+                {data.approval === "true"?'Approve':'View Details'}
             </button>
         </div>
     )
