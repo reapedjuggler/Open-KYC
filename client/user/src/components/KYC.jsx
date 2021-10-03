@@ -13,7 +13,7 @@ export default function RegisterformKYC() {
 
     return (
         <div className="flex mt-4 justify-center items-center">
-            <div className="w-4/5 md:w-3/5 p-5 m-6 bg-white rounded shadow-lg">
+            <div className="w-11/12 md:w-3/5 p-5 m-6 bg-white rounded shadow-lg">
                 <Formik
                     initialValues={initialvalue}
                     enableReinitialize={true}
@@ -98,7 +98,7 @@ export default function RegisterformKYC() {
                                     <Form.Checkbox name="istrue" onChange={handleChange} onBlur={handleBlur} value={values.istrue} label='I agree all the information provided is true' />
                                     <FormError name="istrue" />
                                 </div>
-                                <div className="flex justify-center"><Form.Button onClick={handleSubmit} color="blue">Submit</Form.Button></div>
+                                <div className="flex justify-center mt-4"><Form.Button onClick={handleSubmit} color="blue">Submit</Form.Button></div>
                             </Form>
                         )
                     }}

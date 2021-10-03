@@ -10,6 +10,18 @@ const customError = require("../utils/customError");
 // constants
 let url = "http://localhost:50006/create-iou";
 class Bank {
+	getUserDatafromCorda = async data => {
+		try {
+			var url = `http://localhost:${data}/ious`;
+
+			let resp = await axios({ method: "GET", url: url });
+			console.log("datadgagagagaa", resp.data);
+			return { success: true, message: resp.data };
+		} catch (err) {
+			console.log(err, "\n Iam error in senduserDataToCorda service");
+			return { success: false, message: err };
+		}
+	};
 	createBank = async data => {
 		const user = new bankModel({
 			name: data.name,
@@ -73,9 +85,9 @@ class Bank {
 			});
 
 			for (let i = respFromCorda.length - 1; i >= 0; i--) {
-				if (visSet.has(respFromCorda[i].aadhar) == true) continue;
+				if (visSet.has(respFromCorda[i].email) == true) continue;
 				ans.push(respFromCorda[i]);
-				visSet.add(respFromCorda[i].aadhar);
+				visSet.add(respFromCorda[i].email);
 			}
 
 			for (let i = 0; i < ans.length; i++) {
@@ -86,6 +98,7 @@ class Bank {
 					pan: true,
 					id: "",
 					approval: "false",
+					approved_by: [],
 				};
 
 				newEle.email = ans[i].email;
@@ -100,17 +113,24 @@ class Bank {
 				newEle.aadhar = ans[i].aadhar;
 				newEle.pan = ans[i].pan;
 				newEle.approval = ans[i].approval;
+				if (newEle.approval == "true") {
+					newEle.approved_by =
+						ans[i].approved_by == undefined || ans[i].approved_by == null
+							? []
+							: ans[i].approved_by;
+					newEle.approved_by.push(ans[i].lender);
+				}
 				ans[i] = newEle;
 			}
 
 			let approved = [],
 				pending = [];
-			console.log("ans", ans);
+			// console.log("ans", ans);
 			approved = ans.filter(ele => ele.approval == "true");
 			pending = ans.filter(ele => ele.approval != "true");
 
-			console.log(approved, "\n\n");
-			console.log(pending, "\n\n");
+			// console.log(approved, "\n\n");
+			// console.log(pending, "\n\n");
 			return {
 				success: true,
 				message: {
