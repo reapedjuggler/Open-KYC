@@ -86,9 +86,9 @@ class Bank {
 			});
 
 			for (let i = respFromCorda.length - 1; i >= 0; i--) {
-				if (visSet.has(respFromCorda[i].aadhar) == true) continue;
+				if (visSet.has(respFromCorda[i].email) == true) continue;
 				ans.push(respFromCorda[i]);
-				visSet.add(respFromCorda[i].aadhar);
+				visSet.add(respFromCorda[i].email);
 			}
 
 			for (let i = 0; i < ans.length; i++) {

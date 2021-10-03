@@ -184,7 +184,7 @@ router.post("/getdetails", async (req, res) => {
 				: process.env.bankSec || 50033;
 
 		let resp = await bankService.getUserDatafromCorda(data);
-		console.log(resp)
+		console.log("resp",resp)
 		if (resp.success == false) {
 			res.send({
 				success: false,
@@ -198,7 +198,7 @@ router.post("/getdetails", async (req, res) => {
 			for (let i = 0; i < resp.length; i++) {
 				temp.push(resp[i].state.data);
 			}
-			// console.log("sfhsfhsfhshsh\n", temp);
+			console.log("sfhsfhsfhshsh\n", temp);
 			let getLatestTransaction = await userService.getLatestTransaction(
 				temp,
 				email
@@ -239,7 +239,7 @@ router.post("/getapprovals", async (req, res) => {
 			for (let i = 0; i < respFromCorda.length; i++) {
 				temp.push(respFromCorda[i].state.data);
 			}
-
+			console.log("respgribbm",temp)
 			let respData = await bankService.getApprovalLists(temp);
 
 			if (respData.success == false) {
