@@ -10,17 +10,17 @@ export default function Dashboard() {
     const history = useHistory();
 
     const [email] = useState(localStorage.getItem("email"));
-    // const [data, setdata] = useState([]);
-    const [data, setdata] = useState([{
-        "user": "test@test.com",
-        "bank": "BankB, L=Mumbai, C=IN",
-        "approval": "false"
-    },
-    {
-        "user": "test@test.com",
-        "bank": "BankA, L=New York, C=US",
-        "approval": "true"
-    }]);
+    const [data, setdata] = useState([]);
+    // const [data, setdata] = useState([{
+    //     "user": "test@test.com",
+    //     "bank": "BankB, L=Mumbai, C=IN",
+    //     "approval": "false"
+    // },
+    // {
+    //     "user": "test@test.com",
+    //     "bank": "BankA, L=New York, C=US",
+    //     "approval": "true"
+    // }]);
 
     useEffect(() => {
         fetch(`${url}/kyc/status`, {
