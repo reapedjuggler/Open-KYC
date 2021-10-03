@@ -11,7 +11,7 @@ const userService = require("../service/userServices");
 const bankService = require("../service/bankService");
 
 // const fileData = require("../data.json");
-let arr = [process.env.userPort1 || 50011, process.env.userPort2 || 50044]; // User ports array
+let arr = [process.env.userPort1 || 50011]; // User ports array
 
 router.post("/apply", async (req, res, next) => {
 	try {
@@ -72,11 +72,11 @@ router.post("/apply", async (req, res, next) => {
 router.post("/status", async (req, res) => {
 	try {
 		let email = req.body.email;
-
-		let data =
-			req.body.user == "A"
-				? 50011 || process.env.userPort1
-				: 50012 || process.env.userPort2;
+		//find user A or B from mongo
+		let data =50011 || process.env.userPort1;
+			//req.body.user == "A"
+			//	? 50011 || process.env.userPort1
+			//	: 50044 || process.env.userPort2;
 
 		// Now resp will be a 2d Array
 		let resp = await userService.getUserDatafromCorda(data);
