@@ -5,7 +5,7 @@ import Completed from '../assets/completed';
 import { useHistory } from 'react-router-dom';
 import { url } from '../util/data';
 
-export default function Dashboard({ type = "apply" }) {
+export default function Dashboard() {
 
     const history = useHistory();
 
@@ -30,22 +30,41 @@ export default function Dashboard({ type = "apply" }) {
     return (
         <div>
             {
-                // data.map((val, idx) => {
-                    <div>
-                        <h1 className="text-gray-800 text-center p-4">{"KYC"}</h1>
+                data.length <= 0 ?
+                    <div className="rounded-xl py-20 w-11/12 mx-auto mt-10 drop-shadow-md bg-white ">
                         <div>
-                            {type === "apply" && <div className="h-1/4 w-1/4 mx-auto"><Apply /></div>}
-                            {type === "pending" && <div className="h-1/4 w-1/4 mx-auto"><Inprogress /></div>}
-                            {type === "done" && <div className="h-1/4 w-1/4 mx-auto"><Completed /></div>}
-                            <div className="mt-12 flex justify-center">
-                                {type === "apply" && <button onClick={() => history.push('/kyc')} className="ui primary button">Complete your KYC now!</button>}
-                                {type === "pending" && <h3 className="text-gray-800 text-center p-4">{"Your KYC details is being Verified. (Please wait for 2-3 buisness days)"}</h3>}
-                                {type === "done" && <h3 className="text-green-600 text-center p-4">{"KYC Completed!"}</h3>}
+                            <h1 className="text-gray-800 text-center p-4">KYC</h1>
+                            <div>
+                                {<div className="h-1/4 w-1/4 mx-auto"><Apply /></div>}
+                                <div className="mt-12 flex justify-center">
+                                    {<button onClick={() => history.push('/kyc')} className="ui primary button">Complete your KYC now!</button>}
+                                </div>
                             </div>
                         </div>
                     </div>
-                })
-            {/* } */}
+                    :
+                    <div>
+                        {
+                            data.map((val, idx) => {
+                                return (
+                                    <div className="rounded-xl m-4 drop-shadow-md bg-white w-10/12 h-96 mx-auto">
+                                        <div >
+                                            <h1 className="text-gray-800 text-center p-4">{val.bank}</h1>
+                                            <div>
+                                                {val.approval === "false" && <div className="h-1/4 w-1/4 mx-auto"><Inprogress /></div>}
+                                                {val.approval === "true" && <div className="h-1/4 w-1/4 mx-auto"><Completed /></div>}
+                                                <div className="mt-12 flex justify-center">
+                                                    {val.approval === "false" && <h3 className="text-gray-800 text-center">{"Your KYC details is being Verified. (Please wait for 2-3 buisness days)"}</h3>}
+                                                    {val.approval === "true" && <h3 className="text-green-600 text-center">{"KYC Completed!"}</h3>}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })
+                        }
+                    </div>
+            }
         </div>
     )
 }

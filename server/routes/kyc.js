@@ -79,10 +79,10 @@ router.post("/status", async (req, res) => {
 
 			resp = await userService.checkKycStatus(temp, email);
 
-			resp = resp.message;
+			//resp = resp.message;
 
 			if (resp.success == true) {
-				res.send({ success: true, message: resp.message });
+				res.send({ success: true, message: resp.message});
 			} else {
 				res.send({
 					success: false,

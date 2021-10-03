@@ -1,8 +1,11 @@
 import React, {useEffect,useState} from 'react'
 import { url } from '../util/data';
 // import { useParams } from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 
 export default function Detail() {
+
+    const history = useHistory();
     
     const [email] = useState(localStorage.getItem("user_email"));
     const [approve, setapprove] = useState(false);
@@ -37,10 +40,10 @@ export default function Detail() {
       }).then(response => response.json())
       .then(res => {
           if(res.success) {
-            
+            history.push('/dashboard/approved')
           }
       })
-      }, [email,approve])
+      }, [email,approve,history])
 
     return (
         <>

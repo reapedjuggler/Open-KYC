@@ -24,10 +24,10 @@ export default function Header({ loggedin, setloggedin }) {
                     </div>
                     {loggedin &&
                         <Popover.Group as="nav" className="hidden md:flex space-x-10">
-                            <a href="/dashboard" className="text-base font-medium text-gray-500 hover:text-gray-900">
+                            <a href="/dashboard" className="text-xl font-medium text-gray-500 hover:text-gray-900">
                                 Pending Users
                             </a>
-                            <a href="/dashboard/approved" className="text-base font-medium text-gray-500 hover:text-gray-900">
+                            <a href="/dashboard/approved" className="text-xl font-medium text-gray-500 hover:text-gray-900">
                                 Approved Users
                             </a>
                         </Popover.Group>
