@@ -11,6 +11,7 @@ const userService = require("../service/userServices");
 const bankService = require("../service/bankService");
 
 // const fileData = require("../data.json");
+let arr = [process.env.userPort1 || 50011, process.env.userPort2 || 50044]; // User ports array
 
 router.post("/apply", async (req, res, next) => {
 	try {
@@ -72,8 +73,12 @@ router.post("/status", async (req, res) => {
 	try {
 		let email = req.body.email;
 
-		let data = 50011 || process.env.userPort;
+		let data =
+			req.body.user == "A"
+				? 50011 || process.env.userPort1
+				: 50012 || process.env.userPort2;
 
+		// Now resp will be a 2d Array
 		let resp = await userService.getUserDatafromCorda(data);
 
 		if (resp.success == false) {
@@ -85,11 +90,9 @@ router.post("/status", async (req, res) => {
 			resp = resp.message;
 			// let resp = fileData;
 			let temp = [];
-
 			for (let i = 0; i < resp.length; i++) {
 				temp.push(resp[i].state.data);
 			}
-
 			resp = await userService.checkKycStatus(temp, email);
 
 			if (resp.success == true) {
@@ -191,7 +194,7 @@ router.post("/getdetails", async (req, res) => {
 			});
 		} else {
 			resp = resp.message;
-			// let resp = fileData;
+
 			let temp = [];
 
 			for (let i = 0; i < resp.length; i++) {
@@ -202,6 +205,7 @@ router.post("/getdetails", async (req, res) => {
 				temp,
 				email
 			);
+
 			// console.log(getLatestTransaction);
 			if (getLatestTransaction.success == false) {
 				res.send({
@@ -225,12 +229,31 @@ router.post("/getapprovals", async (req, res) => {
 				: process.env.bankSec || 50033;
 
 		let respFromCorda = await bankService.getUserDatafromCorda(data);
+
+		// let respFromCorda = []; // To test locally, **** Comment this****
+
 		if (respFromCorda.success == false) {
 			res.send({
 				success: false,
 				message: "Error in /kyc/getdetails and getUserDataFromCorda Service",
 			});
 		} else {
+			// Now resp will be a 2d Array jab 2 user hai
+			// ek nested loop ke andar kar dena y waal loop kind of for (let ele = 0; ele < resp.length; ele++)
+			// fir resp[i] ki jagah resp[ele] ek array ban jaege isko modify karna padega
+			// for (let j = 0; j < resp.length; j++) {
+
+			// 	let arr = [];
+
+			// 	for (let i = 0; i < resp[j].length; i++) {
+			// 		arr[i].push(resp[j][i].state.data);
+			// 	}
+
+			// 	temp.push(arr);
+			// }
+
+			// respFromCorda = fileData;			// Uncomment when testing locally *****IMP****
+
 			respFromCorda = respFromCorda.message;
 
 			let temp = [];
@@ -238,18 +261,61 @@ router.post("/getapprovals", async (req, res) => {
 			for (let i = 0; i < respFromCorda.length; i++) {
 				temp.push(respFromCorda[i].state.data);
 			}
-			console.log("Iam temp in /getapprovals", temp);
-			let respData = await bankService.getApprovalLists(temp);
 
-			if (respData.success == false) {
-				res.send({
-					success: false,
-					message:
-						"Error in /kyc/getapprovals route and getApprovalList service",
-				});
-			} else {
-				res.send({ success: true, message: respData.message });
+			console.log(temp);
+
+			let finalApproval = [],
+				finalPending = [];
+
+			for (let i = 0; i < arr.length; i++) {
+				let respFromCordaFromUser = await userService.getUserDatafromCorda(
+					arr[i]
+				);
+
+				respFromCordaFromUser = respFromCordaFromUser.message;
+
+				// console.log(
+				// 	respFromCordaFromUser,
+				// 	" \nUser\n",
+				// 	respFromCorda,
+				// 	"\nFrom Corda\n"
+				// );
+
+				let temp1 = [];
+
+				for (let i = 0; i < respFromCordaFromUser.length; i++) {
+					temp1.push(respFromCordaFromUser[i].state.data);
+				}
+
+				let respData = await bankService.getApprovalLists(temp, temp1);
+
+				// console.log("Iam temp in /getapprovals", respData.message.pending);
+
+				if (respData.success == false) {
+					throw new Error({
+						success: false,
+						message: "Error in getApprovalLists service",
+					});
+				} else {
+					finalApproval = [...finalApproval, ...respData.message.approved];
+					finalPending = [...finalPending, ...respData.message.pending];
+					// console.log("Arrays\n\n");
+
+					// for (let i = 0; i < respData.message.pending.length; i++)
+					// 	console.log(respData.message.pending[i].approved_by, "\n");
+
+					// for (let i = 0; i < respData.message.approved.length; i++)
+					// 	console.log(respData.message.approved[i].approved_by, "\n");
+				}
 			}
+
+			// Maybe will need a for loop here for like processing every user and then we will
+			// send the final list
+
+			res.send({
+				success: true,
+				message: { approved: finalApproval, pending: finalPending },
+			});
 		}
 	} catch (err) {
 		console.log(err);

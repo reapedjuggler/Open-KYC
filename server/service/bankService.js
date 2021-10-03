@@ -67,7 +67,17 @@ class Bank {
 		}
 	};
 
-	getApprovalLists = async respFromCorda => {
+	// getApprovalListForASingleUser = async (user, arr) => {
+	// 	try {
+	// 		let bankWhoApproved = [];
+
+	// 		return { sucess: true, message: bankWhoApproved };
+	// 	} catch (err) {
+	// 		return { success: false, message: err.message };
+	// 	}
+	// };
+
+	getApprovalLists = async (respFromCorda, respFromCordaFromUser) => {
 		try {
 			let visSet = new Set();
 
@@ -86,11 +96,21 @@ class Bank {
 
 			for (let i = respFromCorda.length - 1; i >= 0; i--) {
 				if (visSet.has(respFromCorda[i].email) == true) continue;
+
 				ans.push(respFromCorda[i]);
+
 				visSet.add(respFromCorda[i].email);
 			}
 
+			// ans --> Latest Transactions
+
 			for (let i = 0; i < ans.length; i++) {
+				// is user yaani ki ith user ke liye mujhko respFromCordaFromUser mai se wo
+				// bank cahe jinhone isko approve kar diya hai
+
+				// ek or utility function banate hai jisme sirf hum bhejege
+				// ek user or ek or array ko y operation perform karege
+
 				let newEle = {
 					email: "",
 					name: "Test",
@@ -101,25 +121,24 @@ class Bank {
 					approved_by: [],
 				};
 
-				newEle.email = ans[i].email;
 				let id = await userModel.findOne({ email: newEle.email });
 
 				let name = id == null ? "Batman" : id.firstName + id.lastName;
 
 				id = id == null ? "default" : id._id;
 
+				newEle.email = ans[i].email;
 				newEle.name = name;
 				newEle.id = id;
 				newEle.aadhar = ans[i].aadhar;
 				newEle.pan = ans[i].pan;
-				newEle.approval = ans[i].approval;
-				if (newEle.approval == "true") {
-					newEle.approved_by =
-						ans[i].approved_by == undefined || ans[i].approved_by == null
-							? []
-							: ans[i].approved_by;
-					newEle.approved_by.push(ans[i].lender);
-				}
+
+				let bankWhoApproved = respFromCordaFromUser.filter(
+					ele => ele.approval == "true"
+				);
+
+				newEle.approved_by = bankWhoApproved;
+
 				ans[i] = newEle;
 			}
 
