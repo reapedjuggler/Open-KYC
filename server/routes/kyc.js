@@ -178,9 +178,13 @@ router.post("/approve", async (req, res) => {
 router.post("/getdetails", async (req, res) => {
 	try {
 		let email = req.body.email;
+		let data =
+			req.body.bank == "A"
+				? process.env.bankFirst || 50006
+				: process.env.bankSec || 50033;
 
-		let resp = await userService.getUserDatafromCorda(data);
-
+		let resp = await bankService.getUserDatafromCorda(data);
+		console.log(resp)
 		if (resp.success == false) {
 			res.send({
 				success: false,
@@ -199,7 +203,7 @@ router.post("/getdetails", async (req, res) => {
 				temp,
 				email
 			);
-
+				console.log(getLatestTransaction)
 			if (getLatestTransaction.success == false) {
 				res.send({
 					success: false,
@@ -221,7 +225,7 @@ router.post("/getapprovals", async (req, res) => {
 				? process.env.bankFirst || 50006
 				: process.env.bankSec || 50033;
 
-		let respFromCorda = await userService.getUserDatafromCorda(data);
+		let respFromCorda = await bankService.getUserDatafromCorda(data);
 		if (respFromCorda.success == false) {
 			res.send({
 				success: false,

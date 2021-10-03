@@ -10,6 +10,19 @@ const customError = require("../utils/customError");
 // constants
 let url = "http://localhost:50006/create-iou";
 class Bank {
+	getUserDatafromCorda = async data => {
+		try {
+			
+			var url = `http://localhost:${data}/ious`;
+
+			let resp = await axios({ method: "GET", url: url });
+			console.log("datadgagagagaa", resp.data);
+			return { success: true, message: resp.data };
+		} catch (err) {
+			console.log(err, "\n Iam error in senduserDataToCorda service");
+			return { success: false, message: err };
+		}
+	};
 	createBank = async data => {
 		const user = new bankModel({
 			name: data.name,
