@@ -99,6 +99,7 @@ class Bank {
 					pan: true,
 					id: "",
 					approval: "false",
+					approved_by: []
 				};
 
 				newEle.email = ans[i].email;
@@ -113,6 +114,10 @@ class Bank {
 				newEle.aadhar = ans[i].aadhar;
 				newEle.pan = ans[i].pan;
 				newEle.approval = ans[i].approval;
+				if(newEle.approval=="true"){
+					newEle.approved_by = ans[i].approved_by
+					newEle.approved_by.push(ans[i].lender)
+				}
 				ans[i] = newEle;
 			}
 
