@@ -27,6 +27,7 @@ export default function Dashboard({approved}) {
       .then(res => {
           if(res.success) {
             setbankname(res.message.name);
+            localStorage.setItem('bank',res.message.name)
           }
           else{
             setdata([]);
