@@ -42,12 +42,11 @@ export default function Card({data, bank}) {
     return (
         <div className="relative flex flex-col lg:flex-row justify-around items-center w-2/3 m-4 p-12 lg:p-2 rounded-md bg-white">
             {   
-                data.approval === "true" &&
+                (data !== undefined && data.approval === "false" && data.approved_by.length > 0) &&
                 <div className="absolute bottom-3 right-3 lg:bottom-5 lg:right-8 flex justify-between text-sm text-green-500 font-bold items-center">
-                    <div><i className="check circle outline icon"></i></div>
-                    <p>{`${(data.approved_by !== undefined && data.approved_by.length > 0 ) && 
-                        "Approved By " + data.approved_by[data.approved_by.length - 1].lender.split(',')[0].split('=')[1]} 
-                        ${data.approved_by.length > 1 && "& " + data.approved_by.length-1}+`}
+                    <div><i className="check circle icon"></i></div>
+                    <p>{`${"Approved By " + data.approved_by[data.approved_by.length - 1].lender.split(',')[0].split('=')[1]} 
+                       ${data.approved_by.length > 1 ? "and " : ""} ${data.approved_by.length > 1 ? data.approved_by.length-1 + "+ banks": ""}`}
                     </p>
                 </div>
             }
@@ -69,17 +68,17 @@ export default function Card({data, bank}) {
             </div>
             <div className="flex flex-col lg:flex-row">
                 {
-                    data.approval === "true" &&
-                    <div className="mx-auto my-4 lg:my-0">
+                    data.approval === "false" &&
+                    <div className="mx-auto my-4 mr-4 lg:my-0">
                         <button onClick={() => {setkycapprove(true);}}class="ui active blue button">
-                            <i class="address card outline icon"/>
+                            <i class="edit icon"/>
                             Approve
                         </button>
                     </div>
                 }  
                 <div className="mx-auto my-4 lg:my-0">
                     <button onClick={() => { history.push(`/user/${data.id}`);localStorage.setItem('user_email',data.email)}} class="ui active blue button"> 
-                        <i class="address card outline icon" />
+                        <i class="address card icon" />
                         View Details
                     </button>
                 </div>

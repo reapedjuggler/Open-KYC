@@ -214,7 +214,7 @@ router.post("/getdetails", async (req, res) => {
 					email
 				);
 
-				// console.log(getLatestTransaction);
+				console.log(getLatestTransaction,"latest");
 				if (getLatestTransaction.success == false) {
 					res.send({
 						success: false,
@@ -230,7 +230,58 @@ router.post("/getdetails", async (req, res) => {
 		res.send({ success: false, message: err.message });
 	}
 });
+router.post("/getdetails2", async (req, res) => {
+	try {
+		let email = req.body.email;
+		let data =
+			req.body.bank == "A"
+				? process.env.bankFirst || 50033
+				: process.env.bankSec || 50006;
 
+		let resp = await bankService.getUserDatafromCorda(data);
+
+		if (resp.message.length == 0) {
+			res.send({
+				success: true,
+				message: [],
+			});
+		} else {
+			// console.log("Iam resp in /getdetails", resp);
+			if (resp.success == false) {
+				res.send({
+					success: false,
+					message: "Error in /kyc/getdetails and getUserDataFromCorda Service",
+				});
+			} else {
+				resp = resp.message;
+
+				let temp = [];
+
+				for (let i = 0; i < resp.length; i++) {
+					temp.push(resp[i].state.data);
+				}
+				// console.log("Iam temp in /getdetails\n", temp);
+				let getLatestTransaction = await userService.getLatestTransaction(
+					temp,
+					email
+				);
+
+				console.log(getLatestTransaction,"latest");
+				if (getLatestTransaction.success == false) {
+					res.send({
+						success: false,
+						message:
+							"Error in /kyc/getdetails and getLatestTransaction service",
+					});
+				} else {
+					res.send({ success: true, message: getLatestTransaction.message });
+				}
+			}
+		}
+	} catch (err) {
+		res.send({ success: false, message: err.message });
+	}
+});
 router.post("/getapprovals", async (req, res) => {
 	try {
 		let data =
