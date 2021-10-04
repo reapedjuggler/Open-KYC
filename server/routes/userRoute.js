@@ -17,7 +17,7 @@ router.post("/signup", async (req, res) => {
 
 		var check = await utilService.findByEmail(email, userModel);
 
-		if (check != null && Object.keys(check).length) {
+		if (check != null || Object.keys(check).length) {
 			res.send({ success: false, message: "User already exists" });
 		} else {
 			const hashedPassword = await utilService.hashUtil(password);
@@ -73,10 +73,20 @@ router.post("/login", async (req, res) => {
 				userModel
 			);
 			// console.log(resp);
-			if (Object.keys(resp).length > 0) {
-				res.send({ success: true, message: "You are Logged in" });
-			} else {
+
+			const validPassword = await bcrypt.compare(
+				req.body.password,
+				resp.password
+			);
+
+			if (!validPassword) {
 				res.send({ success: false, message: "Invalid Credentials" });
+			} else {
+				if (Object.keys(resp).length > 0) {
+					res.send({ success: true, message: "You are Logged in" });
+				} else {
+					res.send({ success: false, message: "Invalid Credentials" });
+				}
 			}
 		}
 	} catch (err) {

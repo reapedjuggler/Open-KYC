@@ -61,10 +61,19 @@ router.post("/login", async (req, res) => {
 				bankModel
 			);
 
-			if (Object.keys(resp).length > 0) {
-				res.send({ success: true, message: "You are Logged in" });
-			} else {
+			const validPassword = await bcrypt.compare(
+				req.body.password,
+				resp.password
+			);
+
+			if (!validPassword) {
 				res.send({ success: false, message: "Invalid Credentials" });
+			} else {
+				if (Object.keys(resp).length > 0) {
+					res.send({ success: true, message: "You are Logged in" });
+				} else {
+					res.send({ success: false, message: "Invalid Credentials" });
+				}
 			}
 		}
 	} catch (err) {
