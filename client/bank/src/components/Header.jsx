@@ -1,8 +1,12 @@
 import { Fragment } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
+import { useHistory } from 'react-router-dom';
 
 export default function Header({ loggedin, setloggedin }) {
+
+    const history = useHistory();
+
     return (
         <Popover className="relative bg-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -24,12 +28,12 @@ export default function Header({ loggedin, setloggedin }) {
                     </div>
                     {loggedin &&
                         <Popover.Group as="nav" className="hidden md:flex space-x-10">
-                            <a href="/dashboard" className="text-xl font-medium text-gray-500 hover:text-gray-900">
+                            <div onClick={() => history.push('/')} className="cursor-pointer text-xl font-medium text-gray-500 hover:text-gray-900">
                                 Pending Users
-                            </a>
-                            <a href="/dashboard/approved" className="text-xl font-medium text-gray-500 hover:text-gray-900">
+                            </div>
+                            <div onClick={() =>history.push("/dashboard/approved")} className="cursor-pointer text-xl font-medium text-gray-500 hover:text-gray-900">
                                 Approved Users
-                            </a>
+                            </div>
                         </Popover.Group>
                     }
                     {loggedin ?
@@ -88,13 +92,13 @@ export default function Header({ loggedin, setloggedin }) {
                         <div className="py-6 px-5 space-y-6">
                             {loggedin &&
                                 <div className="grid grid-cols-2 gap-y-4 gap-x-8">
-                                    <a href="/dashboard" className="text-base font-medium text-gray-900 hover:text-gray-700">
+                                    <div onClick={() => history.push('/')} className="cursor-pointer text-base font-medium text-gray-900 hover:text-gray-700">
                                         Pending Users
-                                    </a>
+                                    </div>
 
-                                    <a href="/dashboard/approved" className="text-base font-medium text-gray-900 hover:text-gray-700">
+                                    <div onClick={() =>history.push("/dashboard/approved")} className="cursor-pointer text-base font-medium text-gray-900 hover:text-gray-700">
                                         Approved Users
-                                    </a>
+                                    </div>
                                 </div>
                             }
                             {loggedin ?

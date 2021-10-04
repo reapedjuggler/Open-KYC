@@ -40,6 +40,10 @@ export default function Dashboard() {
                     setdata(data.message);
                     setisloading(false);
                 }
+                else{
+                    setisloading(false);
+                    setiserror(true);
+                }
             }).catch(() => {
                 setisloading(false);
                 setiserror(true);

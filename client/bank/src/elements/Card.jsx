@@ -4,27 +4,12 @@ import { AiOutlineIssuesClose } from 'react-icons/ai';
 import {useHistory} from 'react-router-dom';
 import { url } from '../util/data';
 
-export default function Card({data}) {
+export default function Card({data, bank}) {
 
     const history = useHistory();
 
     const [kycapprove, setkycapprove] = useState(false);
     const [iserror, setiserror] = useState(false);
-    // const [bankname, setbankname] = useState("");
-
-    // useEffect(() => {
-    //     fetch(`${url}/util/getuserdetails`,{
-    //       method:'POST',
-    //       headers:{'Content-Type':'application/json'},
-    //       body: JSON.stringify({
-    //         email:data.email
-    //       })
-    //   }).then(response => response.json())
-    //   .then(res => {
-    //       if(res.success) {
-    //       }
-    //   }).catch(()=>setiserror(true))
-    //   }, [data,kycapprove,history]);
 
     useEffect(() => {
         if (!kycapprove) return;
@@ -32,7 +17,7 @@ export default function Card({data}) {
           method:'POST',
           headers:{'Content-Type':'application/json'},
           body: JSON.stringify({
-            bank:"A",
+            bank:bank,
             email:data.email
           })
       }).then(response => response.json())
@@ -41,7 +26,7 @@ export default function Card({data}) {
             history.push('/dashboard/approved')
           }
       }).catch(()=>setiserror(true))
-      }, [data,kycapprove,history]);
+      }, [data,kycapprove,history,bank]);
 
     if (iserror) {
         return (
@@ -60,7 +45,10 @@ export default function Card({data}) {
                 data.approval === "true" &&
                 <div className="absolute bottom-3 right-3 lg:bottom-5 lg:right-8 flex justify-between text-sm text-green-500 font-bold items-center">
                     <div><i className="check circle outline icon"></i></div>
-                    <p>{`${(data.approved_by !== undefined && data.approved_by.length > 0 ) && "Approved By " + data.approved_by[data.approved_by.length - 1].lender.split(',')[0].split('=')[1]} ${data.approved_by.length > 1 && "& " + data.approved_by.length-1}+`}</p>
+                    <p>{`${(data.approved_by !== undefined && data.approved_by.length > 0 ) && 
+                        "Approved By " + data.approved_by[data.approved_by.length - 1].lender.split(',')[0].split('=')[1]} 
+                        ${data.approved_by.length > 1 && "& " + data.approved_by.length-1}+`}
+                    </p>
                 </div>
             }
             <div>

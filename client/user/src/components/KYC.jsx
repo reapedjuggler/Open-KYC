@@ -47,6 +47,9 @@ export default function RegisterformKYC() {
                             if(data.success){
                                 history.push('/');
                             }
+                            else{
+                                setiserror(true)
+                            }
                         }).catch(()=> setiserror(true));
                         // resetForm({ values: '' });
                     }}

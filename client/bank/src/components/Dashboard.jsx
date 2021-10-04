@@ -9,8 +9,35 @@ export default function Dashboard({approved}) {
     const history = useHistory();
 
     const [data, setdata] = useState([]);
+    const [email] = useState(localStorage.getItem("email"));
     const [isloading, setisloading] = useState(false);
     const [iserror, setiserror] = useState(false);
+    const [bankname, setbankname] = useState("");
+
+    useEffect(() => {
+        if(!email) return;
+        setisloading(true);
+        fetch(`${url}/util/getuserdetails`,{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({
+            email:email
+          })
+      }).then(response => response.json())
+      .then(res => {
+          if(res.success) {
+            setbankname(res.message.name);
+          }
+          else{
+            setdata([]);
+            setisloading(false);
+            setiserror(true);
+          }
+      }).catch(()=>{
+          setisloading(false);
+          setiserror(true);
+        })
+      }, [email]);
 
     useEffect(() => {
         setisloading(true);
@@ -18,7 +45,7 @@ export default function Dashboard({approved}) {
           method:'POST',
           headers:{'Content-Type':'application/json'},
           body: JSON.stringify({
-            bank:"A"
+            bank:bankname
           })
       }).then(response => response.json())
       .then(res => {
@@ -26,12 +53,17 @@ export default function Dashboard({approved}) {
             approved?setdata(res.message.approved):setdata(res.message.pending);
             setisloading(false);
           }
+          else{
+            setdata([]);
+            setisloading(false);
+            setiserror(true);
+          }
       }).catch(() => {
           setdata([]);
           setisloading(false);
           setiserror(true);
       })
-      }, [approved]);
+      }, [approved,bankname]);
 
       if(isloading){
         return(
@@ -64,7 +96,7 @@ export default function Dashboard({approved}) {
                     data.map((val,k)=>{
                        return( 
                         <div className="flex justify-center">
-                            <Card data={val} key={k}/>
+                            <Card data={val} key={k} bank={bankname}/>
                         </div>
                        )
                     })

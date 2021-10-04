@@ -33,7 +33,10 @@ export default function Userconsent() {
       }).then(response => response.json())
       .then(res => {
           if(res.success) {
-            setdata(res.message[0])
+            setdata(res.message[0]);
+          }
+          else{
+            setiserror(true);
           }
       }).catch(() => setiserror(true))
       }, [email,bank])
@@ -63,6 +66,9 @@ export default function Userconsent() {
                 .then(data => {
                     if (data.success) {
                         history.push('/');
+                    }
+                    else{
+                        setiserror(true);
                     }
                 }).catch(() => setiserror(true))
         }

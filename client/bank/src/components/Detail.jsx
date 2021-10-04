@@ -29,6 +29,10 @@ export default function Detail() {
             setdata(res.message[0]);
             setisloading(false);
           }
+          else{
+            setisloading(false);
+            setiserror(true)
+          }
       }).catch(()=>{
         setisloading(false);
         setiserror(true);
@@ -48,6 +52,9 @@ export default function Detail() {
       .then(res => {
           if(res.success) {
             history.push('/dashboard/approved')
+          }
+          else{
+            setiserror(true)
           }
       }).catch(()=>setiserror(true));
       }, [email,approve,history])

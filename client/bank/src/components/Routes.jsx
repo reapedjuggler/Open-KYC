@@ -5,11 +5,13 @@ import Register from './Register';
 import Forget from './Forget';
 import Reset from './Reset';
 import Details from './Detail';
+import Header from '../components/Header';
 
 export default function Routes({loggedin,setloggedin}) {
     return (
         <div>
         <Router>
+            <Header loggedin={loggedin} setloggedin={setloggedin}/>
             <Switch>
                 <Route exact path='/'>
                     {loggedin ?<Redirect to='/dashboard'/>:<Redirect to='/login'/>}
