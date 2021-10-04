@@ -14,28 +14,32 @@ export default function Userconsent() {
     const [checkbox, setcheckbox] = useState(false);
     const [bank, setbank] = useState("");
     const [email] = useState(localStorage.getItem("email") || "");
+    const [iserror, setiserror] = useState(false);
 
     const [bankoptions] = useState([
         { key: 'm', text: 'Bank A', value: 'A' },
         { key: 'f', text: 'Bank B', value: 'B' },
-        { key: 'o', text: 'Bank C', value: 'C' },
     ])
 
     useEffect(() => {
-        if(!email) return;
+        if(!email && !bank) return;
         fetch(`${url}/kyc/getdetails`,{
           method:'POST',
           headers:{'Content-Type':'application/json'},
           body: JSON.stringify({
             email: email,
+            bank: bank,
           })
       }).then(response => response.json())
       .then(res => {
           if(res.success) {
-            setdata(res.message[0])
+            setdata(res.message[0]);
           }
-      })
-      }, [email])
+          else{
+            setiserror(true);
+          }
+      }).catch(() => setiserror(true))
+      }, [email,bank])
 
     useEffect(() => {
         if (!isapply) return;
@@ -63,9 +67,23 @@ export default function Userconsent() {
                     if (data.success) {
                         history.push('/');
                     }
-                }).catch(err => console.log(err))
+                    else{
+                        setiserror(true);
+                    }
+                }).catch(() => setiserror(true))
         }
-    }, [isapply, history, bank, email, clicked, data])
+    }, [isapply, history, bank, email, clicked, data]);
+
+    if (iserror) {
+        return (
+            <React.Fragment>
+                <div className='flex flex-column items-center justify-center bg-white ma3 br2 vh-75'>
+                    <p className="f3 gray">Something Went Wrong!</p>
+                    <button className="mt4 fw6 f6 bn dim br1 ph3 pointer pv2 dib white" style={{ background: "#6EB6FF" }} onClick={() => history.push('/')}>Go Back</button>
+                </div>
+            </React.Fragment>
+        );
+    }
 
     return (
         <div className="rounded-md bg-white p-5 m-12 w-11/12 lg:w-1/2 mx-auto text-center">

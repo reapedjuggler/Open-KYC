@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import Routes from '../components/Routes';
-import Header from '../components/Header';
 
 export default function App() {
 
@@ -8,7 +7,6 @@ export default function App() {
 
   return (
     <div className="App bg-gray-200 min-h-screen">
-      <Header loggedin={isloggedin} setloggedin={setisloggedin}/>
       <Routes loggedin={isloggedin} setloggedin={setisloggedin}/>
     </div>
   );

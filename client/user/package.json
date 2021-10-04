@@ -28,6 +28,7 @@
   "scripts": {
     "start": "npm run watch:css && react-scripts start",
     "build": "npm run watch:css && react-scripts build",
+    "prod": "npm run build && serve -s build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "watch:css": "postcss src/styles/tailwind.css -o src/styles/output.css"

@@ -13,7 +13,7 @@ lerna-debug.log*
 
 # testing
 /coverage
-
+build
 data.json
 .env
 node_modules
