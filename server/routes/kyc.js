@@ -191,7 +191,7 @@ router.post("/getdetails", async (req, res) => {
 		if (resp.message.length == 0) {
 			res.send({
 				success: true,
-				message: `No transactions in ${req.body.bank} `,
+				message: [],
 			});
 		} else {
 			// console.log("Iam resp in /getdetails", resp);
