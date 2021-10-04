@@ -6,6 +6,7 @@ class UtilService {
 
 	findByEmail = async (email, model) => {
 		const user = await model.findOne({ email: email });
+		// console.log(user);
 		return user;
 	};
 

@@ -6,6 +6,7 @@ const env = process.env;
 
 //Models
 const bankModel = require("../models/bankModel");
+const userModel = require("../models/userModel");
 const otpModel = require("../models/otpModel");
 // Services:-
 const bankService = require("../service/bankService");
@@ -22,12 +23,14 @@ const generateOtp = () => {
 
 router.post("/getuserdetails", async (req, res) => {
 	try {
-		let resp = await utilService.findByCredentials(req.body.userid, bankModel);
+		let resp = await utilService.findByEmail(req.body.email, bankModel);
 
 		if (resp != null) {
 			res.send({ success: true, message: resp });
 		} else {
-			resp = await utilService.findByCredentials(req.body.userid, userModel);
+			resp = await utilService.findByEmail(req.body.email, userModel);
+
+			console.log(resp);
 
 			if (resp != null) {
 				res.send({ success: true, message: resp });

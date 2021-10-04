@@ -34,6 +34,18 @@ class Bank {
 		return user.save();
 	};
 
+	getPartyNameFromCorda = async data => {
+		try {
+			let val = data == "A" ? 50006 : 50033;
+			let url = `http://localhost:${val}/me`;
+
+			const resp = await axios({ method: "GET", url: url });
+			// console.log("Iam the data\n", resp.data);
+			return { success: true, message: resp.data };
+		} catch (err) {
+			return { success: false, message: err.message };
+		}
+	};
 	sendBankDataToCorda = async data => {
 		try {
 			url = `http://localhost:${data.bank}/create-iou`;

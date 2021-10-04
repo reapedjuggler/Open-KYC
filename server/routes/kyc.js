@@ -40,12 +40,12 @@ router.post("/apply", async (req, res, next) => {
 				bank:
 					bank == "A"
 						? 50006 || process.env.bankFirst
-						: 50033 || process.env.bankSe,
+						: 50033 || process.env.bankSec,
 				partyName: "",
 				approval: "false",
 			};
 
-			let partyName = await userService.getPartyNameFromCorda(bank);
+			let partyName = await bankService.getPartyNameFromCorda(bank);
 
 			if (partyName.success == false) {
 				res.send({
@@ -272,7 +272,6 @@ router.post("/getapprovals", async (req, res) => {
 					message: `No transactions in ${req.body.bank} `,
 				});
 			} else {
-				
 				respFromCorda = respFromCorda.message;
 
 				let temp = [];
@@ -287,7 +286,6 @@ router.post("/getapprovals", async (req, res) => {
 					finalPending = [];
 
 				for (let i = 0; i < arr.length; i++) {
-					
 					let respFromCordaFromUser = await userService.getUserDatafromCorda(
 						arr[i]
 					);
