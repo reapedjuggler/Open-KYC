@@ -75,13 +75,16 @@ export default function Card({data, bank}) {
                             Approve
                         </button>
                     </div>
-                }  
+                }
+                {
+                data.approval === "true" &&
                 <div className="mx-auto my-4 lg:my-0">
                     <button onClick={() => { history.push(`/user/${data.id}`);localStorage.setItem('user_email',data.email)}} class="ui active blue button"> 
                         <i class="address card icon" />
                         View Details
                     </button>
                 </div>
+                }
             </div>
         </div>
     )

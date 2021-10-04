@@ -79,6 +79,7 @@ export default function Userconsent() {
                 setcheckbox(false);
                 setclicked(false);
                 setisapply(false);
+                setmsg();
             }, 3000);
             return;
         }
@@ -90,6 +91,7 @@ export default function Userconsent() {
                 setcheckbox(false);
                 setclicked(false);
                 setisapply(false);
+                setmsg("");
             }, 3000);
             return;
         };
