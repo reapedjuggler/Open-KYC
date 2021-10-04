@@ -12,14 +12,16 @@ router.post("/createtoken", async (req, res, next) => {
 		const cordaData = {
 			email: email,
 			typeOfTransaction: typeOfTransaction,
+			port: process.env.tokenPort || 50073,
 			bank: bank,
 			partyName: "",
 		};
 
-		let partyName = await userService.getPartyNameFromCorda(bank);
+		let partyName = await bankService.getPartyNameFromCorda(bank);
 
 		if (partyName.success === true) {
-			partyName = partyName.message;
+			partyName = partyName.message.me;
+
 			cordaData.partyName = partyName;
 
 			let respFromCorda = await tokenService.createToken(cordaData);

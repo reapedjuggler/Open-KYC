@@ -113,8 +113,6 @@ router.post("/status", async (req, res) => {
 });
 
 router.post("/approve", async (req, res) => {
-	//if false then approve
-
 	try {
 		let data =
 			req.body.bank == "A"
@@ -269,7 +267,7 @@ router.post("/getapprovals", async (req, res) => {
 			if (respFromCorda.message.length == 0) {
 				res.send({
 					success: true,
-					message: `No transactions in ${req.body.bank} `,
+					message: { approved: [], pending: [] },
 				});
 			} else {
 				respFromCorda = respFromCorda.message;
@@ -280,8 +278,7 @@ router.post("/getapprovals", async (req, res) => {
 					temp.push(respFromCorda[i].state.data);
 				}
 
-				console.log(temp);
-
+				// console.log(temp);
 				let finalApproval = [],
 					finalPending = [];
 

@@ -25,15 +25,29 @@ router.post("/getuserdetails", async (req, res) => {
 	try {
 		let resp = await utilService.findByEmail(req.body.email, bankModel);
 
+		let resp1 = {
+			name: resp.name,
+			ifsc_code: resp.ifsc_code,
+			email: resp.email,
+			createdAt: resp.createdAt,
+			_id: resp._id,
+		};
+
 		if (resp != null) {
-			res.send({ success: true, message: resp });
+			res.send({ success: true, message: resp1 });
 		} else {
 			resp = await utilService.findByEmail(req.body.email, userModel);
 
-			console.log(resp);
+			resp1 = {
+				name: resp.name,
+				ifsc_code: resp.ifsc_code,
+				email: resp.email,
+				createdAt: resp.createdAt,
+				_id: resp._id,
+			};
 
 			if (resp != null) {
-				res.send({ success: true, message: resp });
+				res.send({ success: true, message: resp1 });
 			} else {
 				res.send({ success: false, message: "No user exist" });
 			}
