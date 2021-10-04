@@ -1,4 +1,5 @@
 import { Form } from 'semantic-ui-react'
+import React, {useState} from 'react';
 import { url } from '../util/data';
 import { Formik } from 'formik';
 import { loginformvalues as initialvalue } from '../util/initial-data';
@@ -9,6 +10,7 @@ import {useHistory} from 'react-router-dom';
 export default function Loginform({setloggedin}) {
 
     const history = useHistory();
+    const [hidden, sethidden] = useState(false);
 
     return (
         <div className="flex mt-4 justify-center items-center">
@@ -51,7 +53,10 @@ export default function Loginform({setloggedin}) {
                                 <h1 className="gray-600 text-3xl my-6 text-center font-bold">Bank Login</h1>
                                 <Form.Input name="uuid" onChange={handleChange} onBlur={handleBlur} value={values.uuid} fluid label='Bank UUID' placeholder='Bank UUID' />
                                 <FormError name="uuid" />
-                                <Form.Input name="password" onChange={handleChange} onBlur={handleBlur} type="password" value={values.password} fluid label='Password' placeholder='Password' />
+                                <div className="relative">
+                                    <Form.Input name="password" onChange={handleChange} onBlur={handleBlur} type={hidden?"text":"password"} value={values.password} fluid label='Password' placeholder='Password' />
+                                    <div onClick={()=>{sethidden(prev=>!prev)}} className="absolute top-9 cursor-pointer right-4">{hidden?<i class="eye icon"/>:<i class="eye slash icon"/>}</div>
+                                </div>
                                 <FormError name="password" />
                                 <div className="flex justify-around my-5">
                                 <p onClick={() => history.push('/register')} className="f7 m-0 cursor-pointer hover:text-blue-400 text-gray-600">New to platform?</p>
