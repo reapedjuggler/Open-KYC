@@ -132,6 +132,7 @@ class Bank {
 				newEle.id = id;
 				newEle.aadhar = ans[i].aadhar;
 				newEle.pan = ans[i].pan;
+				newEle.approval = ans[i].approval;
 
 				let bankWhoApproved = respFromCordaFromUser.filter(
 					ele => ele.approval == "true"

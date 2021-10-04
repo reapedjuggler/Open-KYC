@@ -91,11 +91,11 @@ class User {
 			});
 
 			for (let i = data.length - 1; i >= 0; i--) {
-				if (visSet.has(data[i].aadhar) == true) continue;
+				if (visSet.has(data[i].email) == true) continue;
 
 				if (email == data[i].email) ans.push(data[i]);
 
-				visSet.add(data[i].aadhar);
+				visSet.add(data[i].email);
 			}
 
 			console.log(ans, "\ndata\n");
@@ -139,8 +139,11 @@ class User {
 
 			for (let i = data.length - 1; i >= 0; i--) {
 				let index = data[i].borrower.indexOf("=");
+
 				let borrower = data[i].borrower.substring(index + 1);
+
 				let lender = data[i].lender.substring(index + 1);
+
 				let x =
 					data[i].approval == "true" && lender[0] == "B" ? lender : borrower;
 				if (visSet.has(x) == true) continue;
