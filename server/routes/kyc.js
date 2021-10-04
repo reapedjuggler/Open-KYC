@@ -214,7 +214,7 @@ router.post("/getdetails", async (req, res) => {
 					email
 				);
 
-				console.log(getLatestTransaction,"latest");
+				console.log(getLatestTransaction, "latest");
 				if (getLatestTransaction.success == false) {
 					res.send({
 						success: false,
@@ -266,7 +266,7 @@ router.post("/getdetails2", async (req, res) => {
 					email
 				);
 
-				console.log(getLatestTransaction,"latest");
+				console.log(getLatestTransaction, "latest");
 				if (getLatestTransaction.success == false) {
 					res.send({
 						success: false,
@@ -389,6 +389,7 @@ router.post("/getapprovals", async (req, res) => {
 		res.send({ success: false, message: err });
 	}
 });
+
 module.exports = exports = {
 	router,
 };
