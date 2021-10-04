@@ -22,17 +22,23 @@ router.post("/signup", async (req, res) => {
 		} else {
 			const hashedPassword = await utilService.hashUtil(password);
 
-			var modelData = {
-				firstname: firstName,
-				lastname: lastName,
-				password: hashedPassword,
-				email: email,
-				createdAt: new Date(),
-			};
-			modelData.password = hashedPassword;
-			var resp = await userService.createUser(modelData);
+			if (hashedPassword == false) {
+				res.send({ success: false, message: "Error in /user/signup" });
+			} else {
+				var modelData = {
+					firstname: firstName,
+					lastname: lastName,
+					password: hashedPassword,
+					email: email,
+					createdAt: new Date(),
+				};
 
-			res.send({ success: true, message: "Account created successfully" });
+				modelData.password = hashedPassword;
+
+				var resp = await userService.createUser(modelData);
+
+				res.send({ success: true, message: "Account created successfully" });
+			}
 		}
 	} catch (err) {
 		console.log(err, "\nError in signup\n");
