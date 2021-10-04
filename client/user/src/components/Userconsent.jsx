@@ -79,7 +79,7 @@ export default function Userconsent() {
                 setcheckbox(false);
                 setclicked(false);
                 setisapply(false);
-                setmsg();
+                setmsg("");
             }, 3000);
             return;
         }
