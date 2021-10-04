@@ -6,32 +6,28 @@ class UtilService {
 
 	findByEmail = async (email, model) => {
 		const user = await model.findOne({ email: email });
-		// console.log(user);
-		return user;
+		if(user==undefined ||user==null ||Object.keys(user).length == 0){
+			return {}
+		}	
+		return user
 	};
 
 	findById = async (userId, model) => {
 		const user = await model.findOne({ _id: userId });
-		if (!user)
-			throw customError(401, `user not found with this ${userId} user id`);
-
-		return user;
+		if(user==undefined ||user==null ||Object.keys(user).length == 0){
+			return {}
+		}	
+		return user
 	};
 
 	findByCredentials = async (email, password, model) => {
 		const user = await this.findByEmail(email, model);
-		if (!user)
-			throw customError(401, `user does not exist with this ${email} email`);
+		
 
-		return new Promise((resolve, reject) => {
-			bcrypt.compare(password, user.password, (err, result) => {
-				if (err) reject(customError(400, err.message));
-
-				if (!result) reject(customError(401, "Invalid Password"));
-
-				return resolve(user);
-			});
-		});
+		if(user==undefined ||user==null ||Object.keys(user).length == 0){
+			return {}
+		}	
+		return user
 	};
 
 	hashUtil = async password => {
