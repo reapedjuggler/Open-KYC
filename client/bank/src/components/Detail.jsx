@@ -7,7 +7,8 @@ export default function Detail() {
 
     const history = useHistory();
     
-    const [email] = useState(localStorage.getItem("user_email"));
+    const [email] = useState(localStorage.getItem("user_email") || "");
+    const [bank] = useState(localStorage.getItem("bank") || "");
     const [approve, setapprove] = useState(false);
     const [data, setdata] = useState({aadhar:"jedncjinedjc",pan:"ceoimciencur"});
     const [isloading, setisloading] = useState(false);
@@ -45,7 +46,7 @@ export default function Detail() {
           method:'POST',
           headers:{'Content-Type':'application/json'},
           body: JSON.stringify({
-            bank:"A",
+            bank:bank,
             email:email
           })
       }).then(response => response.json())
@@ -57,7 +58,7 @@ export default function Detail() {
             setiserror(true)
           }
       }).catch(()=>setiserror(true));
-      }, [email,approve,history])
+      }, [email,approve,history,bank])
 
     
     if(isloading){

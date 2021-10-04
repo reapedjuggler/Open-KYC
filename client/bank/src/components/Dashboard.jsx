@@ -27,6 +27,7 @@ export default function Dashboard({approved}) {
       .then(res => {
           if(res.success) {
             setbankname(res.message.name);
+            localStorage.setItem('bank',res.message.name)
           }
           else{
             setdata([]);
@@ -40,6 +41,7 @@ export default function Dashboard({approved}) {
       }, [email]);
 
     useEffect(() => {
+        if(bankname === "") return;
         setisloading(true);
         fetch(`${url}/kyc/getapprovals`,{
           method:'POST',
