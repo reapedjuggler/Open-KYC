@@ -27,6 +27,7 @@ export default function Dashboard({approved}) {
             setisloading(false);
           }
       }).catch(() => {
+          setdata([]);
           setisloading(false);
           setiserror(true);
       })
@@ -58,7 +59,7 @@ export default function Dashboard({approved}) {
             <h1 className="text-gray-800 text-center p-4">{approved?'Approved Users':'Pending Approvals'}</h1> 
             <div>
                 {
-                    data.length <= 0 ? <h2 className="text-gray-600 text-center">No data available</h2>
+                    (data.length === undefined || data.length <= 0) ? <h2 className="text-gray-600 text-center">No data available</h2>
                     :
                     data.map((val,k)=>{
                        return( 
