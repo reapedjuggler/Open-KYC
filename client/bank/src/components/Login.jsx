@@ -35,7 +35,7 @@ export default function Loginform({setloggedin}) {
                                 setloggedin(true);
                             }
                         })
-                        resetForm({ password: '' });
+                        resetForm('');
                     }}
                 >
                     {props => {
