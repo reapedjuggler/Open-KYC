@@ -98,7 +98,7 @@ class User {
 				visSet.add(data[i].email);
 			}
 
-			console.log(ans, "\ndata\n");
+			//console.log(ans, "\ndata\n");
 
 			ans.filter(async ele => ele.email == email);
 
@@ -108,7 +108,7 @@ class User {
 				ans[0].id = !id || id == null ? "default" : id._id;
 			}
 
-			// console.log(ans, "\nI'm ans");
+			console.log(ans, "\nI'm ans");
 
 			return { success: true, message: ans };
 		} catch (err) {

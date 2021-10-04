@@ -22,7 +22,8 @@ export default function Userconsent() {
     ])
 
     useEffect(() => {
-        if(!email && !bank) return;
+        console.log(email,bank)
+        if(email==="" || bank==="") return;
         fetch(`${url}/kyc/getdetails2`,{
           method:'POST',
           headers:{'Content-Type':'application/json'},
@@ -33,7 +34,7 @@ export default function Userconsent() {
       }).then(response => response.json())
       .then(res => {
           if(res.success) {
-            res.message[0].length > 0 ? setdata(res.message[0]): setiserror(true);
+            setdata(res.message[0])
           }
           else{
             setiserror(true);
