@@ -1,6 +1,6 @@
 import React, {useEffect,useState} from 'react'
 import { url } from '../util/data';
-// import { useParams } from 'react-router-dom';
+import Loading from '../shared/Loading';
 import {useHistory} from 'react-router-dom';
 
 export default function Detail() {
@@ -10,10 +10,13 @@ export default function Detail() {
     const [email] = useState(localStorage.getItem("user_email"));
     const [approve, setapprove] = useState(false);
     const [data, setdata] = useState({aadhar:"jedncjinedjc",pan:"ceoimciencur"});
+    const [isloading, setisloading] = useState(false);
+    const [iserror, setiserror] = useState(false);
     // let {userid} = useParams();
 
     useEffect(() => {
         if(!email) return;
+        setisloading(true);
         fetch(`${url}/kyc/getdetails`,{
           method:'POST',
           headers:{'Content-Type':'application/json'},
@@ -23,8 +26,12 @@ export default function Detail() {
       }).then(response => response.json())
       .then(res => {
           if(res.success) {
-            setdata(res.message[0])
+            setdata(res.message[0]);
+            setisloading(false);
           }
+      }).catch(()=>{
+        setisloading(false);
+        setiserror(true);
       })
       }, [email])
 
@@ -42,8 +49,30 @@ export default function Detail() {
           if(res.success) {
             history.push('/dashboard/approved')
           }
-      })
+      }).catch(()=>setiserror(true));
       }, [email,approve,history])
+
+    
+    if(isloading){
+        return(
+        <React.Fragment>
+            <div className='flex items-center justify-center bg-white ma3 br2 vh-75'>
+				<Loading text="Loading Dashboard" />
+			</div>
+        </React.Fragment>
+        );
+    }
+
+    if (iserror) {
+        return (
+            <React.Fragment>
+                <div className='flex flex-column items-center justify-center bg-white ma3 br2 vh-75'>
+                    <p className="f3 gray">Something Went Wrong!</p>
+                    <button className="mt4 fw6 f6 bn dim br1 ph3 pointer pv2 dib white" style={{ background: "#6EB6FF" }} onClick={() => history.push('/')}>Go Back</button>
+                </div>
+            </React.Fragment>
+        );
+    }
 
     return (
         <>

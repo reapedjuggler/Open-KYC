@@ -4,6 +4,7 @@ import Inprogress from '../assets/inprogress';
 import Completed from '../assets/completed';
 import { useHistory } from 'react-router-dom';
 import { url } from '../util/data';
+import Loading from '../shared/Loading';
 
 export default function Dashboard() {
 
@@ -11,6 +12,9 @@ export default function Dashboard() {
 
     const [email] = useState(localStorage.getItem("email"));
     const [data, setdata] = useState([]);
+    const [isloading, setisloading] = useState(false);
+    const [iserror, setiserror] = useState(false);
+
     // const [data, setdata] = useState([{
     //     "user": "test@test.com",
     //     "bank": "BankB, L=Mumbai, C=IN",
@@ -23,6 +27,7 @@ export default function Dashboard() {
     // }]);
 
     useEffect(() => {
+        setisloading(true);
         fetch(`${url}/kyc/status`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -32,10 +37,35 @@ export default function Dashboard() {
         }).then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    setdata(data.message)
+                    setdata(data.message);
+                    setisloading(false);
                 }
+            }).catch(() => {
+                setisloading(false);
+                setiserror(true);
             })
     }, [email])
+
+    if(isloading){
+        return(
+        <React.Fragment>
+            <div className='flex items-center justify-center bg-white ma3 br2 vh-75'>
+				<Loading text="Loading Dashboard" />
+			</div>
+        </React.Fragment>
+        );
+    }
+
+    if (iserror) {
+        return (
+            <React.Fragment>
+                <div className='flex flex-column items-center justify-center bg-white ma3 br2 vh-75'>
+                    <p className="f3 gray">Something Went Wrong!</p>
+                    <button className="mt4 fw6 f6 bn dim br1 ph3 pointer pv2 dib white" style={{ background: "#6EB6FF" }} onClick={() => history.push('/')}>Go Back</button>
+                </div>
+            </React.Fragment>
+        );
+    }
 
     return (
         <div>

@@ -5,7 +5,7 @@ import Register from './Register';
 import Forget from './Forget';
 import Reset from './Reset';
 import KYC from './KYC';
-import UserConsent from './UserConsent';
+import UserConsent from './Userconsent';
 
 export default function Routes({loggedin,setloggedin}) {
     return (

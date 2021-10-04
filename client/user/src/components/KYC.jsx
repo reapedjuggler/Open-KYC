@@ -1,4 +1,5 @@
 import { Form } from 'semantic-ui-react'
+import React, { useState } from 'react'
 import { url } from '../util/data';
 import { Formik } from 'formik';
 import { kycformvalues as initialvalue } from '../util/initial-data';
@@ -10,6 +11,19 @@ import {DropzoneArea} from 'material-ui-dropzone';
 export default function RegisterformKYC() {
 
     const history = useHistory();
+
+    const [iserror, setiserror] = useState(false);
+
+    if (iserror) {
+        return (
+            <React.Fragment>
+                <div className='flex flex-column items-center justify-center bg-white ma3 br2 vh-75'>
+                    <p className="f3 gray">Something Went Wrong!</p>
+                    <button className="mt4 fw6 f6 bn dim br1 ph3 pointer pv2 dib white" style={{ background: "#6EB6FF" }} onClick={() => history.push('/')}>Go Back</button>
+                </div>
+            </React.Fragment>
+        );
+    }
 
     return (
         <div className="flex mt-4 justify-center items-center">
@@ -33,7 +47,7 @@ export default function RegisterformKYC() {
                             if(data.success){
                                 history.push('/');
                             }
-                        })
+                        }).catch(()=> setiserror(true));
                         // resetForm({ values: '' });
                     }}
                 >
