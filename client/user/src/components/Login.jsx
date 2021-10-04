@@ -51,7 +51,7 @@ export default function Loginform({setloggedin}) {
                                 <h1 className="gray-600 text-3xl my-6 text-center font-bold">User Login</h1>
                                 <Form.Input name="email" onChange={handleChange} onBlur={handleBlur} value={values.uuid} fluid label='Email' placeholder='Email' />
                                 <FormError name="email" />
-                                <Form.Input name="password" onChange={handleChange} onBlur={handleBlur} value={values.password} fluid label='Password' placeholder='Password' />
+                                <Form.Input name="password" type="password" onChange={handleChange} onBlur={handleBlur} value={values.password} fluid label='Password' placeholder='Password' />
                                 <FormError name="password" />
                                 <div className="flex justify-around my-5">
                                 <p onClick={() => history.push('/register')} className="f7 m-0 cursor-pointer hover:text-blue-400 text-gray-600">New to platform?</p>
