@@ -1,0 +1,122 @@
+[
+	{
+		"state": {
+			"data": {
+				"@class": "net.corda.samples.example.states.IOUState",
+				"value": 17,
+				"lender": "O=UserA, L=London, C=GB",
+				"borrower": "O=BankA, L=New York, C=US",
+				"linearId": {
+					"externalId": null,
+					"id": "3de39119-adee-4898-b41e-90897e8ba48a"
+				},
+				"aadhar": "6646464646464||null",
+				"pan": "4545454545||null",
+				"email": "test@test.com",
+				"approval": "false",
+				"timestamp": "2021-10-03T13:20:28.771"
+			},
+			"contract": "net.corda.samples.example.contracts.IOUContract",
+			"notary": "O=Notary, L=London, C=GB",
+			"encumbrance": null,
+			"constraint": {
+				"@class": "net.corda.core.contracts.SignatureAttachmentConstraint",
+				"key": "aSq9DsNNvGhYxYyqA9wd2eduEAZ5AXWgJTbTEw3G5d2maAq8vtLE4kZHgCs5jcB1N31cx1hpsLeqG2ngSysVHqcXhbNts6SkRWDaV7xNcr6MtcbufGUchxredBb6"
+			}
+		},
+		"ref": {
+			"txhash": "79E7A7CC728F252E62D2D50F30DEF2525149858575CF27EA002C570DE1FE2AF8",
+			"index": 0
+		}
+	},
+	{
+		"state": {
+			"data": {
+				"@class": "net.corda.samples.example.states.IOUState",
+				"value": 17,
+				"lender": "O=UserA, L=London, C=GB",
+				"borrower": "O=BankB, L=Mumbai, C=IN",
+				"linearId": {
+					"externalId": null,
+					"id": "b98b8cd5-1044-41e5-99da-7ed129138e21"
+				},
+				"aadhar": "9989797977979||null",
+				"pan": "1234567890||null",
+				"email": "test@test.com",
+				"approval": "false",
+				"timestamp": "2021-10-03T13:32:15.745"
+			},
+			"contract": "net.corda.samples.example.contracts.IOUContract",
+			"notary": "O=Notary, L=London, C=GB",
+			"encumbrance": null,
+			"constraint": {
+				"@class": "net.corda.core.contracts.SignatureAttachmentConstraint",
+				"key": "aSq9DsNNvGhYxYyqA9wd2eduEAZ5AXWgJTbTEw3G5d2maAq8vtLE4kZHgCs5jcB1N31cx1hpsLeqG2ngSysVHqcXhbNts6SkRWDaV7xNcr6MtcbufGUchxredBb6"
+			}
+		},
+		"ref": {
+			"txhash": "7DA503CA41D10FDC4618A89D5B592501512D13CA6E31DD87A2EFB361E94BF49B",
+			"index": 0
+		}
+	},
+	{
+		"state": {
+			"data": {
+				"@class": "net.corda.samples.example.states.IOUState",
+				"value": 17,
+				"lender": "O=UserA, L=London, C=GB",
+				"borrower": "O=BankA, L=New York, C=US",
+				"linearId": {
+					"externalId": null,
+					"id": "c776f785-2dea-49d9-b68a-3e6300f2e8ca"
+				},
+				"aadhar": "9876676777||null",
+				"pan": "7777777777||null",
+				"email": "test@test.com",
+				"approval": "false",
+				"timestamp": "2021-10-03T19:31:09.062"
+			},
+			"contract": "net.corda.samples.example.contracts.IOUContract",
+			"notary": "O=Notary, L=London, C=GB",
+			"encumbrance": null,
+			"constraint": {
+				"@class": "net.corda.core.contracts.SignatureAttachmentConstraint",
+				"key": "aSq9DsNNvGhYxYyqA9wd2eduEAZ5AXWgJTbTEw3G5d2maAq8vtLE4kZHgCs5jcB1N31cx1hpsLeqG2ngSysVHqcXhbNts6SkRWDaV7xNcr6MtcbufGUchxredBb6"
+			}
+		},
+		"ref": {
+			"txhash": "878BBBE7CDB993943E75F06F138381210C624E1F8FC360083797A749EE8B678A",
+			"index": 0
+		}
+	},
+	{
+		"state": {
+			"data": {
+				"@class": "net.corda.samples.example.states.IOUState",
+				"value": 17,
+				"lender": "O=BankB, L=Mumbai, C=IN",
+				"borrower": "O=UserA, L=London, C=GB",
+				"linearId": {
+					"externalId": null,
+					"id": "0d270560-15c4-46ca-a89e-698fa0748771"
+				},
+				"aadhar": "9876676777||null",
+				"pan": "7777777777||null",
+				"email": "test@test.com",
+				"approval": "true",
+				"timestamp": "2021-10-03T19:34:22.449"
+			},
+			"contract": "net.corda.samples.example.contracts.IOUContract",
+			"notary": "O=Notary, L=London, C=GB",
+			"encumbrance": null,
+			"constraint": {
+				"@class": "net.corda.core.contracts.SignatureAttachmentConstraint",
+				"key": "aSq9DsNNvGhYxYyqA9wd2eduEAZ5AXWgJTbTEw3G5d2maAq8vtLE4kZHgCs5jcB1N31cx1hpsLeqG2ngSysVHqcXhbNts6SkRWDaV7xNcr6MtcbufGUchxredBb6"
+			}
+		},
+		"ref": {
+			"txhash": "EBF95FBF27B9022BFC871CD63F803CA0053536EAF4D1D78E374621EB5EBD8302",
+			"index": 0
+		}
+	}
+]
