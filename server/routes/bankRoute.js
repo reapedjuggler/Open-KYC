@@ -49,19 +49,23 @@ router.post("/login", async (req, res) => {
 
 		var check = await utilService.findByEmail(email, bankModel);
 
-		if (check == null || Object.keys(check).length == 0) {
+		if (check == null || check == undefined || Object.keys(check).length == 0) {
 			res.send({
 				success: false,
 				message: "No account found with that email Id",
 			});
-		}
-
-		var resp = await utilService.findByCredentials(email, password, bankModel);
-
-		if (Object.keys(resp).length > 0) {
-			res.send({ success: true, message: "You are Logged in" });
 		} else {
-			res.send({ success: false, message: "Invalid Credentials" });
+			var resp = await utilService.findByCredentials(
+				email,
+				password,
+				bankModel
+			);
+
+			if (Object.keys(resp).length > 0) {
+				res.send({ success: true, message: "You are Logged in" });
+			} else {
+				res.send({ success: false, message: "Invalid Credentials" });
+			}
 		}
 	} catch (err) {
 		console.log(err, "\nError in login\n");
