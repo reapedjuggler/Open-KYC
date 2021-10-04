@@ -71,7 +71,7 @@ export default function Userconsent() {
     }, [email, bank])
 
     useEffect(() => {
-        if (!isapply) return;
+        if (!isapply || !bank) return;
         if (!clicked) {
             setcheckbox(true);
             setmsg("Please check the checkbox to apply for KYC!");
@@ -83,7 +83,7 @@ export default function Userconsent() {
             }, 3000);
             return;
         }
-        let res = bankdata.filter(val => val.bank.split(',')[0].split('=')[1] === bank)
+        let res = bankdata.filter(val => val.bank.split(',')[0].split("Bank")[1] === bank)
         if (res.length >= 1) {
             setcheckbox(true);
             setmsg(`Already Applied for ${bank}`);
