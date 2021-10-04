@@ -23,19 +23,23 @@ router.post("/signup", async (req, res) => {
 		} else {
 			const hashedPassword = await utilService.hashUtil(password);
 
-			const modelData = {
-				name: req.body.name,
-				ifsc_code: req.body.ifsc_code,
-				email: req.body.email,
-				password: hashedPassword,
-				createdAt: new Date(),
-			};
+			if (hashedPassword == false) {
+				res.send({ success: false, message: "Error in /user/signup" });
+			} else {
+				const modelData = {
+					name: req.body.name,
+					ifsc_code: req.body.ifsc_code,
+					email: req.body.email,
+					password: hashedPassword,
+					createdAt: new Date(),
+				};
 
-			modelData.password = hashedPassword;
+				modelData.password = hashedPassword;
 
-			const respFromMongo = bankService.createBank(modelData);
+				const respFromMongo = await bankService.createBank(modelData);
 
-			res.send({ success: true, message: "Account created successfully" });
+				res.send({ success: true, message: "Account created successfully" });
+			}
 		}
 	} catch (err) {
 		console.log(err, "\nError in signup\n");
