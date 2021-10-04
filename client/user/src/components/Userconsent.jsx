@@ -22,8 +22,8 @@ export default function Userconsent() {
     ])
 
     useEffect(() => {
-        if(!email && !bank) return;
-        fetch(`${url}/kyc/getdetails2`,{
+        if(!email || !bank) return;
+        fetch(`${url}/kyc/getdetails`,{
           method:'POST',
           headers:{'Content-Type':'application/json'},
           body: JSON.stringify({

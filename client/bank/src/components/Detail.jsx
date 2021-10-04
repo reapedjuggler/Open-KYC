@@ -41,7 +41,7 @@ export default function Detail() {
       }, [email])
 
     useEffect(() => {
-        if (!approve && !bank) return;
+        if (!approve || !bank) return;
         fetch(`${url}/kyc/approve`,{
           method:'POST',
           headers:{'Content-Type':'application/json'},
