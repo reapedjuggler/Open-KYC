@@ -120,7 +120,7 @@ export default function Dashboard() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2">
                 {
-                    (data.length <= 0 || data === undefined) ? <div className="">No data found !</div>
+                    (data === undefined || data.length <= 0 ) ? <div className="">No data found !</div>
                     :
                     <div className="grid grid-cols-2 md:grid-cols-4">
                         {
