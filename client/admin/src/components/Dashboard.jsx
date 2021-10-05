@@ -30,7 +30,6 @@ export default function Dashboard() {
                     setdata(res.message);
                 }
                 else {
-                    setdata([]);
                     setisloading(false);
                     setiserror(true);
                 }
@@ -81,7 +80,6 @@ export default function Dashboard() {
                     setbank(res.message.name);
                 }
                 else {
-                    setdata([]);
                     setisloading(false);
                     setiserror(true);
                 }
@@ -116,7 +114,7 @@ export default function Dashboard() {
         <div>
             <h2 className="text-center text-gray-700">{`Welcome to ${bank} Admin Dashboard`}</h2>
             <div className="flex w-full justify-center items-center">
-                <input className="" type="search" onchange={(e) =>setvalue(e.target.value)}/>
+                <input className="" type="search" onChange={(e) =>setvalue(e.target.value)}/>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2">
                 {
