@@ -22,7 +22,7 @@ export default function Registerform({ setloggedin }) {
                             method:'POST',
                             headers:{'Content-Type':'application/json'},
                             body: JSON.stringify({
-                                name:values.firstname + " " + values.lastname,
+                                name:values.firstname + values.lastname,
                                 email:values.email,
                                 password:values.password
                             })

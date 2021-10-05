@@ -44,7 +44,7 @@ router.post("/apply", async (req, res, next) => {
 						: 50033 || process.env.bankSec,
 				partyName: "",
 				approval: "false",
-				port: resp.name =="A" ? 50011 : 50071 
+				port: resp.name == "A" ? 50011 : 50071,
 			};
 
 			let partyName = await bankService.getPartyNameFromCorda(bank);
@@ -149,7 +149,6 @@ router.post("/approve", async (req, res) => {
 			if (getLatestTransaction == []) {
 				res.send({ success: false, message: "not applied for kyc" });
 			} else {
-				
 				let userDetails = await userModel.findOne({ email: email });
 
 				let partyName =
@@ -330,7 +329,7 @@ router.post("/getapprovals", async (req, res) => {
 					message: { approved: [], pending: [] },
 				});
 			} else {
-				respFromCorda = respFromCorda.message;
+				respFromCorda = respFromCorda.message; // Bank's data
 
 				let temp = [];
 
@@ -343,6 +342,8 @@ router.post("/getapprovals", async (req, res) => {
 					finalPending = [];
 
 				for (let i = 0; i < arr.length; i++) {
+					// 50011, 50071
+
 					let respFromCordaFromUser = await userService.getUserDatafromCorda(
 						arr[i]
 					);
@@ -356,15 +357,35 @@ router.post("/getapprovals", async (req, res) => {
 					// 	"\nFrom Corda\n"
 					// );
 
+					if (
+						respFromCordaFromUser != undefined &&
+						respFromCordaFromUser.length == 0
+					)
+						continue;
+
 					let temp1 = [];
 
 					for (let i = 0; i < respFromCordaFromUser.length; i++) {
 						temp1.push(respFromCordaFromUser[i].state.data);
 					}
 
+<<<<<<< HEAD
 					let respData = await bankService.getApprovalLists(temp, temp1);
 					console.log(temp,"temp",temp1)
 					//console.log("Iam pending in /getapprovals", respData.message.pending);
+=======
+					if (temp1 == []) continue;
+
+					let userEmail = temp1[0].email;
+
+					let respData = await bankService.getApprovalLists(
+						temp,
+						temp1,
+						userEmail
+					);
+
+					// console.log("Iam temp in /getapprovals", respData.message.pending);
+>>>>>>> 317af4d077388d4dccef18b32137c09af9c72460
 
 					if (respData.success == false) {
 						throw new Error({
