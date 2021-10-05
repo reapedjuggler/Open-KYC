@@ -11,13 +11,13 @@ const utilService = require("../service/utilService");
 
 router.post("/signup", async (req, res) => {
 	try {
-		var { firstName, lastName, email, password } = req.body;
+		var { name, email, password } = req.body;
 
 		// UUID --> Every Bank will generate this UUID for every user-
 
 		var check = await utilService.findByEmail(email, userModel);
 
-		if (check != null || Object.keys(check).length) {
+		if (check == null || Object.keys(check).length) {
 			res.send({ success: false, message: "User already exists" });
 		} else {
 			const hashedPassword = await utilService.hashUtil(password);
@@ -26,8 +26,7 @@ router.post("/signup", async (req, res) => {
 				res.send({ success: false, message: "Error in /user/signup" });
 			} else {
 				var modelData = {
-					firstname: firstName,
-					lastname: lastName,
+					name: name,
 					password: hashedPassword,
 					email: email,
 					createdAt: new Date(),
@@ -37,7 +36,11 @@ router.post("/signup", async (req, res) => {
 
 				var resp = await userService.createUser(modelData);
 
-				res.send({ success: true, message: "Account created successfully" });
+				if (resp.success == true) {
+					res.send({ success: true, message: "Account created successfully" });
+				} else {
+					res.send({ success: false, message: resp.message });
+				}
 			}
 		}
 	} catch (err) {

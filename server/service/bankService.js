@@ -10,6 +10,20 @@ const customError = require("../utils/customError");
 // constants
 let url = "http://localhost:50006/create-iou";
 class Bank {
+	createBank = async data => {
+		try {
+			const user = new bankModel({
+				name: data.name,
+				ifsc_code: data.ifsc_code,
+				email: data.email,
+				password: data.password,
+				createdAt: new Date(),
+			});
+			return user.save();
+		} catch (err) {
+			return { success: false, message: "Mongo Error in creating Bank" };
+		}
+	};
 	getUserDatafromCorda = async data => {
 		try {
 			var url = `http://localhost:${data}/ious`;
@@ -21,17 +35,6 @@ class Bank {
 			console.log(err, "\n Iam error in senduserDataToCorda service");
 			return { success: false, message: err };
 		}
-	};
-	createBank = async data => {
-		const user = new bankModel({
-			name: data.name,
-			ifsc_code: data.ifsc_code,
-			email: data.email,
-			password: data.password,
-			createdAt: new Date(),
-		});
-
-		return user.save();
 	};
 
 	getPartyNameFromCorda = async data => {
@@ -135,7 +138,7 @@ class Bank {
 
 				let id = await userModel.findOne({ email: newEle.email });
 
-				let name = id == null ? "Batman" : id.firstName + id.lastName;
+				let name = id == null ? "Batman" : id.name;
 
 				id = id == null ? "default" : id._id;
 
