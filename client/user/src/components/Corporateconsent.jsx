@@ -21,8 +21,8 @@ export default function Userconsent() {
     const [msg, setmsg] = useState("");
 
     const [bankoptions] = useState([
-        { key: 'm', text: 'Bank A', value: 'A' },
-        { key: 'f', text: 'Bank B', value: 'B' },
+        { key: 'm', text: 'Corp A', value: 'A' },
+        { key: 'f', text: 'Corp B', value: 'B' },
     ])
 
     useEffect(() => {
@@ -94,11 +94,11 @@ export default function Userconsent() {
             }, 3000);
             return;
         };
-        fetch(`${url}/kyc/apply`, {
+        fetch(`${url}/kyc/apply/corp`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                bank: bank,
+                corp: bank,
                 email: email,
                 aadhar: data.aadhar,
                 pan: data.pan
@@ -138,7 +138,7 @@ export default function Userconsent() {
     return (
         <div className="rounded-md bg-white p-5 m-12 w-11/12 lg:w-1/2 mx-auto text-center">
             <h2 className="text-gray-700">Let's get you verified</h2>
-            <p>I give my consent to use my documents which includes Aadhar Card, Pan Card, Biometrics and Photograph to be used by the bank to verify my documents and approve me as a valid user by checking on the box below i hereby accept my consent to utilize my documents by the bank.</p>
+            <p>I give my consent to use my documents which includes Aadhar Card, Pan Card, Biometrics and Photograph to be used by the corporate to verify my documents and approve me as a valid user by checking on the box below i hereby accept my consent to give permission to the corporate to use my documents</p>
             <p className="text-gray-600 font-bold">Select Bank to apply for</p>
             <Form.Field
                 control={Select}
