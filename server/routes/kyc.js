@@ -16,7 +16,7 @@ const middleware = require("../middlewares/checkRoles");
 
 // const fileData = require("../data.json");
 let arr = [process.env.userPort1 || 50011, process.env.userPort2 || 50071]; // User ports array
-let email_arr=["test@test.com","test3@test.com"]
+let email_arr = ["test@test.com", "test3@test.com"];
 router.post("/apply", async (req, res, next) => {
 	try {
 		// whether this email already exists in corda
@@ -46,7 +46,7 @@ router.post("/apply", async (req, res, next) => {
 				approval: "false",
 				port: resp.name == "A" ? 50011 : 50071,
 			};
-			
+
 			let partyName = await bankService.getPartyNameFromCorda(bank);
 			//console.log(cordaData,"cordaData",partyName)
 			if (partyName.success == false) {
@@ -78,8 +78,8 @@ router.post("/status", async (req, res) => {
 	try {
 		let email = req.body.email;
 		//find user A or B from mongo
-		let dataMongo = await userModel.findOne({email:email})
-		dataMongo = dataMongo.name
+		let dataMongo = await userModel.findOne({ email: email });
+		dataMongo = dataMongo.name;
 		//console.log(dataMongo)
 		let data =
 			dataMongo == "A"
@@ -100,7 +100,7 @@ router.post("/status", async (req, res) => {
 			for (let i = 0; i < resp.length; i++) {
 				temp.push(resp[i].state.data);
 			}
-			console.log(temp)
+			console.log(temp);
 			resp = await userService.checkKycStatus(temp, email);
 
 			if (resp.success == true) {
@@ -369,13 +369,13 @@ router.post("/getapprovals", async (req, res) => {
 
 					let temp1 = [];
 
-					for (let j = 0;j < respFromCordaFromUser.length; j++) {
+					for (let j = 0; j < respFromCordaFromUser.length; j++) {
 						temp1.push(respFromCordaFromUser[j].state.data);
 					}
 
 					if (temp1 == []) continue;
 
-					console.log(userEmail)
+					console.log(userEmail);
 					let respData = await bankService.getApprovalLists(
 						temp,
 						temp1,
@@ -392,7 +392,7 @@ router.post("/getapprovals", async (req, res) => {
 					} else {
 						finalApproval = [...finalApproval, ...respData.message.approved];
 						finalPending = [...finalPending, ...respData.message.pending];
-						console.log(finalApproval,"aafaa",finalPending);
+						console.log(finalApproval, "aafaa", finalPending);
 
 						// for (let i = 0; i < respData.message.pending.length; i++)
 						// 	console.log(respData.message.pending[i].approved_by, "\n");
@@ -436,10 +436,10 @@ router.post("/reject", async (req, res) => {
 			partyName: "",
 			approval: "reject",
 		};
-		let dataMongo = await userModel.findOne({email:email})
-		dataMongo = dataMongo.name
+		let dataMongo = await userModel.findOne({ email: email });
+		dataMongo = dataMongo.name;
 		let partyName = await userService.getPartyNameFromCorda(dataMongo);
-		
+
 		if (partyName.success == false) {
 			res.send({
 				success: false,
@@ -447,7 +447,7 @@ router.post("/reject", async (req, res) => {
 			});
 		} else {
 			cordaData.partyName = partyName.message.me;
-			console.log(cordaData,"dgsdgdgd")
+			console.log(cordaData, "dgsdgdgd");
 			let respFromCord = await bankService.sendBankDataToCorda(cordaData);
 
 			if (respFromCord.success == false) {
@@ -488,9 +488,28 @@ router.post("/createtrackingdetails", async (req, res) => {
 	}
 });
 
+router.post("/getalltrackingdetails", async (req, res) => {
+	try {
+		let port = process.env.tokenPort || 50073;
+
+		let respForTracking = await tokenService.getTrackingDetails(port);
+
+		if (respForTracking.success == true) {
+			res.send({ sucess: true, message: respForTracking.message });
+		} else {
+			return {
+				success: false,
+				message: "Error in /util/getalltrackingdetails",
+			};
+		}
+	} catch (err) {
+		res.send({ success: false, message: "Error in /kyc/trackandtrace" });
+	}
+});
+
 router.post("/trackandtrace", async (req, res) => {
 	try {
-		let { bank, user } = req.body.body;
+		let { bank, user } = req.body;
 
 		let resp = await tokenService.trackAndTrace(bank, user);
 

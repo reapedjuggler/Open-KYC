@@ -41,6 +41,19 @@ class Token {
 	// 	}
 	// };
 
+	getPartyNameFromCorda = async data => {
+		try {
+			let val = data.port;
+			let url = `http://localhost:${val}/me`;
+
+			const resp = await axios({ method: "GET", url: url });
+			// console.log("Iam the data\n", resp.data);
+			return { success: true, message: resp.data };
+		} catch (err) {
+			return { success: false, message: err.message };
+		}
+	};
+
 	trackAndTrace = async data => {
 		try {
 			let url = `http://localhost:${data.port}/create-iou`;
@@ -51,12 +64,7 @@ class Token {
 			params.append("type_of_transaction", data.typeOfTransaction);
 			params.append("bank", data.bank);
 
-			params.append(
-				"partyName",
-				data.partyName == "50011"
-					? "O=UserA,L=London,C=GB"
-					: "O=UserB,L=London,C=GB"
-			);
+			params.append("partyName", data.partyName);
 			params.append("iouValue", 17);
 			const config = {
 				headers: {
@@ -73,18 +81,12 @@ class Token {
 	};
 
 	getTrackingDetails = async data => {
-
 		try {
 
 			
 
-
-			return {success: true, message: ans}
-
-		} catch (err) {
-
-		}
-
+			return { success: true, message: ans };
+		} catch (err) {}
 	};
 }
 
