@@ -26,6 +26,7 @@ export default function Dashboard() {
             })
         }).then(response => response.json())
             .then(res => {
+                console.log(res,email,"getalltrack")
                 if (res.success) {
                     setdata(res.message.message);
                 }
@@ -51,6 +52,7 @@ export default function Dashboard() {
             })
         }).then(response => response.json())
             .then(res => {
+                console.log(res,email,"trackdetail")
                 if (res.success) {
                     setdata(res.message);
                 }
@@ -76,6 +78,7 @@ export default function Dashboard() {
             })
         }).then(response => response.json())
             .then(res => {
+                console.log(res,email,"getuserdet")
                 if (res.success) {
                     setbank(res.message.name);
                 }
