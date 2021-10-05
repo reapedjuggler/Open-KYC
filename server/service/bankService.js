@@ -92,7 +92,7 @@ class Bank {
 	// 	}
 	// };
 
-	getApprovalLists = async (respFromCorda, respFromCordaFromUser) => {
+	getApprovalLists = async (respFromCorda, respFromCordaFromUser,userEmail) => {
 		try {
 			let visSet = new Set();
 
@@ -161,8 +161,8 @@ class Bank {
 			let approved = [],
 				pending = [];
 			// console.log("ans", ans);
-			approved = ans.filter(ele => ele.approval == "true");
-			pending = ans.filter(ele => ele.approval == "false");
+			approved = ans.filter(ele => ele.approval == "true" && ele.email == userEmail);
+			pending = ans.filter(ele => ele.approval == "false" && ele.email == userEmail);
 
 			// console.log(approved, "\n\n");
 			// console.log(pending, "\n\n");

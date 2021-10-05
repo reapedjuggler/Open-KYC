@@ -33,7 +33,7 @@ class User {
 			// let resp = { data: fileData1 }; // When testing locally uncomment
 
 			let resp = await axios({ method: "GET", url: url });
-			// console.log("Iam resp data", resp.data);
+			console.log("Iam resp data", resp.data);
 			return { success: true, message: resp.data };
 		} catch (err) {
 			console.log(err, "\n Iam error in senduserDataToCorda service");
