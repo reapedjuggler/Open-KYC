@@ -17,7 +17,7 @@ router.post("/signup", async (req, res) => {
 
 		var check = await utilService.findByEmail(email, userModel);
 
-		if (check != null || Object.keys(check).length) {
+		if (check != null || !Object.keys(check).length) {
 			res.send({ success: false, message: "User already exists" });
 		} else {
 			const hashedPassword = await utilService.hashUtil(password);
