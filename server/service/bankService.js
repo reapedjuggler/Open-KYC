@@ -52,18 +52,15 @@ class Bank {
 	sendBankDataToCorda = async data => {
 		try {
 			url = `http://localhost:${data.bank}/create-iou`;
-
+			console.log("senBankToCorPartyname", data.partyName)
 			const params = new URLSearchParams();
 			params.append("email", data.email);
 			params.append("pan", data.pan);
 			params.append("aadhar", data.aadhar);
 			params.append("approval", data.approval);
 			params.append("timestamp", "date");
-			params.append(
-				"partyName",
-				data.partyName == "50011"
-					? "O=UserA,L=London,C=GB"
-					: "O=UserB,L=Bangalore,C=IN"
+			params.append("partyName",
+				data.partyName 
 			);
 			params.append("iouValue", 17);
 			const config = {

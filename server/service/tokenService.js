@@ -41,6 +41,19 @@ class Token {
 	// 	}
 	// };
 
+	getPartyNameFromCorda = async data => {
+		try {
+			let val = data.port;
+			let url = `http://localhost:${val}/me`;
+
+			const resp = await axios({ method: "GET", url: url });
+			// console.log("Iam the data\n", resp.data);
+			return { success: true, message: resp.data };
+		} catch (err) {
+			return { success: false, message: err.message };
+		}
+	};
+
 	trackAndTrace = async data => {
 		try {
 			let url = `http://localhost:${data.port}/create-iou`;
@@ -51,12 +64,7 @@ class Token {
 			params.append("type_of_transaction", data.typeOfTransaction);
 			params.append("bank", data.bank);
 
-			params.append(
-				"partyName",
-				data.partyName == "50011"
-					? "O=UserA,L=London,C=GB"
-					: "O=UserB,L=London,C=GB"
-			);
+			params.append("partyName", data.partyName);
 			params.append("iouValue", 17);
 			const config = {
 				headers: {
@@ -66,25 +74,44 @@ class Token {
 
 			const resp = await axios.post(url, params, config);
 
-			return { success: true, datgTa: resp };
+			return { success: true, message: resp };
 		} catch (err) {
 			return { success: false, message: "Error in trackAndTrace service" };
 		}
 	};
 
-	getTrackingDetails = async data => {
-
+	getAllTrackingDetails = async data => {
 		try {
+			var url = `http://localhost:${data.port}/ious`;
 
-			
+			let resp = await axios({ method: "GET", url: url });
+			// console.log("Iam the data in tokenService getAllTrackingDetails", resp.data);
 
+			let ans = [];
 
-			return {success: true, message: ans}
+			ans = resp.data.filter(
+				ele => ele.bank == data.bankEmail || ele.email == data.bankEmail
+			);
 
+			return { success: true, message: ans };
 		} catch (err) {
-
+			return {
+				success: false,
+				message: "Error in getAllTrackingDetails service",
+			};
 		}
+	};
 
+	getTrackingDetails = async (resp, data) => {
+		try {
+			let ans = [];
+
+			resp.forEach(
+				ele => ele.bank == data.userEmail || ele.email == data.userEmail
+			);
+
+			return { success: true, message: ans };
+		} catch (err) {}
 	};
 }
 
