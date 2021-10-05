@@ -11,19 +11,17 @@ const axios = require("axios");
 class User {
 	createUser = async data => {
 		try {
-			const user = new UserModel({
-				firstName: data.firstname,
-				lastName: data.lastname,
+			const user = new userModel({
+				name: data.name,
 				email: data.email,
 				password: data.password,
 				createdAt: new Date(),
 			});
 
 			await user.save();
-
 			return { success: true, message: "Data Saved" };
 		} catch (err) {
-			console.log(err);
+			// console.log(err);
 			return { success: false, message: err.message };
 		}
 	};

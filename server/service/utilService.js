@@ -12,8 +12,7 @@ class UtilService {
 			}
 			return user;
 		} catch (err) {
-			{
-			}
+			{}
 		}
 	};
 

@@ -18,7 +18,7 @@ router.post("/signup", async (req, res) => {
 
 		var check = await utilService.findByEmail(email, bankModel);
 
-		if (check != null && Object.keys(check).length) {
+		if (check == null || Object.keys(check).length) {
 			res.send({ success: true, message: "User already exists" });
 		} else {
 			const hashedPassword = await utilService.hashUtil(password);
@@ -37,8 +37,12 @@ router.post("/signup", async (req, res) => {
 				modelData.password = hashedPassword;
 
 				const respFromMongo = await bankService.createBank(modelData);
-
-				res.send({ success: true, message: "Account created successfully" });
+				
+				if (respFromMongo.success == true) {
+					res.send({ success: true, message: "Account created successfully" });
+				} else {
+					res.send({ success: false, message: respFromMongo.message });
+				}
 			}
 		}
 	} catch (err) {
