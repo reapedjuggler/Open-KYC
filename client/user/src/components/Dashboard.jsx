@@ -120,12 +120,12 @@ export default function Dashboard() {
                                                 {val.approval === "false" && <div className="h-1/2 w-1/2 md:h-1/4 md:w-1/4 mx-auto"><Inprogress /></div>}
                                                 {val.approval === "true" && <div className="h-1/2 w-1/2 md:h-1/4 md:w-1/4 mx-auto"><Completed /></div>}
                                                 {val.approval === "reject" && <div className="h-1/2 w-1/2 md:h-1/4 md:w-1/4 mx-auto"><Reject /></div>}
-                                                {val.approval === "consent" && <div className="h-1/2 w-1/2 md:h-1/4 md:w-1/4 mx-auto"><Consent /></div>}
+                                                {val.approval === "request" && <div className="h-1/2 w-1/2 md:h-1/4 md:w-1/4 mx-auto"><Consent /></div>}
                                                 <div className="mt-12 flex justify-center">
                                                     {val.approval === "false" && <h3 className="text-gray-800 pb-6 text-md md:text-lg lg:text-xl text-center">{"Your KYC details is being Verified. (Please wait for 2-3 buisness days)"}</h3>}
                                                     {val.approval === "true" && <h3 className="text-green-600 pb-6 text-md md:text-lg lg:text-xl text-center">{"KYC Completed!"}</h3>}
                                                     {val.approval === "reject" && <button onClick={() => history.push('/kyc')} className="fixed bottom-4 right-4 ui primary button">Apply for KYC again!</button>}
-                                                    {val.approval === "consent" && <button onClick={() => history.push('/request')} className="fixed bottom-4 right-4 ui primary button">Give consent for KYC</button>}
+                                                    {val.approval === "request" && <button onClick={() => history.push('/request')} className="fixed bottom-4 right-4 ui primary button">Give consent for KYC</button>}
                                                 </div>
                                             </div>
                                         </div>

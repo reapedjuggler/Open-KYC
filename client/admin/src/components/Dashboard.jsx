@@ -132,7 +132,7 @@ export default function Dashboard() {
                                         <p className="text-gray-600 my-2">{`Email: ${val.state.data.email}`}</p>
                                         <p className="text-gray-600 my-2">{`State: ${val.state.data.type_of_transaction}`}</p>
                                         <p className="text-gray-600 my-2">{`Date: ${date.getDate()}/${date.getMonth()}/${date.getFullYear()}, ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`}</p>
-                                        <p className="text-gray-600 my-2">{`${val.state.data.bank}`}</p>
+                                        <p className="text-gray-600 my-2">{`Bank Name: ${val.state.data.bank}`}</p>
                                     </div>
                                 );
                             })

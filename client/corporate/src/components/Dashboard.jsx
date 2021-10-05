@@ -52,7 +52,7 @@ export default function Dashboard({approved,corp}) {
       }).then(response => response.json())
       .then(res => {
           if(res.success) {
-            corp?setdata(res.message.requests):approved?setdata(res.message.approved):setdata(res.message.pending);
+            corp?setdata(res.message.pending):approved?setdata(res.message.approved):setdata(res.message.pending);
             setisloading(false);
           }
           else{
@@ -98,7 +98,7 @@ export default function Dashboard({approved,corp}) {
                     data.map((val,k)=>{
                        return( 
                         <div className="flex justify-center">
-                            <Card data={val} key={k} bank={bankname}/>
+                            <Card data={val} key={k} bank={bankname} corp={corp}/>
                         </div>
                        )
                     })

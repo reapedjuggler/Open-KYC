@@ -94,11 +94,11 @@ export default function Userconsent() {
             }, 3000);
             return;
         };
-        fetch(`${url}/kyc/apply/corp`, {
+        fetch(`${url}/kyc/apply`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                corp: bank,
+                bank: bank,
                 email: email,
                 aadhar: data.aadhar,
                 pan: data.pan
