@@ -14,7 +14,7 @@ const tokenService = require("../service/tokenService");
 //Middlewares
 const middleware = require("../middlewares/checkRoles");
 
-// const fileData = require("../data.json");
+const fileData1 = require("../data3.json");
 let arr = [process.env.userPort1 || 50011, process.env.userPort2 || 50071]; // User ports array
 let email_arr = ["test@test.com", "test3@test.com"];
 router.post("/apply", async (req, res, next) => {
@@ -508,10 +508,10 @@ router.post("/getalltrackingdetails", async (req, res) => {
 
 		let data = { port: port, bank: req.body.email };
 
-		let respForTracking = await tokenService.getAllTrackingDetails(data);
-
+		// let respForTracking = await tokenService.getAllTrackingDetails(data);
+		let respForTracking = {success:true, message:fileData1}
 		if (respForTracking.success == true) {
-			res.send({ sucess: true, message: respForTracking.message });
+			res.send({ sucess: true, message: respForTracking });
 		} else {
 			return {
 				success: false,
@@ -528,12 +528,12 @@ router.post("/trackandtrace", async (req, res) => {
 		let data = {
 			port: process.env.tokenPort || 50073,
 			bankEmail: req.body.bankEmail,
-			user: req.body.userEmail,
+			userEmail: req.body.userEmail,
 		};
 
 		let totalResp = await tokenService.getAllTrackingDetails(data);
-
-		let resp = await tokenService.getTrackingDetails(totalResp, data);
+		console.log(totalResp.message)
+		let resp = await tokenService.getTrackingDetails(totalResp.message, data);
 
 		if (resp.success == true) {
 			res.send({ success: true, message: resp.message });
@@ -544,6 +544,7 @@ router.post("/trackandtrace", async (req, res) => {
 			});
 		}
 	} catch (err) {
+		console.log(err)
 		res.send({ success: false, message: "Error in /trackandtrace route" });
 	}
 });
