@@ -74,16 +74,41 @@ class Token {
 
 			const resp = await axios.post(url, params, config);
 
-			return { success: true, datgTa: resp };
+			return { success: true, message: resp };
 		} catch (err) {
 			return { success: false, message: "Error in trackAndTrace service" };
 		}
 	};
 
-	getTrackingDetails = async data => {
+	getAllTrackingDetails = async data => {
 		try {
+			var url = `http://localhost:${data.port}/ious`;
 
-			
+			let resp = await axios({ method: "GET", url: url });
+			// console.log("Iam the data in tokenService getAllTrackingDetails", resp.data);
+
+			let ans = [];
+
+			ans = resp.data.filter(
+				ele => ele.bank == data.bankEmail || ele.email == data.bankEmail
+			);
+
+			return { success: true, message: ans };
+		} catch (err) {
+			return {
+				success: false,
+				message: "Error in getAllTrackingDetails service",
+			};
+		}
+	};
+
+	getTrackingDetails = async (resp, data) => {
+		try {
+			let ans = [];
+
+			resp.forEach(
+				ele => ele.bank == data.userEmail || ele.email == data.userEmail
+			);
 
 			return { success: true, message: ans };
 		} catch (err) {}
