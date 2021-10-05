@@ -436,9 +436,10 @@ router.post("/reject", async (req, res) => {
 			partyName: "",
 			approval: "reject",
 		};
-
-		let partyName = await bankService.getPartyNameFromCorda(bank);
-
+		let dataMongo = await userModel.findOne({email:email})
+		dataMongo = dataMongo.name
+		let partyName = await userService.getPartyNameFromCorda(dataMongo);
+		
 		if (partyName.success == false) {
 			res.send({
 				success: false,

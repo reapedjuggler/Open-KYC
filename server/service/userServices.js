@@ -25,7 +25,18 @@ class User {
 			return { success: false, message: err.message };
 		}
 	};
+	getPartyNameFromCorda = async data => {
+		try {
+			let val = data == "A" ? 50011 : 50071;
+			let url = `http://localhost:${val}/me`;
 
+			const resp = await axios({ method: "GET", url: url });
+			// console.log("Iam the data\n", resp.data);
+			return { success: true, message: resp.data };
+		} catch (err) {
+			return { success: false, message: err.message };
+		}
+	};
 	getUserDatafromCorda = async data => {
 		try {
 			var url = `http://localhost:${data}/ious`;
