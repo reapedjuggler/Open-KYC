@@ -92,7 +92,7 @@ export default function Dashboard() {
 
     return (
         <div>
-            <h2 className="text-center text-gray-700">{`User ${bank}`}</h2>
+            <h2 className="text-center text-gray-700">{`Welcome ${bank} to your Dashboard`}</h2>
             {
                 data.length <= 0 ?
                     <div className="rounded-xl py-20 w-11/12 mx-auto mt-10 drop-shadow-md bg-white">
