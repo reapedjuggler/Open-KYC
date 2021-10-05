@@ -39,8 +39,8 @@ export default function RegisterformKYC() {
                             body: JSON.stringify({
                                 bank: values.bank, 
                                 email: values.email, 
-                                aadhar: values.aadhar + "||" + values.aadhar_file, 
-                                pan: values.pan + "||" + values.pan_file
+                                aadhar: values.aadhar, 
+                                pan: values.pan
                             })
                         }).then(response => response.json())
                         .then(data => {
