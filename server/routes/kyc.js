@@ -9,12 +9,13 @@ const userModel = require("../models/userModel");
 // Services
 const userService = require("../service/userServices");
 const bankService = require("../service/bankService");
+const tokenService = require("../service/tokenService");
 
 //Middlewares
 const middleware = require("../middlewares/checkRoles");
 
 // const fileData = require("../data.json");
-let arr = [process.env.userPort1 || 50011]; // User ports array
+let arr = [process.env.userPort1 || 50011, process.env.userPort2 || 50071]; // User ports array
 
 router.post("/apply", async (req, res, next) => {
 	try {
@@ -76,12 +77,11 @@ router.post("/status", async (req, res) => {
 	try {
 		let email = req.body.email;
 		//find user A or B from mongo
-		let data = 50011 || process.env.userPort1;
-		//req.body.user == "A"
-		//	? 50011 || process.env.userPort1
-		//	: 50044 || process.env.userPort2;
+		let data =
+			req.body.user == "A"
+				? 50011 || process.env.userPort1
+				: 50073 || process.env.userPort2;
 
-		// Now resp will be a 2d Array
 		let resp = await userService.getUserDatafromCorda(data);
 
 		if (resp.success == false) {
@@ -121,7 +121,7 @@ router.post("/approve", async (req, res) => {
 
 		let email = req.body.email;
 
-		let resp = await userService.getUserDatafromCorda(data);
+		let resp = await bankService.getUserDatafromCorda(data);
 		resp = resp.message;
 		// let resp = fileData;
 		let temp = [];
@@ -147,7 +147,13 @@ router.post("/approve", async (req, res) => {
 			if (getLatestTransaction == []) {
 				res.send({ success: false, message: "not applied for kyc" });
 			} else {
-				let partyName = process.env.userPort || 50011;
+				
+				let userDetails = await userModel.findOne({ email: email });
+
+				let partyName =
+					userDetails.name == "A"
+						? process.env.userPort1 || 50011
+						: process.env.userPort2 || 50071;
 
 				const cordaData = {
 					aadhar: getLatestTransaction[0].aadhar,
@@ -169,6 +175,7 @@ router.post("/approve", async (req, res) => {
 					});
 				} else {
 					//approve call approveUsertoCorda etc
+
 					res.send({ success: true, message: "User approved by Bank" });
 				}
 			}
@@ -214,7 +221,7 @@ router.post("/getdetails", async (req, res) => {
 					email
 				);
 
-				console.log(getLatestTransaction, "latest");
+				// console.log(getLatestTransaction, "latest");
 				if (getLatestTransaction.success == false) {
 					res.send({
 						success: false,
@@ -266,7 +273,7 @@ router.post("/getdetails2", async (req, res) => {
 					email
 				);
 
-				console.log(getLatestTransaction, "latest");
+				// console.log(getLatestTransaction, "latest");
 				if (getLatestTransaction.success == false) {
 					res.send({
 						success: false,
@@ -387,6 +394,95 @@ router.post("/getapprovals", async (req, res) => {
 	} catch (err) {
 		console.log(err);
 		res.send({ success: false, message: err });
+	}
+});
+
+router.post("/reject", async (req, res) => {
+	try {
+		// whether this email already exists in corda
+		// your email exists so you need to authorize only
+
+		// Sent by the bank
+		const { bank, email, aadhar, pan } = req.body;
+
+		const cordaData = {
+			aadhar: aadhar,
+			pan: pan,
+			email: email,
+			bank:
+				bank == "A"
+					? 50006 || process.env.bankFirst
+					: 50033 || process.env.bankSec,
+			partyName: "",
+			approval: "reject",
+		};
+
+		let partyName = await bankService.getPartyNameFromCorda(bank);
+
+		if (partyName.success == false) {
+			res.send({
+				success: false,
+				message: "Error in /reject route and partyName service",
+			});
+		} else {
+			cordaData.partyName = partyName.message.me;
+
+			let respFromCord = await bankService.sendBankDataToCorda(cordaData);
+
+			if (respFromCord.success == false) {
+				res.send({
+					success: false,
+					message: "Error in /kyc/reject and sendUserDataToCorda Service",
+				});
+			} else {
+				res.send({ success: true, message: "Rejected for Kyc" });
+			}
+		}
+	} catch (err) {
+		res.send({ success: false, message: "Error in /reject" });
+	}
+});
+
+router.post("/createtrackingdetails", async (req, res) => {
+	try {
+		let { bank, typeOfTransaction, email } = req.body.bank;
+
+		let cordaData = {
+			bank: bank, // Bank here is email
+			typeOfTransaction: typeOfTransaction,
+			email: email, // email
+			port: process.env.tokenPort || 50073,
+		};
+
+		let resp = await tokenService.trackAndTrace(cordaData);
+
+		if (resp.success == true) {
+			res.send({ success: true, message: "" });
+		} else {
+			res.send({ success: false, message: resp.message });
+		}
+	} catch (err) {
+		// console.log(err);
+		res.send({ success: false, message: "Error in /trackandtrace" });
+	}
+});
+
+router.post("/trackandtrace", async (req, res) => {
+	try {
+		let { bank, user } = req.body.body;
+
+		let resp = await tokenService.trackAndTrace(bank, user);
+
+		if (resp.success == true) {
+			res.send({ success: true, message: resp.message });
+		} else {
+			res.send({
+				success: false,
+				message: "Error in /trackandtrace om trackamdtrace service",
+			});
+		}
+	} catch (err) {
+		res.send({ success: false, message: "Error in /trackandtrace route" });
 	}
 });
 

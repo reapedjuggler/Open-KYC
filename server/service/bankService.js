@@ -15,7 +15,7 @@ class Bank {
 			var url = `http://localhost:${data}/ious`;
 
 			let resp = await axios({ method: "GET", url: url });
-			console.log("datadgagagagaa", resp.data);
+			// console.log("datadgagagagaa", resp.data);
 			return { success: true, message: resp.data };
 		} catch (err) {
 			console.log(err, "\n Iam error in senduserDataToCorda service");
@@ -60,7 +60,7 @@ class Bank {
 				"partyName",
 				data.partyName == "50011"
 					? "O=UserA,L=London,C=GB"
-					: "O=UserB,L=London,C=GB"
+					: "O=UserB,L=Bangalore,C=IN"
 			);
 			params.append("iouValue", 17);
 			const config = {
@@ -70,7 +70,7 @@ class Bank {
 			};
 
 			const resp = await axios.post(url, params, config);
-			console.log("snedBankdnadg", url);
+			// console.log("snedBankdnadg", url);
 			return { success: true, data: resp };
 		} catch (err) {
 			console.log(err);
@@ -159,7 +159,7 @@ class Bank {
 				pending = [];
 			// console.log("ans", ans);
 			approved = ans.filter(ele => ele.approval == "true");
-			pending = ans.filter(ele => ele.approval != "true");
+			pending = ans.filter(ele => ele.approval == "false");
 
 			// console.log(approved, "\n\n");
 			// console.log(pending, "\n\n");

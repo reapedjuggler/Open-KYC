@@ -44,7 +44,7 @@ class User {
 	};
 	sendUserDataToCorda = async (data, num) => {
 		try {
-			var val = 50011;
+			var val = data.port;
 			var url = `http://localhost:${val}/create-iou`;
 			console.log("lol", typeof url);
 
@@ -62,9 +62,9 @@ class User {
 				},
 			};
 
-			console.log("bas data", data);
+			// console.log("bas data", data);
 			const resp = await axios.post(url, params, config);
-			console.log(resp);
+			// console.log(resp);
 			return { success: true, data: resp };
 		} catch (err) {
 			console.log(err);
@@ -108,7 +108,7 @@ class User {
 				ans[0].id = !id || id == null ? "default" : id._id;
 			}
 
-			console.log(ans, "\nI'm ans");
+			// console.log(ans, "\nI'm ans");
 
 			return { success: true, message: ans };
 		} catch (err) {
@@ -123,7 +123,7 @@ class User {
 
 		try {
 			let visSet = new Set();
-			console.log(data);
+			// console.log(data);
 			let ans = []; // Array to store approval lists
 
 			await data.sort(async (ele, ele1) => {
@@ -149,7 +149,7 @@ class User {
 				if (visSet.has(x) == true) continue;
 
 				if (email == data[i].email) {
-					//bank has approved											//applied but not approved  --new approval:rejected
+					//bank has approved			//applied but not approved  --new approval:rejected
 					if (
 						(data[i].approval == "true" && lender[0] == "B") ||
 						(data[i].approval == "false") & (lender[0] == "U")
@@ -175,7 +175,6 @@ class User {
 			return { success: false, message: err.message };
 		}
 	};
-
 }
 
 module.exports = exports = new User();
