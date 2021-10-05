@@ -40,7 +40,6 @@ router.post("/getuserdetails", async (req, res) => {
 
 			resp1 = {
 				name: resp.name,
-				ifsc_code: resp.ifsc_code,
 				email: resp.email,
 				createdAt: resp.createdAt,
 				_id: resp._id,

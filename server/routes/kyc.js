@@ -44,7 +44,10 @@ router.post("/apply", async (req, res, next) => {
 						: 50033 || process.env.bankSec,
 				partyName: "",
 				approval: "false",
-				port: resp.name == "A" ? 50011 : 50071,
+				port:
+					resp.name == "A"
+						? process.env.userPort1 || 50011
+						: process.env.userPort2 || 50071,
 			};
 
 			let partyName = await bankService.getPartyNameFromCorda(bank);
@@ -81,7 +84,7 @@ router.post("/status", async (req, res) => {
 		let data =
 			req.body.user == "A"
 				? 50011 || process.env.userPort1
-				: 50073 || process.env.userPort2;
+				: 50071 || process.env.userPort2;
 
 		let resp = await userService.getUserDatafromCorda(data);
 
@@ -347,64 +350,71 @@ router.post("/getapprovals", async (req, res) => {
 						arr[i]
 					);
 
-					respFromCordaFromUser = respFromCordaFromUser.message;
-
-					// console.log(
-					// 	respFromCordaFromUser,
-					// 	" \nUser\n",
-					// 	respFromCorda,
-					// 	"\nFrom Corda\n"
-					// );
-
-					if (
-						respFromCordaFromUser != undefined &&
-						respFromCordaFromUser.length == 0
-					)
-						continue;
-
-					let temp1 = [];
-
-					for (let i = 0; i < respFromCordaFromUser.length; i++) {
-						temp1.push(respFromCordaFromUser[i].state.data);
-					}
-
-					if (temp1 == []) continue;
-
-					let userEmail = temp1[0].email;
-
-					let respData = await bankService.getApprovalLists(
-						temp,
-						temp1,
-						userEmail
-					);
-
-					// console.log("Iam temp in /getapprovals", respData.message.pending);
-
-					if (respData.success == false) {
-						throw new Error({
+					if (respFromCordaFromUser.success == false) {
+						res.send({
 							success: false,
-							message: "Error in getApprovalLists service",
+							message: "Error in /kyc/getapprovals in getUserDataService",
 						});
 					} else {
-						finalApproval = [...finalApproval, ...respData.message.approved];
-						finalPending = [...finalPending, ...respData.message.pending];
-						// console.log("Arrays\n\n");
+						respFromCordaFromUser = respFromCordaFromUser.message;
 
-						// for (let i = 0; i < respData.message.pending.length; i++)
-						// 	console.log(respData.message.pending[i].approved_by, "\n");
+						// console.log(
+						// 	respFromCordaFromUser,
+						// 	" \nUser\n",
+						// 	respFromCorda,
+						// 	"\nFrom Corda\n"
+						// );
 
-						// for (let i = 0; i < respData.message.approved.length; i++)
-						// 	console.log(respData.message.approved[i].approved_by, "\n");
+						if (
+							respFromCordaFromUser != undefined &&
+							respFromCordaFromUser.length == 0
+						)
+							continue;
+
+						let temp1 = [];
+
+						for (let i = 0; i < respFromCordaFromUser.length; i++) {
+							temp1.push(respFromCordaFromUser[i].state.data);
+						}
+
+						if (temp1 == []) continue;
+
+						let userEmail = temp1[0].email;
+
+						let respData = await bankService.getApprovalLists(
+							temp,
+							temp1,
+							userEmail
+						);
+
+						// console.log("Iam temp in /getapprovals", respData.message.pending);
+
+						if (respData.success == false) {
+							throw new Error({
+								success: false,
+								message: "Error in getApprovalLists service",
+							});
+						} else {
+							finalApproval = [...finalApproval, ...respData.message.approved];
+							finalPending = [...finalPending, ...respData.message.pending];
+							// console.log("Arrays\n\n");
+
+							// for (let i = 0; i < respData.message.pending.length; i++)
+							// 	console.log(respData.message.pending[i].approved_by, "\n");
+
+							// for (let i = 0; i < respData.message.approved.length; i++)
+							// 	console.log(respData.message.approved[i].approved_by, "\n");
+						}
 					}
+
+					// Maybe will need a for loop here for like processing every user and then we will
+					// send the final list
+
+					res.send({
+						success: true,
+						message: { approved: finalApproval, pending: finalPending },
+					});
 				}
-
-				// Maybe will need a for loop here for like processing every user and then we will
-				// send the final list
-
-				res.send({
-					success: true,
-					message: { approved: finalApproval, pending: finalPending },
-				});
 			}
 		}
 	} catch (err) {
