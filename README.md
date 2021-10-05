@@ -99,6 +99,7 @@
     <pre>npm install</pre></br>
      **Download and setup MongoDB**</br>
      [MongoDB](https://www.mongodb.com/)</br>
+     **Setup .env file**
      </br>**Start the Server**</br>
     <pre>npm start server.js </pre>
   
