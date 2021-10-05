@@ -37,7 +37,7 @@ router.post("/signup", async (req, res) => {
 				modelData.password = hashedPassword;
 
 				const respFromMongo = await bankService.createBank(modelData);
-				
+
 				if (respFromMongo.success == true) {
 					res.send({ success: true, message: "Account created successfully" });
 				} else {
@@ -57,17 +57,23 @@ router.post("/login", async (req, res) => {
 
 		var check = await utilService.findByEmail(email, bankModel);
 
+		// console.log(check);
+
 		if (check == null || check == undefined || Object.keys(check).length == 0) {
 			res.send({
 				success: false,
 				message: "No account found with that email Id",
 			});
 		} else {
+			// console.log(check);
+
 			var resp = await utilService.findByCredentials(
 				email,
 				password,
 				bankModel
 			);
+
+			console.log(check);
 
 			const validPassword = await bcrypt.compare(
 				req.body.password,
