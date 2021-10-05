@@ -42,7 +42,7 @@ export default function Dashboard() {
     }, [email]);
 
     useEffect(() => {
-        if (!value || !email) return;
+        if (value.length < 5 || !email) return;
         setisloading(true);
         fetch(`${url}/kyc/trackandtrace`, {
             method: 'POST',
@@ -121,7 +121,7 @@ export default function Dashboard() {
         <div>
             <h2 className="text-center text-gray-700">{`Welcome to ${bank} Admin Dashboard`}</h2>
             <div className="flex w-full justify-center items-center">
-                <input className="" type="search" onChange={(e) =>setvalue(e.target.value)}/>
+                <input className="p-5" type="search" value={value} placeholder="User email" onChange={(e) =>setvalue(e.target.value)}/>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2">
                 {
