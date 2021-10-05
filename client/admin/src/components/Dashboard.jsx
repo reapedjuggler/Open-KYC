@@ -43,7 +43,6 @@ export default function Dashboard() {
 
     useEffect(() => {
         if (value.length < 5 || !email) return;
-        setisloading(true);
         fetch(`${url}/kyc/trackandtrace`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -55,12 +54,9 @@ export default function Dashboard() {
             .then(res => {
                 console.log(res,email,"trackdetail")
                 if (res.success) {
-                    setisloading(false);
                     setdata(res.message);
                 }
                 else {
-                    setdata([]);
-                    setisloading(false);
                     setiserror(true);
                 }
             }).catch(() => {
@@ -132,10 +128,10 @@ export default function Dashboard() {
                             data.map((val, idx) => {
                                 return (
                                     <div className="rounded-xl m-4 drop-shadow-md bg-white w-10/12 mx-auto">
-                                        <p className="text-gray-600">{val.email}</p>
-                                        <p className="text-gray-600">{val.type_of_transaction}</p>
-                                        <p className="text-gray-600">{val.timestamp}</p>
-                                        <p className="text-gray-600">{val.bank}</p>
+                                        <p className="text-gray-600">{val.state.data.email}</p>
+                                        <p className="text-gray-600">{val.state.data.type_of_transaction}</p>
+                                        <p className="text-gray-600">{val.state.data.timestamp}</p>
+                                        <p className="text-gray-600">{val.state.data.bank}</p>
                                     </div>
                                 );
                             })
