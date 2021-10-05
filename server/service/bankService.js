@@ -117,7 +117,7 @@ class Bank {
 				visSet.add(respFromCorda[i].email);
 			}
 
-			// ans --> Latest Transactions
+			// ans --> Latest Transactions of every user
 
 			for (let i = 0; i < ans.length; i++) {
 				// is user yaani ki ith user ke liye mujhko respFromCordaFromUser mai se wo
@@ -161,8 +161,12 @@ class Bank {
 			let approved = [],
 				pending = [];
 			// console.log("ans", ans);
-			approved = ans.filter(ele => ele.approval == "true");
-			pending = ans.filter(ele => ele.approval == "false");
+			approved = ans.filter(
+				ele => ele.approval == "true" && ele.email == userEmail
+			);
+			pending = ans.filter(
+				ele => ele.approval == "false" && ele.email == userEmail
+			);
 
 			// console.log(approved, "\n\n");
 			// console.log(pending, "\n\n");
