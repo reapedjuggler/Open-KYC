@@ -16,8 +16,34 @@ export default function Dashboard() {
     // const [data, setdata] = useState([]);
     const [isloading, setisloading] = useState(false);
     const [iserror, setiserror] = useState(false);
+    const [bank, setbank] = useState("");
 
     const [data, setdata] = useState([]);
+
+    useEffect(() => {
+        if(!email) return;
+        setisloading(true);
+        fetch(`${url}/util/getuserdetails`,{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({
+            email:email
+          })
+      }).then(response => response.json())
+      .then(res => {
+          if(res.success) {
+            setbank(res.message.name);
+          }
+          else{
+            setdata([]);
+            setisloading(false);
+            setiserror(true);
+          }
+      }).catch(()=>{
+          setisloading(false);
+          setiserror(true);
+        })
+      }, [email]);
 
     useEffect(() => {
         setisloading(true);
@@ -66,6 +92,7 @@ export default function Dashboard() {
 
     return (
         <div>
+            <h2 className="text-center text-gray-700">{`User ${bank}`}</h2>
             {
                 data.length <= 0 ?
                     <div className="rounded-xl py-20 w-11/12 mx-auto mt-10 drop-shadow-md bg-white">
