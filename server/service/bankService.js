@@ -76,7 +76,7 @@ class Bank {
 			// console.log("snedBankdnadg", url);
 			return { success: true, data: resp };
 		} catch (err) {
-			console.log(err);
+			// console.log(err);
 
 			return { sucess: false, message: "Problem in sending data" };
 		}
@@ -174,7 +174,7 @@ class Bank {
 				},
 			};
 		} catch (err) {
-			console.log(err);
+			// console.log(err);
 			return { success: false, message: err.message };
 		}
 	};

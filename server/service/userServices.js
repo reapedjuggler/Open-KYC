@@ -44,7 +44,7 @@ class User {
 		try {
 			var val = data.port;
 			var url = `http://localhost:${val}/create-iou`;
-			console.log("lol", typeof url);
+			// console.log("lol", typeof url);
 
 			const params = new URLSearchParams();
 			params.append("email", data.email);
@@ -74,7 +74,7 @@ class User {
 		// for loop ke liye wait ni krri ans=[] return ho jaara
 		try {
 			let visSet = new Set();
-			console.log(data);
+			// console.log(data);
 			let ans = []; // Array to store approval lists
 
 			await data.sort(async (ele, ele1) => {
