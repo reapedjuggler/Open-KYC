@@ -81,7 +81,7 @@ router.post("/status", async (req, res) => {
 		let data =
 			req.body.user == "A"
 				? 50011 || process.env.userPort1
-				: 50073 || process.env.userPort2;
+				: 50071 || process.env.userPort2;
 
 		let resp = await userService.getUserDatafromCorda(data);
 
@@ -97,6 +97,7 @@ router.post("/status", async (req, res) => {
 			for (let i = 0; i < resp.length; i++) {
 				temp.push(resp[i].state.data);
 			}
+			console.log(temp)
 			resp = await userService.checkKycStatus(temp, email);
 
 			if (resp.success == true) {
@@ -362,8 +363,8 @@ router.post("/getapprovals", async (req, res) => {
 					}
 
 					let respData = await bankService.getApprovalLists(temp, temp1);
-
-					// console.log("Iam temp in /getapprovals", respData.message.pending);
+					console.log(temp,"temp",temp1)
+					//console.log("Iam pending in /getapprovals", respData.message.pending);
 
 					if (respData.success == false) {
 						throw new Error({
