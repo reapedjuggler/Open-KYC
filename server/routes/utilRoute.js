@@ -33,7 +33,7 @@ router.post("/getuserdetails", async (req, res) => {
 			_id: resp._id,
 		};
 
-		if (resp != null || Object.keys(resp1).length) {
+		if (resp != null && Object.keys(resp1).length) {
 			res.send({ success: true, message: resp1 });
 		} else {
 			resp = await utilService.findByEmail(req.body.email, userModel);
