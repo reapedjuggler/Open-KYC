@@ -6,11 +6,14 @@ import { loginformvalues as initialvalue } from '../util/initial-data';
 import { loginformvalidation as schema } from '../util/validations';
 import FormError from '../elements/FormError';
 import {useHistory} from 'react-router-dom';
+import Alert from '@mui/material/Alert';
 
 export default function Loginform({setloggedin}) {
 
     const history = useHistory();
     const [hidden, sethidden] = useState(false);
+    const [msg, setmsg] = useState("");
+    const [iserror, setiserror] = useState(false);
 
     return (
         <div className="flex mt-4 justify-center items-center">
@@ -34,8 +37,15 @@ export default function Loginform({setloggedin}) {
                                 localStorage.setItem('email',values.uuid);
                                 setloggedin(true);
                             }
+                            else{
+                                setiserror(true);
+                                setmsg("Invalid Username or Password!");
+                                setTimeout(() => {
+                                    setiserror(false);
+                                }, 5000);
+                            }
                         })
-                        resetForm({ password: '' });
+                        resetForm();
                     }}
                 >
                     {props => {
@@ -62,6 +72,7 @@ export default function Loginform({setloggedin}) {
                                 <p onClick={() => history.push('/register')} className="f7 m-0 cursor-pointer hover:text-blue-400 text-gray-600">New to platform?</p>
                                 <p onClick={() => history.push('/forget')} className="f7 m-0 cursor-pointer hover:text-blue-400 text-gray-600">Forgot password?</p>
                                 </div>
+                                {iserror && <Alert severity="error">{msg}</Alert>}
                                 <div className="flex justify-center"><Form.Button disabled={isSubmitting} onClick={handleSubmit} color="blue">Login</Form.Button></div>
                             </Form>
                         )
