@@ -39,8 +39,8 @@ export default function RegisterformKYC() {
                             body: JSON.stringify({
                                 bank: values.bank, 
                                 email: values.email, 
-                                aadhar: values.aadhar + "||data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHCBUVFRgVFRUZGBgaGBoYGhwcGBwZGhwaGhgcGRoYHBwcIS4lJB4rIRoaJkYnKy8xNTU1HCQ7QDs0Py40NTEBDAwMEA8QGhISHjQhIyE0NDQ0NDQxMTQxMTE0NDExMTQ0NDQ4NDQ0NDE0NDQ0NDQ0MTE0PTQ2NDQ0MTQ/NDQ0Mf/AABEIALQBFwMBIgACEQEDEQH/xAAcAAEAAQUBAQAAAAAAAAAAAAAABQEDBAYHAgj/" , 
-                                pan: values.pan + "||data:image/jpeg;base64,/4k/BUVFRgVFRUZGBgaGBoYGhwcGBwZGhwaGhgcGRoYHBwcIS4lJB4rIRoaJkYnKy8xNTU1HCQ7QDs0Py40NTEBDAwMEA8QGhISHjQhIyE0NDQ0NDQxMTQxMTE0NDExMTQ0NDQ4NDQ0NDE0NDQ0NDQ0MTE0PTQ2NDQ0MTQ/NDQ0Mf/AABEIALQBFwMBIgACEQEDEQH/xAAcAAEAAQUBAQAAAAAAAAAAAAAABQEDBAYHAgj/"
+                                aadhar: values.aadhar + "||" + values.aadhar_file, 
+                                pan: values.pan + "||" + values.pan_file
                             })
                         }).then(response => response.json())
                         .then(data => {
