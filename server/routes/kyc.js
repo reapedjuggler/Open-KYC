@@ -44,6 +44,7 @@ router.post("/apply", async (req, res, next) => {
 						: 50033 || process.env.bankSec,
 				partyName: "",
 				approval: "false",
+				port: resp.name =="A" ? 50011 : 50071 
 			};
 
 			let partyName = await bankService.getPartyNameFromCorda(bank);
