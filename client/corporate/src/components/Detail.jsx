@@ -13,30 +13,7 @@ export default function Detail() {
     const [data, setdata] = useState({aadhar:"jedncjinedjc",pan:"ceoimciencur"});
     const [isloading, setisloading] = useState(false);
     const [iserror, setiserror] = useState(false);
-    const [reject, setreject] = useState(false);
     // let {userid} = useParams();
-
-    useEffect(() => {
-      if(!reject || !bank || !email) return;
-      fetch(`${url}/kyc/reject`,{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({
-            bank: bank, 
-            email: email, 
-            aadhar: data.aadhar, 
-            pan: data.pan
-        })
-    }).then(response => response.json())
-    .then(data => {
-        if(data.success){
-            history.push('/');
-        }
-        else{
-            setiserror(true)
-        }
-    }).catch(()=> setiserror(true));
-    }, [reject])
 
     useEffect(() => {
         if(!email) return;
@@ -122,7 +99,7 @@ export default function Detail() {
                         <button onClick = {()=> setapprove(true)} className="ui primary button">
                             Approve
                         </button>
-                        <button onClick = {()=> setreject(true)} className="ui button">
+                        <button className="ui button">
                             Reject
                         </button>
                     </div>

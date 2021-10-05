@@ -4,14 +4,14 @@ import Login from './Login';
 import Register from './Register';
 import Forget from './Forget';
 import Reset from './Reset';
-import KYC from './KYC';
-import UserConsent from './Userconsent';
-import CorporateConsent from './Corporateconsent';
+import Details from './Detail';
+import Header from '../components/Header';
 
 export default function Routes({loggedin,setloggedin}) {
     return (
         <div>
         <Router>
+            <Header loggedin={loggedin} setloggedin={setloggedin}/>
             <Switch>
                 <Route exact path='/'>
                     {loggedin ?<Redirect to='/dashboard'/>:<Redirect to='/login'/>}
@@ -34,19 +34,19 @@ export default function Routes({loggedin,setloggedin}) {
                 </Route>
                 <Route exact path="/dashboard" >
                     {!loggedin && <Redirect to='/' />}
-                    <Dashboard/>
+                    <Dashboard approved={false} corp={false}/>
                 </Route>
-                <Route exact path="/kyc" >
+                <Route exact path="/dashboard/approved" >
                     {!loggedin && <Redirect to='/' />}
-                    <KYC/>
+                    <Dashboard approved={true} corp={false}/>
                 </Route>
-                <Route exact path="/consent" >
+                <Route exact path="/dashboard/request" >
                     {!loggedin && <Redirect to='/' />}
-                    <UserConsent/>
+                    <Dashboard approved={true} corp={true}/>
                 </Route>
-                <Route exact path="/request" >
+                <Route exact path="/user/:userid" >
                     {!loggedin && <Redirect to='/' />}
-                    <CorporateConsent/>
+                    <Details/>
                 </Route>
                 <Route><Redirect to='/' /></Route>
             </Switch>
