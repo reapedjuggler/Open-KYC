@@ -23,7 +23,6 @@ export default function Registerform({ setloggedin }) {
                             headers:{'Content-Type':'application/json'},
                             body: JSON.stringify({
                                 name:values.firstname + " " + values.lastname,
-                                ifsc_code:"xyz",
                                 email:values.email,
                                 password:values.password
                             })
