@@ -24,7 +24,7 @@ export default function Loginform({setloggedin}) {
                     validationSchema={schema}
                     onSubmit={(values, { setSubmitting, resetForm }) => {
 
-                        fetch(`${url}/user/login`,{
+                        fetch(`${url}/bank/login`,{
                             method:'POST',
                             headers:{'Content-Type':'application/json'},
                             body: JSON.stringify({
