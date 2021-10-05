@@ -27,7 +27,7 @@ export default function Dashboard() {
         }).then(response => response.json())
             .then(res => {
                 if (res.success) {
-                    setdata(res.message);
+                    setdata(res.message.message);
                 }
                 else {
                     setisloading(false);
@@ -83,7 +83,8 @@ export default function Dashboard() {
                     setisloading(false);
                     setiserror(true);
                 }
-            }).catch(() => {
+            }).catch((err) => {
+                console.error(err);
                 setisloading(false);
                 setiserror(true);
             })
