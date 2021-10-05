@@ -28,6 +28,7 @@ export default function Dashboard() {
             .then(res => {
                 console.log(res,email,"getalltrack")
                 if (res.success) {
+                    setisloading(false);
                     setdata(res.message.message);
                 }
                 else {
@@ -54,6 +55,7 @@ export default function Dashboard() {
             .then(res => {
                 console.log(res,email,"trackdetail")
                 if (res.success) {
+                    setisloading(false);
                     setdata(res.message);
                 }
                 else {
@@ -80,6 +82,7 @@ export default function Dashboard() {
             .then(res => {
                 console.log(res,email,"getuserdet")
                 if (res.success) {
+                    setisloading(false);
                     setbank(res.message.name);
                 }
                 else {
