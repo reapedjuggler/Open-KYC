@@ -425,7 +425,7 @@ router.post("/reject", async (req, res) => {
 		// Sent by the bank
 		const { bank, email, aadhar, pan } = req.body;
 
-		const cordaData = {
+		let cordaData = {
 			aadhar: aadhar,
 			pan: pan,
 			email: email,
@@ -439,7 +439,7 @@ router.post("/reject", async (req, res) => {
 		let dataMongo = await userModel.findOne({email:email})
 		dataMongo = dataMongo.name
 		let partyName = await userService.getPartyNameFromCorda(dataMongo);
-		
+		console.log("partyname",partyName)
 		if (partyName.success == false) {
 			res.send({
 				success: false,
