@@ -471,7 +471,7 @@ router.post("/reject", async (req, res) => {
 
 router.post("/createtrackingdetails", async (req, res) => {
 	try {
-		let { bank, typeOfTransaction, email } = req.body.bank;
+		let { bank, typeOfTransaction, email } = req.body;
 
 		let cordaData = {
 			bank: bank, // Bank here is email

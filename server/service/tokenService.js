@@ -43,7 +43,7 @@ class Token {
 
 	getPartyNameFromCorda = async data => {
 		try {
-			let val = data.port;
+			let val = process.env.trackPort || 50086;
 			let url = `http://localhost:${val}/me`;
 
 			const resp = await axios({ method: "GET", url: url });
