@@ -40,6 +40,12 @@
   Provides the user with some additional functionalities of forgot-password, account-verification etc.
   </p>
  
+  `/trackingroutes`
+  <p>
+  Provides the bank with the functionality of logging their transactions.
+  </p>
+ 
+ 
 ----- 
 * **Sample URL**
 
@@ -100,7 +106,7 @@
      **Download and setup MongoDB**</br>
      [MongoDB](https://www.mongodb.com/)</br>
      
-     `Setup .env file`
+     <br>`Setup .env file` </br>
      </br>**Start the Server**</br>
     <pre>npm start server.js </pre>
   
