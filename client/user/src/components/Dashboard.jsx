@@ -13,7 +13,6 @@ export default function Dashboard() {
     const history = useHistory();
 
     const [email] = useState(localStorage.getItem("email"));
-    // const [data, setdata] = useState([]);
     const [isloading, setisloading] = useState(false);
     const [iserror, setiserror] = useState(false);
     const [bank, setbank] = useState("");
@@ -124,8 +123,8 @@ export default function Dashboard() {
                                                 <div className="mt-12 flex justify-center">
                                                     {val.approval === "false" && <h3 className="text-gray-800 pb-6 text-md md:text-lg lg:text-xl text-center">{"Your KYC details is being Verified. (Please wait for 2-3 buisness days)"}</h3>}
                                                     {val.approval === "true" && <h3 className="text-green-600 pb-6 text-md md:text-lg lg:text-xl text-center">{"KYC Completed!"}</h3>}
-                                                    {val.approval === "reject" && <button onClick={() => history.push('/kyc')} className="fixed bottom-4 right-4 ui primary button">Apply for KYC again!</button>}
-                                                    {val.approval === "request" && <button onClick={() => history.push('/request')} className="fixed bottom-4 right-4 ui primary button">Give consent for KYC</button>}
+                                                    {val.approval === "reject" && <button onClick={() => history.push('/kyc')} className="ui primary button">Apply for KYC again!</button>}
+                                                    {val.approval === "request" && <button onClick={() => history.push('/request')} className="ui primary button">Give consent for KYC</button>}
                                                 </div>
                                             </div>
                                         </div>
