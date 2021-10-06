@@ -20,29 +20,29 @@ export default function Dashboard() {
     const [data, setdata] = useState([]);
 
     useEffect(() => {
-        if(!email) return;
+        if (!email) return;
         setisloading(true);
-        fetch(`${url}/util/getuserdetails`,{
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({
-            email:email
-          })
-      }).then(response => response.json())
-      .then(res => {
-          if(res.success) {
-            setbank(res.message.name);
-          }
-          else{
-            setdata([]);
-            setisloading(false);
-            setiserror(true);
-          }
-      }).catch(()=>{
-          setisloading(false);
-          setiserror(true);
-        })
-      }, [email]);
+        fetch(`${url}/util/getuserdetails`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                email: email
+            })
+        }).then(response => response.json())
+            .then(res => {
+                if (res.success) {
+                    setbank(res.message.name);
+                }
+                else {
+                    setdata([]);
+                    setisloading(false);
+                    setiserror(true);
+                }
+            }).catch(() => {
+                setisloading(false);
+                setiserror(true);
+            })
+    }, [email]);
 
     useEffect(() => {
         setisloading(true);
@@ -58,7 +58,7 @@ export default function Dashboard() {
                     setdata(data.message);
                     setisloading(false);
                 }
-                else{
+                else {
                     setisloading(false);
                     // setiserror(true);
                 }
@@ -68,13 +68,13 @@ export default function Dashboard() {
             })
     }, [email])
 
-    if(isloading){
-        return(
-        <React.Fragment>
-            <div className='flex items-center justify-center bg-white ma3 br2 vh-75'>
-				<Loading text="Loading Dashboard" />
-			</div>
-        </React.Fragment>
+    if (isloading) {
+        return (
+            <React.Fragment>
+                <div className='flex items-center justify-center bg-white ma3 br2 vh-75'>
+                    <Loading text="Loading Dashboard" />
+                </div>
+            </React.Fragment>
         );
     }
 
@@ -91,7 +91,7 @@ export default function Dashboard() {
 
     return (
         <div>
-            <h2 className="text-center text-gray-700">{`Welcome ${bank==="A"?"Alex":"Bob"} to your Dashboard`}</h2>
+            <h2 className="text-center text-gray-700">{`Welcome ${bank === "A" ? "Alex" : "Bob"} to your Dashboard`}</h2>
             {
                 data.length <= 0 ?
                     <div className="rounded-xl py-20 w-11/12 mx-auto mt-10 drop-shadow-md bg-white">
@@ -107,32 +107,40 @@ export default function Dashboard() {
                     </div>
                     :
                     <>
-                    {<button onClick={() => history.push('/consent')} className="fixed bottom-4 right-4 ui primary button">Apply for KYC!</button>}
-                    <div className="grid grid-cols-1 md:grid-cols-2">
-                        {
-                            data.map((val, idx) => {
-                                return (
-                                    <div className="rounded-xl m-4 drop-shadow-md bg-white w-10/12 mx-auto">
-                                        <div >
-                                            <h1 className="text-gray-800 text-center text-2xl md:text-3xl p-4">{`${val.bank.split(",")[0]}, ${val.bank.split(",")[1].split("=")[1]}, ${val.bank.split(",")[2].split("=")[1]}`}</h1>
-                                            <div>
-                                                {val.approval === "false" && <div className="h-1/2 w-1/2 md:h-1/4 md:w-1/4 mx-auto"><Inprogress /></div>}
-                                                {val.approval === "true" && <div className="h-1/2 w-1/2 md:h-1/4 md:w-1/4 mx-auto"><Completed /></div>}
-                                                {val.approval === "reject" && <div className="h-1/2 w-1/2 md:h-1/4 md:w-1/4 mx-auto"><Reject /></div>}
-                                                {val.approval === "request" && <div className="h-1/2 w-1/2 md:h-1/4 md:w-1/4 mx-auto"><Consent /></div>}
-                                                <div className="mt-12 flex justify-center">
-                                                    {val.approval === "false" && <h3 className="text-gray-800 pb-6 text-md md:text-lg lg:text-xl text-center">{"Your KYC details is being Verified. (Please wait for 2-3 buisness days)"}</h3>}
-                                                    {val.approval === "true" && <h3 className="text-green-600 pb-6 text-md md:text-lg lg:text-xl text-center">{"KYC Completed!"}</h3>}
-                                                    {val.approval === "reject" && <button onClick={() => history.push('/kyc')} className="ui primary button">Apply for KYC again!</button>}
-                                                    {val.approval === "request" && <button onClick={() => history.push('/request')} className="ui primary button">Give consent for KYC</button>}
+                        {<button onClick={() => history.push('/consent')} className="fixed bottom-4 right-4 ui primary button">Apply for KYC!</button>}
+                        <div className="grid grid-cols-1 md:grid-cols-2">
+                            {
+                                data.map((val, idx) => {
+                                    return (
+                                        <div className="rounded-xl m-4 drop-shadow-md bg-white w-10/12 mx-auto">
+                                            <div >
+                                                <h1 className="text-gray-800 text-center text-2xl md:text-3xl p-4">{`${val.bank.split(",")[0]}, ${val.bank.split(",")[1].split("=")[1]}, ${val.bank.split(",")[2].split("=")[1]}`}</h1>
+                                                <div>
+                                                    {val.approval === "false" && <div className="h-1/2 w-1/2 md:h-1/4 md:w-1/4 mx-auto"><Inprogress /></div>}
+                                                    {val.approval === "true" && <div className="h-1/2 w-1/2 md:h-1/4 md:w-1/4 mx-auto"><Completed /></div>}
+                                                    {val.approval === "reject" && <div className="h-1/2 w-1/2 md:h-1/4 md:w-1/4 mx-auto"><Reject /></div>}
+                                                    {val.approval === "request" && <div className="h-1/2 w-1/2 md:h-1/4 md:w-1/4 mx-auto"><Consent /></div>}
+                                                    <div className="mt-12 flex justify-center">
+                                                        {val.approval === "false" && <h3 className="text-gray-800 pb-6 text-md md:text-lg lg:text-xl text-center">{"Your KYC details is being Verified. (Please wait for 2-3 buisness days)"}</h3>}
+                                                        {val.approval === "true" && <h3 className="text-green-600 pb-6 text-md md:text-lg lg:text-xl text-center">{"KYC Completed!"}</h3>}
+                                                        {val.approval === "reject" && (
+                                                            <div className="my-4 flex justify-center">
+                                                                <button onClick={() => history.push('/kyc')} className="ui primary button">Apply for KYC again!</button>}
+                                                            </div>)
+                                                        }
+                                                        {val.approval === "request" && (
+                                                            <div className="my-4 flex justify-center">
+                                                                <button onClick={() => history.push('/request')} className="ui primary button">Give consent for KYC</button>}
+                                                            </div>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                );
-                            })
-                        }
-                    </div>
+                                    );
+                                })
+                            }
+                        </div>
                     </>
             }
         </div>
