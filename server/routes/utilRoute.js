@@ -6,6 +6,7 @@ const env = process.env;
 
 //Models
 const bankModel = require("../models/bankModel");
+const userModel = require("../models/userModel");
 const otpModel = require("../models/otpModel");
 // Services:-
 const bankService = require("../service/bankService");
@@ -20,19 +21,43 @@ const generateOtp = () => {
 	return OTP;
 };
 
+// Getting all the user details from MONGO
 router.post("/getuserdetails", async (req, res) => {
 	try {
-		let resp = await utilService.findByCredentials(req.body.userid, bankModel);
+		let resp = await utilService.findByEmail(req.body.email, bankModel);
 
-		if (resp != null) {
-			res.send({ success: true, message: resp });
+		if (resp != undefined && resp != null && Object.keys(resp).length) {
+			let resp1 = {
+				name: resp.name,
+				ifsc_code: resp.ifsc_code,
+				email: resp.email,
+				createdAt: resp.createdAt,
+				_id: resp._id,
+			};
+
+			console.log(resp1);
+
+			res.send({ success: true, message: resp1 });
 		} else {
-			resp = await utilService.findByCredentials(req.body.userid, userModel);
+			resp = await utilService.findByEmail(req.body.email, userModel);
 
-			if (resp != null) {
-				res.send({ success: true, message: resp });
+			if (resp == {}) {
+				res.send({ success: false, message: "Error in /util/getuserdetails" });
 			} else {
-				res.send({ success: false, message: "No user exist" });
+				let resp1 = {
+					name: resp.name,
+					email: resp.email,
+					createdAt: resp.createdAt,
+					_id: resp._id,
+				};
+
+				console.log(resp1);
+
+				if (resp != null) {
+					res.send({ success: true, message: resp1 });
+				} else {
+					res.send({ success: false, message: "No user exist" });
+				}
 			}
 		}
 	} catch (err) {

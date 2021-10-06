@@ -4,41 +4,58 @@ require("dotenv").config();
 class UtilService {
 	constructor() {}
 
+	// Service to find email in MONGO
 	findByEmail = async (email, model) => {
-		const user = await model.findOne({ email: email });
-		console.log(user, " yo");
-		return user;
+		try {
+			const user = await model.findOne({ email: email });
+			if (user == undefined || user == null || Object.keys(user).length == 0) {
+				return {};
+			}
+			return user;
+		} catch (err) {
+			{
+			}
+		}
 	};
 
+	// Service to find ID in MONGO
 	findById = async (userId, model) => {
-		const user = await model.findOne({ _id: userId });
-		if (!user)
-			throw customError(401, `user not found with this ${userId} user id`);
+		try {
+			const user = await model.findOne({ _id: userId });
 
-		return user;
+			if (user == undefined || user == null || Object.keys(user).length == 0) {
+				return {};
+			}
+
+			return user;
+		} catch (err) {
+			return {};
+		}
 	};
 
+	// Service to find User by findByCredentials
 	findByCredentials = async (email, password, model) => {
-		const user = await this.findByEmail(email, model);
-		if (!user)
-			throw customError(401, `user does not exist with this ${email} email`);
+		try {
+			const user = await this.findByEmail(email, model);
 
-		return new Promise((resolve, reject) => {
-			bcrypt.compare(password, user.password, (err, result) => {
-				if (err) reject(customError(400, err.message));
-
-				if (!result) reject(customError(401, "Invalid Password"));
-
-				return resolve(user);
-			});
-		});
+			if (user == undefined || user == null || Object.keys(user).length == 0) {
+				return {};
+			}
+			return user;
+		} catch (err) {
+			return {};
+		}
 	};
 
+	// Creating the hashed password
 	hashUtil = async password => {
-		const salt = await bcrypt.genSalt(parseInt(process.env.saltRounds));
-		const hashedPassword = await bcrypt.hash(password, salt);
-
-		return hashedPassword;
+		try {
+			const salt = await bcrypt.genSalt(parseInt(process.env.saltRounds));
+			const hashedPassword = await bcrypt.hash(password, salt);
+			return hashedPassword;
+		} catch (err) {
+			return { success: false };
+		}
 	};
 }
 module.exports = exports = new UtilService();

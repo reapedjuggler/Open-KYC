@@ -4,10 +4,7 @@ const Schema = mongoose.Schema;
 // const customError = require("../utils/customError");
 
 const userSchema = new mongoose.Schema({
-	firstName: {
-		type: String,
-	},
-	lastName: {
+	name: {
 		type: String,
 	},
 	email: {

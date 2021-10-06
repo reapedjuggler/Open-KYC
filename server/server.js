@@ -1,13 +1,19 @@
 const express = require("express");
 require("./database/db");
 require("dotenv").config();
-var cors = require('cors')
+var cors = require("cors");
 const app = express();
-app.use(cors())
+
+// CORS
+var cors = require("cors");
+
+app.use(cors());
+
+//Routes:
 const userRouter = require("./routes/userRoute").router;
 const bankRouter = require("./routes/bankRoute").router;
 const utilRouter = require("./routes/utilRoute").router;
-const kycRouter = require("./routes/kycRoute").router;
+const kycRouter = require("./routes/kyc").router;
 
 const PORT = process.env.PORT || 8000;
 

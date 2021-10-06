@@ -11,11 +11,18 @@ lerna-debug.log*
 /.pnp
 .pnp.js
 
+dataFromBlockchain.json
+
 # testing
 /coverage
-
+build
+data.json
+.env
+node_modules
 # production
 /build
+
+r3corda.js
 
 # misc
 .DS_Store
@@ -45,7 +52,8 @@ coverage
 *.lcov
 
 .env
-
+data1.json
+data3.json
 # nyc test coverage
 .nyc_output
 
