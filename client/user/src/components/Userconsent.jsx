@@ -21,8 +21,8 @@ export default function Userconsent() {
     const [msg, setmsg] = useState("");
 
     const [bankoptions] = useState([
-        { key: 'm', text: 'Bank A', value: 'A' },
-        { key: 'f', text: 'Bank B', value: 'B' },
+        { key: 'm', text: 'Bank of America', value: 'A' },
+        { key: 'f', text: 'HDFC', value: 'B' },
     ])
 
     useEffect(() => {

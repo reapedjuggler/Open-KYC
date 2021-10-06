@@ -21,8 +21,8 @@ export default function Userconsent() {
     const [msg, setmsg] = useState("");
 
     const [bankoptions] = useState([
-        { key: 'm', text: 'Corp A', value: 'A' },
-        { key: 'f', text: 'Corp B', value: 'B' },
+        { key: 'm', text: 'ICM', value: 'A' },
+        { key: 'f', text: 'Gogale', value: 'B' },
     ])
 
     useEffect(() => {
@@ -94,7 +94,7 @@ export default function Userconsent() {
         //     }, 3000);
         //     return;
         // }; 
-        
+
         fetch(`${url}/kyc/apply`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
