@@ -23,7 +23,9 @@ router.post("/apply", async (req, res, next) => {
 		// your email exists so you need to authorize only
 
 		const { bank, email, aadhar, pan } = req.body;
-
+		if(!bank||!email||!aadhar||!pan){
+			console.log("Pranav ke side se error")
+		}
 		// whether this email exists or not in mongo
 
 		let resp = await userModel.findOne({ email: email });
@@ -77,6 +79,9 @@ router.post("/apply", async (req, res, next) => {
 router.post("/status", async (req, res) => {
 	try {
 		let email = req.body.email;
+		if(!email){
+			console.log("Pranav ke side se error")
+		}
 		//find user A or B from mongo
 		let dataMongo = await userModel.findOne({ email: email });
 		dataMongo = dataMongo.name;
@@ -100,8 +105,8 @@ router.post("/status", async (req, res) => {
 			for (let i = 0; i < resp.length; i++) {
 				temp.push(resp[i].state.data);
 			}
-			console.log(temp);
-			resp = await userService.checkKycStatus(temp, email);
+			//console.log(temp);
+			resp = await userService.checkKycStatus2(temp, email);
 
 			if (resp.success == true) {
 				res.send({ success: true, message: resp.message });
@@ -125,7 +130,9 @@ router.post("/approve", async (req, res) => {
 				: process.env.bankSec || 50033;
 
 		let email = req.body.email;
-
+		if(!email||!req.body.bank){
+			console.log("Pranav ke side se error")
+		}
 		let resp = await bankService.getUserDatafromCorda(data);
 		resp = resp.message;
 		// let resp = fileData;
@@ -166,7 +173,7 @@ router.post("/approve", async (req, res) => {
 				};
 
 				let respFromCorda = await bankService.sendBankDataToCorda(cordaData);
-				console.log("respformmgagcor",respFromCorda)
+				//console.log("respformmgagcor",respFromCorda)
 				// Service did not approved the user
 				if (respFromCorda.success == false) {
 					res.send({
@@ -197,7 +204,9 @@ router.post("/consent", async (req, res) => {
 				: process.env.bankSec || 50033;
 
 		let email = req.body.email;
-
+		if(!req.body.bank||!email){
+			console.log("Pranav ke side se error")
+		}
 		let resp = await bankService.getUserDatafromCorda(data);
 		resp = resp.message;
 		// let resp = fileData;
@@ -226,17 +235,14 @@ router.post("/consent", async (req, res) => {
 			} else {
 				let userDetails = await userModel.findOne({ email: email });
 
-				let partyName =
-					userDetails.name == "A"
-						? process.env.userPort1 || 50011
-						: process.env.userPort2 || 50071;
-
+				let partyName =await userService.getPartyNameFromCorda(userDetails.name)
+				//console.log("getlatedst",getLatestTransaction)
 				const cordaData = {
 					aadhar: getLatestTransaction[0].aadhar,
 					pan: getLatestTransaction[0].pan,
 					email: email,
 					bank: data,
-					partyName: partyName,
+					partyName: partyName.message.me,
 					approval: "request",
 				};
 
@@ -252,7 +258,7 @@ router.post("/consent", async (req, res) => {
 				} else {
 					//approve call approveUsertoCorda etc
 
-					res.send({ success: true, message: "User approved by Bank" });
+					res.send({ success: true, message: "Consent requested by Auditor" });
 				}
 			}
 		}
@@ -269,11 +275,15 @@ router.post("/getdetails", async (req, res) => {
 				? process.env.bankFirst || 50006
 				: process.env.bankSec || 50033;
 
+		if(!req.body.bank||!email){
+			console.log("Pranav ke side se error")
+		}
+
 		let resp = await bankService.getUserDatafromCorda(data);
 
 		if (resp.message.length == 0) {
 			res.send({
-				success: true,
+				success: false,
 				message: [],
 			});
 		} else {
@@ -291,7 +301,7 @@ router.post("/getdetails", async (req, res) => {
 				for (let i = 0; i < resp.length; i++) {
 					temp.push(resp[i].state.data);
 				}
-				// console.log("Iam temp in /getdetails\n", temp);
+				console.log("Iam temp in /getdetails\n", temp);
 				let getLatestTransaction = await userService.getLatestTransaction(
 					temp,
 					email
@@ -320,7 +330,9 @@ router.post("/getdetails2", async (req, res) => {
 			req.body.bank == "A"
 				? process.env.bankFirst || 50033
 				: process.env.bankSec || 50006;
-
+		if(!req.body.bank||!email){
+			console.log("Pranav ke side se error")
+		}
 		let resp = await bankService.getUserDatafromCorda(data);
 
 		if (resp.message.length == 0) {
@@ -373,7 +385,9 @@ router.post("/getapprovals", async (req, res) => {
 				: process.env.bankSec || 50033;
 
 		let respFromCorda = await bankService.getUserDatafromCorda(data);
-
+		if(!req.body.bank){
+			console.log("Pranav ke side se error")
+		}
 		// let respFromCorda = []; // To test locally, **** Comment this****
 
 		if (respFromCorda.success == false) {
@@ -496,7 +510,9 @@ router.post("/reject", async (req, res) => {
 
 		// Sent by the bank
 		const { bank, email, aadhar, pan } = req.body;
-
+		if(!bank||!email||!aadhar||!pan){
+			console.log("Pranav ke side se error")
+		}
 		let cordaData = {
 			aadhar: aadhar,
 			pan: pan,
@@ -577,7 +593,9 @@ router.post("/createtrackingdetails", async (req, res) => {
 router.post("/getalltrackingdetails", async (req, res) => {
 	try {
 		let port = process.env.tokenPort || 50073;
-
+		if(!req.body.email){
+			console.log("Pranav ke side se error")
+		}
 		let data = { port: port, bank: req.body.email };
 
 		// let respForTracking = await tokenService.getAllTrackingDetails(data);
@@ -602,7 +620,9 @@ router.post("/trackandtrace", async (req, res) => {
 			bankEmail: req.body.bankEmail,
 			userEmail: req.body.userEmail,
 		};
-
+		if(!req.body.bankEmail||!req.body.userEmail){
+			console.log("Pranav ke side se error")
+		}
 		let totalResp = await tokenService.getAllTrackingDetails(data);
 		console.log(totalResp.message)
 		let resp = await tokenService.getTrackingDetails(totalResp.message, data);

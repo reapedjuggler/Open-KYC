@@ -29,7 +29,7 @@ class Bank {
 			var url = `http://localhost:${data}/ious`;
 
 			let resp = await axios({ method: "GET", url: url });
-			// console.log("datadgagagagaa", resp.data);
+			console.log("datadgagagagaa", resp);
 			return { success: true, message: resp.data };
 		} catch (err) {
 			console.log(err, "\n Iam error in senduserDataToCorda service");
