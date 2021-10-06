@@ -4,12 +4,31 @@ import { AiOutlineIssuesClose } from 'react-icons/ai';
 import {useHistory} from 'react-router-dom';
 import { url } from '../util/data';
 
-export default function Card({data, bank}) {
+export default function Card({data, bank, corp}) {
 
     const history = useHistory();
 
     const [kycapprove, setkycapprove] = useState(false);
     const [iserror, setiserror] = useState(false);
+    const [consent, setconsent] = useState(false);
+
+
+    useEffect(() => {
+        if (!consent) return;
+        fetch(`${url}/kyc/consent`,{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({
+            bank:bank,
+            email:data.email
+          })
+      }).then(response => response.json())
+      .then(res => {
+          if(res.success) {
+            history.push('/dashboard')
+          }
+      }).catch(()=>setiserror(true))
+      }, [data,consent,history,bank]);
 
     useEffect(() => {
         if (!kycapprove) return;
@@ -70,9 +89,9 @@ export default function Card({data, bank}) {
                 {
                     data.approval === "false" &&
                     <div className="mx-auto my-4 mr-4 lg:my-0">
-                        <button onClick={() => {setkycapprove(true);}}class="ui active blue button">
+                        <button onClick={() => {corp?setconsent(true):setkycapprove(true);}}class="ui active blue button">
                             <i class="edit icon"/>
-                            Approve
+                            {corp?"Request Consent":"Approve"}
                         </button>
                     </div>
                 }
