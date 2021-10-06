@@ -75,7 +75,7 @@ class Bank {
 		} catch (err) {
 			// console.log(err);
 
-			return { sucess: false, message: "Problem in sending data" };
+			return { success: false, message: "Problem in sending data" };
 		}
 	};
 

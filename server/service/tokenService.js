@@ -81,18 +81,19 @@ class Token {
 	};
 
 	getAllTrackingDetails = async data => {
+		
 		try {
 			var url = `http://localhost:${data.port}/ious`;
-
-			let resp = await axios({ method: "GET", url: url });
+const fileData = require('../data3.json')
+			//let resp = await axios({ method: "GET", url: url });
+			let resp=fileData
 			// console.log("Iam the data in tokenService getAllTrackingDetails", resp.data);
 
 			let ans = [];
 
-			ans = resp.data.filter(
-				ele => ele.bank == data.bankEmail || ele.email == data.bankEmail
+			ans = resp.filter(
+				ele => ele.state.data.bank == data.bankEmail || ele.state.data.email == data.bankEmail
 			);
-
 			return { success: true, message: ans };
 		} catch (err) {
 			return {
@@ -106,12 +107,15 @@ class Token {
 		try {
 			let ans = [];
 
-			resp.forEach(
-				ele => ele.bank == data.userEmail || ele.email == data.userEmail
+			ans=resp.filter(
+				ele => ele.state.data.bank == data.userEmail || ele.state.data.email == data.userEmail
 			);
-
+				console.log(ans)
 			return { success: true, message: ans };
-		} catch (err) {}
+		} catch (err) {
+			console.log(err)
+			return { success: false, message: err };
+		}
 	};
 }
 

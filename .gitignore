@@ -48,7 +48,8 @@ coverage
 *.lcov
 
 .env
-
+data1.json
+data3.json
 # nyc test coverage
 .nyc_output
 
