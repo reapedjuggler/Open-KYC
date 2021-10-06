@@ -154,22 +154,19 @@ router.post("/approve", async (req, res) => {
 			} else {
 				let userDetails = await userModel.findOne({ email: email });
 
-				let partyName =
-					userDetails.name == "A"
-						? process.env.userPort1 || 50011
-						: process.env.userPort2 || 50071;
+				let partyName = await userService.getPartyNameFromCorda(userDetails.name)
 
 				const cordaData = {
 					aadhar: getLatestTransaction[0].aadhar,
 					pan: getLatestTransaction[0].pan,
 					email: email,
 					bank: data,
-					partyName: partyName,
+					partyName: partyName.message.me,
 					approval: "true",
 				};
 
 				let respFromCorda = await bankService.sendBankDataToCorda(cordaData);
-
+				console.log("respformmgagcor",respFromCorda)
 				// Service did not approved the user
 				if (respFromCorda.success == false) {
 					res.send({
@@ -586,7 +583,7 @@ router.post("/getalltrackingdetails", async (req, res) => {
 		// let respForTracking = await tokenService.getAllTrackingDetails(data);
 		let respForTracking = {success:true, message:fileData1}
 		if (respForTracking.success == true) {
-			res.send({ sucess: true, message: respForTracking });
+			res.send({ success: true, message: respForTracking });
 		} else {
 			return {
 				success: false,
