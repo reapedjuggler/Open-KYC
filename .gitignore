@@ -11,6 +11,8 @@ lerna-debug.log*
 /.pnp
 .pnp.js
 
+dataFromBlockchain.json
+
 # testing
 /coverage
 build
@@ -19,6 +21,8 @@ data.json
 node_modules
 # production
 /build
+
+r3corda.js
 
 # misc
 .DS_Store

@@ -10,21 +10,21 @@ const userModel = require("../models/userModel");
 const userService = require("../service/userServices");
 const bankService = require("../service/bankService");
 const tokenService = require("../service/tokenService");
-
+const r3Corda = require("../r3corda");
 //Middlewares
 const middleware = require("../middlewares/checkRoles");
 
-const fileData1 = require("../data3.json");
-let arr = [process.env.userPort1 || 50011, process.env.userPort2 || 50071]; // User ports array
-let email_arr = ["test@test.com", "test3@test.com"];
+//Only for testing puprose ///////////////********* Make sure to remove this *////////////////////////////
+// const fileData1 = require("../data3.json");
+
 router.post("/apply", async (req, res, next) => {
 	try {
 		// whether this email already exists in corda
 		// your email exists so you need to authorize only
 
 		const { bank, email, aadhar, pan } = req.body;
-		if(!bank||!email||!aadhar||!pan){
-			console.log("Pranav ke side se error")
+		if (!bank || !email || !aadhar || !pan) {
+			console.log("Pranav ke side se error");
 		}
 		// whether this email exists or not in mongo
 
@@ -41,12 +41,12 @@ router.post("/apply", async (req, res, next) => {
 				pan: pan,
 				email: email,
 				bank:
-					bank == "A"
+					bank == r3Corda.bankFromBlockchain
 						? 50006 || process.env.bankFirst
 						: 50033 || process.env.bankSec,
 				partyName: "",
 				approval: "false",
-				port: resp.name == "A" ? 50011 : 50071,
+				port: resp.name == r3Corda.bankFromBlockchain ? 50011 : 50071,
 			};
 
 			let partyName = await bankService.getPartyNameFromCorda(bank);
@@ -79,15 +79,15 @@ router.post("/apply", async (req, res, next) => {
 router.post("/status", async (req, res) => {
 	try {
 		let email = req.body.email;
-		if(!email){
-			console.log("Pranav ke side se error")
+		if (!email) {
+			console.log("Pranav ke side se error");
 		}
 		//find user A or B from mongo
 		let dataMongo = await userModel.findOne({ email: email });
 		dataMongo = dataMongo.name;
 		//console.log(dataMongo)
 		let data =
-			dataMongo == "A"
+			dataMongo == r3Corda.bankFromBlockchain
 				? 50011 || process.env.userPort1
 				: 50071 || process.env.userPort2;
 		//console.log(data)
@@ -125,13 +125,13 @@ router.post("/status", async (req, res) => {
 router.post("/approve", async (req, res) => {
 	try {
 		let data =
-			req.body.bank == "A"
+			req.body.bank == r3Corda.bankFromBlockchain
 				? process.env.bankFirst || 50006
 				: process.env.bankSec || 50033;
 
 		let email = req.body.email;
-		if(!email||!req.body.bank){
-			console.log("Pranav ke side se error")
+		if (!email || !req.body.bank) {
+			console.log("Pranav ke side se error");
 		}
 		let resp = await bankService.getUserDatafromCorda(data);
 		resp = resp.message;
@@ -201,13 +201,13 @@ router.post("/consent", async (req, res) => {
 	// making approval attribute as "request" for consent form
 	try {
 		let data =
-			req.body.bank == "A"
+			req.body.bank == r3Corda.bankFromBlockchain
 				? process.env.bankFirst || 50006
 				: process.env.bankSec || 50033;
 
 		let email = req.body.email;
-		if(!req.body.bank||!email){
-			console.log("Pranav ke side se error")
+		if (!req.body.bank || !email) {
+			console.log("Pranav ke side se error");
 		}
 		let resp = await bankService.getUserDatafromCorda(data);
 		resp = resp.message;
@@ -237,7 +237,9 @@ router.post("/consent", async (req, res) => {
 			} else {
 				let userDetails = await userModel.findOne({ email: email });
 
-				let partyName =await userService.getPartyNameFromCorda(userDetails.name)
+				let partyName = await userService.getPartyNameFromCorda(
+					userDetails.name
+				);
 				//console.log("getlatedst",getLatestTransaction)
 				const cordaData = {
 					aadhar: getLatestTransaction[0].aadhar,
@@ -273,12 +275,12 @@ router.post("/getdetails", async (req, res) => {
 	try {
 		let email = req.body.email;
 		let data =
-			req.body.bank == "A"
+			req.body.bank == r3Corda.bankFromBlockchain
 				? process.env.bankFirst || 50006
 				: process.env.bankSec || 50033;
 
-		if(!req.body.bank||!email){
-			console.log("Pranav ke side se error")
+		if (!req.body.bank || !email) {
+			console.log("Pranav ke side se error");
 		}
 
 		let resp = await bankService.getUserDatafromCorda(data);
@@ -327,18 +329,16 @@ router.post("/getdetails", async (req, res) => {
 });
 router.post("/getdetails2", async (req, res) => {
 	try {
-
-
-		// y tab hit hota hai jab user already apply kar chuka hai atleast ek bank mai or dobara apply karne ja raha hai dusre 
-		// bank mai to ab uski details already applied waale bank se laani padege to port swap karne padege 
+		// y tab hit hota hai jab user already apply kar chuka hai atleast ek bank mai or dobara apply karne ja raha hai dusre
+		// bank mai to ab uski details already applied waale bank se laani padege to port swap karne padege
 
 		let email = req.body.email;
 		let data =
-			req.body.bank == "A"
+			req.body.bank == r3Corda.bankFromBlockchain
 				? process.env.bankFirst || 50033
 				: process.env.bankSec || 50006;
-		if(!req.body.bank||!email){
-			console.log("Pranav ke side se error")
+		if (!req.body.bank || !email) {
+			console.log("Pranav ke side se error");
 		}
 		let resp = await bankService.getUserDatafromCorda(data);
 
@@ -387,13 +387,13 @@ router.post("/getdetails2", async (req, res) => {
 router.post("/getapprovals", async (req, res) => {
 	try {
 		let data =
-			req.body.bank == "A"
+			req.body.bank == r3Corda.bankFromBlockchain
 				? process.env.bankFirst || 50006
 				: process.env.bankSec || 50033;
 
 		let respFromCorda = await bankService.getUserDatafromCorda(data);
-		if(!req.body.bank){
-			console.log("Pranav ke side se error")
+		if (!req.body.bank) {
+			console.log("Pranav ke side se error");
 		}
 		// let respFromCorda = []; // To test locally, **** Comment this****
 
@@ -433,17 +433,15 @@ router.post("/getapprovals", async (req, res) => {
 					temp.push(respFromCorda[i].state.data);
 				}
 
-				// console.log(temp);
 				let finalApproval = [],
 					finalPending = [];
 
-				for (let i = 0; i < arr.length; i++) {
-					// 50011, 50071
-
+				for (let i = 0; i < r3Corda.portEmitterFromCorda.length; i++) {
 					let respFromCordaFromUser = await userService.getUserDatafromCorda(
-						arr[i]
+						r3Corda.portEmitterFromCorda[i]
 					);
-					let userEmail = email_arr[i];
+
+					let userEmail = r3Corda.emailFromCorda[i];
 
 					respFromCordaFromUser = respFromCordaFromUser.message;
 
@@ -517,15 +515,15 @@ router.post("/reject", async (req, res) => {
 
 		// Sent by the bank
 		const { bank, email, aadhar, pan } = req.body;
-		if(!bank||!email||!aadhar||!pan){
-			console.log("Pranav ke side se error")
+		if (!bank || !email || !aadhar || !pan) {
+			console.log("Pranav ke side se error");
 		}
 		let cordaData = {
 			aadhar: aadhar,
 			pan: pan,
 			email: email,
 			bank:
-				bank == "A"
+				bank == r3Corda.bankFromBlockchain
 					? 50006 || process.env.bankFirst
 					: 50033 || process.env.bankSec,
 			partyName: "",
@@ -600,8 +598,8 @@ router.post("/createtrackingdetails", async (req, res) => {
 router.post("/getalltrackingdetails", async (req, res) => {
 	try {
 		let port = process.env.tokenPort || 50073;
-		if(!req.body.email){
-			console.log("Pranav ke side se error")
+		if (!req.body.email) {
+			console.log("Pranav ke side se error");
 		}
 		let data = { port: port, bank: req.body.email };
 
@@ -627,8 +625,8 @@ router.post("/trackandtrace", async (req, res) => {
 			bankEmail: req.body.bankEmail,
 			userEmail: req.body.userEmail,
 		};
-		if(!req.body.bankEmail||!req.body.userEmail){
-			console.log("Pranav ke side se error")
+		if (!req.body.bankEmail || !req.body.userEmail) {
+			console.log("Pranav ke side se error");
 		}
 		let totalResp = await tokenService.getAllTrackingDetails(data);
 		console.log(totalResp.message);
