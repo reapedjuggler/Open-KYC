@@ -154,7 +154,9 @@ router.post("/approve", async (req, res) => {
 			} else {
 				let userDetails = await userModel.findOne({ email: email });
 
-				let partyName = await userService.getPartyNameFromCorda(userDetails.name)
+				let partyName = await userService.getPartyNameFromCorda(
+					userDetails.name
+				);
 
 				const cordaData = {
 					aadhar: getLatestTransaction[0].aadhar,
@@ -166,7 +168,7 @@ router.post("/approve", async (req, res) => {
 				};
 
 				let respFromCorda = await bankService.sendBankDataToCorda(cordaData);
-				console.log("respformmgagcor",respFromCorda)
+				console.log("respformmgagcor", respFromCorda);
 				// Service did not approved the user
 				if (respFromCorda.success == false) {
 					res.send({
@@ -315,6 +317,11 @@ router.post("/getdetails", async (req, res) => {
 });
 router.post("/getdetails2", async (req, res) => {
 	try {
+
+
+		// y tab hit hota hai jab user already apply kar chuka hai atleast ek bank mai or dobara apply karne ja raha hai dusre 
+		// bank mai to ab uski details already applied waale bank se laani padege to port swap karne padege 
+
 		let email = req.body.email;
 		let data =
 			req.body.bank == "A"
@@ -581,7 +588,7 @@ router.post("/getalltrackingdetails", async (req, res) => {
 		let data = { port: port, bank: req.body.email };
 
 		// let respForTracking = await tokenService.getAllTrackingDetails(data);
-		let respForTracking = {success:true, message:fileData1}
+		let respForTracking = { success: true, message: fileData1 };
 		if (respForTracking.success == true) {
 			res.send({ success: true, message: respForTracking });
 		} else {
@@ -604,7 +611,7 @@ router.post("/trackandtrace", async (req, res) => {
 		};
 
 		let totalResp = await tokenService.getAllTrackingDetails(data);
-		console.log(totalResp.message)
+		console.log(totalResp.message);
 		let resp = await tokenService.getTrackingDetails(totalResp.message, data);
 
 		if (resp.success == true) {
@@ -616,7 +623,7 @@ router.post("/trackandtrace", async (req, res) => {
 			});
 		}
 	} catch (err) {
-		console.log(err)
+		console.log(err);
 		res.send({ success: false, message: "Error in /trackandtrace route" });
 	}
 });
