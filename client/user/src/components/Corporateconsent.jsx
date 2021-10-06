@@ -93,7 +93,8 @@ export default function Userconsent() {
         //         setmsg("");
         //     }, 3000);
         //     return;
-        // };
+        // }; 
+        
         fetch(`${url}/kyc/apply`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

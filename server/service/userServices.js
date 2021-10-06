@@ -162,7 +162,7 @@ class User {
 					//bank has approved			//applied but not approved  --new approval:rejected
 					if (
 						(data[i].approval == "true" && lender[0] == "B") ||
-						(data[i].approval == "false") & (lender[0] == "U")
+						(data[i].approval == "false" && lender[0] == "U")
 					) {
 						ans.push({
 							user: email,
@@ -176,10 +176,74 @@ class User {
 				}
 				visSet.add(x);
 			}
+			visSet.forEach(e => {
+				console.log(e, "\n");
+			});
+			console.log(ans, "\nI'm ans");
+			return { success: true, message: ans };
+		} catch (err) {
+			return { success: false, message: err.message };
+		}
+	};
+
+	checkKycStatus2 = async (data, email) => {
+		// [ { user: email, bank: BankA , status: "pending" }]
+		// Cope and Seethe
+
+		try {
+			let visSet = new Set();
+			// console.log(data);
+			let ans = []; // Array to store approval lists
+
+			await data.sort(async (ele, ele1) => {
+				let keyA = new Date(ele.timestamp),
+					keyB = new Date(ele1.timestamp);
+
+				if (keyA < keyB) return -1;
+
+				if (keyA > keyB) return 1;
+
+				return 0;
+			});
+
+			for (let i = data.length - 1; i >= 0; i--) {
+				let index = data[i].borrower.indexOf("=");
+
+				let borrower = data[i].borrower.substring(index + 1);
+
+				let lender = data[i].lender.substring(index + 1);
+				console.log(lender,"lender",borrower,"b",data[i])
+				// let x =
+				// 	data[i].approval == "true" && lender[0] == "B" ? lender : borrower;
+				let c = data[i].approval == "false" && lender[0] == "U"
+						? borrower
+						: lender
+				if (visSet.has(JSON.stringify({email,c})) == true) continue;
+
+				if (email == data[i].email) {
+					//bank has approved			//applied but not approved  --new approval:rejected
+					if (
+						(data[i].approval == "true" && lender[0] == "B") ||
+						(data[i].approval == "false" && lender[0] == "U") ||
+						(data[i].approval == "request" && lender[0] == "B")||
+						(data[i].approval == "reject" && lender[0] == "B")
+					) {
+						
+						ans.push({
+							user: email,
+							bank:c,
+							approval: data[i].approval,
+						});
+						
+						visSet.add(JSON.stringify({email,c}));
+					}
+				 }
+				// visSet.add(x);
+			}
 			// visSet.forEach(e => {
 			// 	console.log(e, "\n");
 			// });
-			// console.log(ans, "\nI'm ans");
+			//console.log(ans, "\nI'm ans");
 			return { success: true, message: ans };
 		} catch (err) {
 			return { success: false, message: err.message };
