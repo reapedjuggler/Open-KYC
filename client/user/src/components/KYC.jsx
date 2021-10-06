@@ -37,7 +37,7 @@ export default function RegisterformKYC() {
                             method:'POST',
                             headers:{'Content-Type':'application/json'},
                             body: JSON.stringify({
-                                bank: values.bank, 
+                                bank: values.bank === "HDFC"?"A":"B", 
                                 email: values.email, 
                                 aadhar: values.aadhar, 
                                 pan: values.pan
