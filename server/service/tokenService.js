@@ -1,3 +1,5 @@
+//This service is made entirely for track and trace ledger
+
 const bcrypt = require("bcryptjs");
 const axios = require("axios");
 
@@ -41,19 +43,21 @@ class Token {
 	// 	}
 	// };
 
+	
+	// For getting the partyName of a particular user or Bank in r3Corda
 	getPartyNameFromCorda = async data => {
 		try {
 			let val = process.env.trackPort || 50086;
 			let url = `http://localhost:${val}/me`;
 
 			const resp = await axios({ method: "GET", url: url });
-			// console.log("Iam the data\n", resp.data);
 			return { success: true, message: resp.data };
 		} catch (err) {
 			return { success: false, message: err.message };
 		}
 	};
 
+	// For tracking all the responses made by the user to this bank
 	trackAndTrace = async data => {
 		try {
 			let url = `http://localhost:${data.port}/create-iou`;
@@ -80,19 +84,21 @@ class Token {
 		}
 	};
 
+	// Getting all the tracking details for a particular bank
 	getAllTrackingDetails = async data => {
-		
 		try {
 			var url = `http://localhost:${data.port}/ious`;
-const fileData = require('../data3.json')
+			const fileData = require("../data3.json");
 			//let resp = await axios({ method: "GET", url: url });
-			let resp=fileData
+			let resp = fileData;
 			// console.log("Iam the data in tokenService getAllTrackingDetails", resp.data);
 
 			let ans = [];
 
 			ans = resp.filter(
-				ele => ele.state.data.bank == data.bankEmail || ele.state.data.email == data.bankEmail
+				ele =>
+					ele.state.data.bank == data.bankEmail ||
+					ele.state.data.email == data.bankEmail
 			);
 			return { success: true, message: ans };
 		} catch (err) {
@@ -103,17 +109,19 @@ const fileData = require('../data3.json')
 		}
 	};
 
+	// Get all the responses here for a particular user
 	getTrackingDetails = async (resp, data) => {
 		try {
 			let ans = [];
 
-			ans=resp.filter(
-				ele => ele.state.data.bank == data.userEmail || ele.state.data.email == data.userEmail
+			ans = resp.filter(
+				ele =>
+					ele.state.data.bank == data.userEmail ||
+					ele.state.data.email == data.userEmail
 			);
-				console.log(ans)
 			return { success: true, message: ans };
 		} catch (err) {
-			console.log(err)
+			console.log(err);
 			return { success: false, message: err };
 		}
 	};

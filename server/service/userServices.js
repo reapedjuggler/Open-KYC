@@ -1,3 +1,5 @@
+// This service is entirely made for fetching and creating user details from Blockchain
+
 const bcrypt = require("bcryptjs");
 const customError = require("../utils/customError");
 const r3Corda = require("../r3corda");
@@ -5,11 +7,13 @@ const r3Corda = require("../r3corda");
 // Models
 const userModel = require("../models/userModel");
 
+// For development purposes only do make sure to comment this while in live server ///******IMP *//////
 // const fileData1 = require("../data1.json");
 
-// Constants
+// API
 const axios = require("axios");
 class User {
+	// For creating a new User in REST
 	createUser = async data => {
 		try {
 			const user = new userModel({
@@ -22,10 +26,11 @@ class User {
 			await user.save();
 			return { success: true, message: "Data Saved" };
 		} catch (err) {
-			// console.log(err);
 			return { success: false, message: err.message };
 		}
 	};
+
+	// Getting partyname in blockchain for a particular user
 	getPartyNameFromCorda = async data => {
 		try {
 			let val = data == r3Corda.bankFromBlockchain ? 50011 : 50071;
@@ -38,6 +43,8 @@ class User {
 			return { success: false, message: err.message };
 		}
 	};
+
+	//Getting all the user data from CORDA 
 	getUserDatafromCorda = async data => {
 		try {
 			var url = `http://localhost:${data}/ious`;
@@ -45,13 +52,13 @@ class User {
 			// let resp = { data: fileData1 }; // When testing locally uncomment
 
 			let resp = await axios({ method: "GET", url: url });
-			console.log("Iam resp data", resp.data);
 			return { success: true, message: resp.data };
 		} catch (err) {
-			console.log(err, "\n Iam error in senduserDataToCorda service");
 			return { success: false, message: err };
 		}
 	};
+
+	// Sending all the user data from CORDA 
 	sendUserDataToCorda = async (data, num) => {
 		try {
 			var val = data.port;
@@ -72,9 +79,7 @@ class User {
 				},
 			};
 
-			// console.log("bas data", data);
 			const resp = await axios.post(url, params, config);
-			// console.log(resp);
 			return { success: true, data: resp };
 		} catch (err) {
 			console.log(err);
@@ -82,11 +87,11 @@ class User {
 		}
 	};
 
+	// Getting the latest transaction made by this user
 	getLatestTransaction = async (data, email) => {
 		// for loop ke liye wait ni krri ans=[] return ho jaara
 		try {
 			let visSet = new Set();
-			// console.log(data);
 			let ans = []; // Array to store approval lists
 
 			await data.sort(async (ele, ele1) => {
@@ -108,32 +113,27 @@ class User {
 				visSet.add(data[i].email);
 			}
 
-			//console.log(ans, "\ndata\n");
-
 			ans.filter(async ele => ele.email == email);
 
 			let id = await userModel.findOne({ email: email });
-			//console.log(id)
+
 			if (ans && ans.length) {
 				ans[0].id = !id || id == null ? "default" : id._id;
 			}
-
-			// console.log(ans, "\nI'm ans");
 
 			return { success: true, message: ans };
 		} catch (err) {
 			return { success: false, message: err };
 		}
 	};
-	// approval==true & lender == bank    ||   approval==false & lender ==user
 
+	// For checking the status of pending reject or approved KYC's
 	checkKycStatus = async (data, email) => {
 		// [ { user: email, bank: BankA , status: "pending" }]
 		// Cope and Seethe
 
 		try {
 			let visSet = new Set();
-			// console.log(data);
 			let ans = []; // Array to store approval lists
 
 			await data.sort(async (ele, ele1) => {
@@ -176,10 +176,7 @@ class User {
 				}
 				visSet.add(x);
 			}
-			visSet.forEach(e => {
-				console.log(e, "\n");
-			});
-			console.log(ans, "\nI'm ans");
+
 			return { success: true, message: ans };
 		} catch (err) {
 			return { success: false, message: err.message };
@@ -212,38 +209,31 @@ class User {
 				let borrower = data[i].borrower.substring(index + 1);
 
 				let lender = data[i].lender.substring(index + 1);
-				console.log(lender,"lender",borrower,"b",data[i])
 				// let x =
 				// 	data[i].approval == "true" && lender[0] == "B" ? lender : borrower;
-				let c = data[i].approval == "false" && lender[0] == "U"
-						? borrower
-						: lender
-				if (visSet.has(JSON.stringify({email,c})) == true) continue;
+				let c =
+					data[i].approval == "false" && lender[0] == "U" ? borrower : lender;
+				if (visSet.has(JSON.stringify({ email, c })) == true) continue;
 
 				if (email == data[i].email) {
 					//bank has approved			//applied but not approved  --new approval:rejected
 					if (
 						(data[i].approval == "true" && lender[0] == "B") ||
 						(data[i].approval == "false" && lender[0] == "U") ||
-						(data[i].approval == "request" && lender[0] == "B")||
+						(data[i].approval == "request" && lender[0] == "B") ||
 						(data[i].approval == "reject" && lender[0] == "B")
 					) {
-						
 						ans.push({
 							user: email,
-							bank:c,
+							bank: c,
 							approval: data[i].approval,
 						});
-						
-						visSet.add(JSON.stringify({email,c}));
+
+						visSet.add(JSON.stringify({ email, c }));
 					}
-				 }
+				}
 				// visSet.add(x);
 			}
-			// visSet.forEach(e => {
-			// 	console.log(e, "\n");
-			// });
-			//console.log(ans, "\nI'm ans");
 			return { success: true, message: ans };
 		} catch (err) {
 			return { success: false, message: err.message };

@@ -12,6 +12,7 @@ const bankService = require("../service/bankService");
 const utilService = require("../service/utilService");
 const mail = require("../service/mail");
 
+// Signup route for BANK in MONGOdb
 router.post("/signup", async (req, res) => {
 	try {
 		var { email, password } = req.body;
@@ -46,18 +47,17 @@ router.post("/signup", async (req, res) => {
 			}
 		}
 	} catch (err) {
-		console.log(err, "\nError in signup\n");
+		// console.log(err, "\nError in signup\n");
 		res.send({ success: false, message: err.message });
 	}
 });
 
+// LOGIN route for BANK in MONGOdb
 router.post("/login", async (req, res) => {
 	try {
 		var { email, password } = req.body;
 
 		var check = await utilService.findByEmail(email, bankModel);
-
-		// console.log(check);
 
 		if (check == null || check == undefined || Object.keys(check).length == 0) {
 			res.send({
@@ -65,15 +65,11 @@ router.post("/login", async (req, res) => {
 				message: "No account found with that email Id",
 			});
 		} else {
-			// console.log(check);
-
 			var resp = await utilService.findByCredentials(
 				email,
 				password,
 				bankModel
 			);
-
-			console.log(check);
 
 			const validPassword = await bcrypt.compare(
 				req.body.password,
@@ -91,7 +87,7 @@ router.post("/login", async (req, res) => {
 			}
 		}
 	} catch (err) {
-		console.log(err, "\nError in login\n");
+		// console.log(err, "\nError in login\n");
 		res.send({ success: false, message: err.message });
 	}
 });
@@ -99,8 +95,9 @@ router.post("/login", async (req, res) => {
 module.exports = exports = {
 	router,
 };
-// firstName:Reaped
-// lastName:Juggler
+
+// firstName:Vibhav
+// lastName:Tomar
 // email:tomarvibhav55@gmail.com
 // password:Hello123
 // phone:7000305373

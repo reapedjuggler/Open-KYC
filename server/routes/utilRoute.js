@@ -21,6 +21,7 @@ const generateOtp = () => {
 	return OTP;
 };
 
+// Getting all the user details from MONGO
 router.post("/getuserdetails", async (req, res) => {
 	try {
 		let resp = await utilService.findByEmail(req.body.email, bankModel);

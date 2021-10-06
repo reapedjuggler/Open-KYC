@@ -11,6 +11,8 @@ const customError = require("../utils/customError");
 // constants
 let url = "http://localhost:50006/create-iou";
 class Bank {
+
+	// Service for creating a new bank entry in REST api
 	createBank = async data => {
 		try {
 			const user = new bankModel({
@@ -25,12 +27,13 @@ class Bank {
 			return { success: false, message: "Mongo Error in creating Bank" };
 		}
 	};
+
+	// Getting all the user data for a particular bank from CORDA
 	getUserDatafromCorda = async data => {
 		try {
 			var url = `http://localhost:${data}/ious`;
 
 			let resp = await axios({ method: "GET", url: url });
-			console.log("datadgagagagaa", resp);
 			return { success: true, message: resp.data };
 		} catch (err) {
 			console.log(err, "\n Iam error in senduserDataToCorda service");
@@ -38,13 +41,13 @@ class Bank {
 		}
 	};
 
+	// For getting the partyName of a particular user or Bank in r3Corda
 	getPartyNameFromCorda = async data => {
 		try {
 			let val = data == r3Corda.bankFromBlockchain ? 50006 : 50033;
 			let url = `http://localhost:${val}/me`;
 
 			const resp = await axios({ method: "GET", url: url });
-			// console.log("Iam the data\n", resp.data);
 			return { success: true, message: resp.data };
 		} catch (err) {
 			return { success: false, message: err.message };
@@ -69,7 +72,6 @@ class Bank {
 			};
 
 			const resp = await axios.post(url, params, config);
-			// console.log("snedBankdnadg", url);
 			return { success: true, data: resp };
 		} catch (err) {
 			// console.log(err);
@@ -88,6 +90,7 @@ class Bank {
 	// 	}
 	// };
 
+	// Getting all the user approval and pending requests for a particular bank from CORDA
 	getApprovalLists = async (
 		respFromCorda,
 		respFromCordaFromUser,
