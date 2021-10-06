@@ -83,17 +83,18 @@ export default function Userconsent() {
             }, 3000);
             return;
         }
-        let res = bankdata.filter(val => val.bank.split(',')[0].split("Bank")[1] === bank)
-        if (res.length >= 1) {
-            setcheckbox(true);
-            setmsg(`Already Applied for ${bank}`);
-            setTimeout(() => {
-                setcheckbox(false);
-                setisapply(false);
-                setmsg("");
-            }, 3000);
-            return;
-        };
+        // let res = bankdata.filter(val => val.bank.split(',')[0].split("Bank")[1] === bank)
+        // if (res.length >= 1) {
+        //     setcheckbox(true);
+        //     setmsg(`Already Applied for ${bank}`);
+        //     setTimeout(() => {
+        //         setcheckbox(false);
+        //         setisapply(false);
+        //         setmsg("");
+        //     }, 3000);
+        //     return;
+        // }; 
+        
         fetch(`${url}/kyc/apply`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
