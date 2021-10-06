@@ -14,6 +14,7 @@ export default function Dashboard({approved,corp}) {
     const [iserror, setiserror] = useState(false);
     const [bankname, setbankname] = useState("");
 
+
     useEffect(() => {
         if(!email) return;
         setisloading(true);
@@ -65,7 +66,7 @@ export default function Dashboard({approved,corp}) {
           setisloading(false);
           setiserror(true);
       })
-      }, [approved,bankname]);
+      }, [approved,bankname,corp]);
 
       if(isloading){
         return(

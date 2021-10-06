@@ -36,7 +36,7 @@ export default function Detail() {
             setiserror(true)
         }
     }).catch(()=> setiserror(true));
-    }, [reject])
+    }, [reject,bank,data,email,history])
 
     useEffect(() => {
         if(!email || !bank ) return;
