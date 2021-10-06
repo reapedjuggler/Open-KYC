@@ -91,11 +91,7 @@ export default function Dashboard() {
 
     return (
         <div>
-<<<<<<< HEAD
             <h2 className="text-center text-gray-700">{`Welcome ${bank==="A"?"Alice":"Bob"} to your Dashboard`}</h2>
-=======
-            <h2 className="text-center text-gray-700">{`Welcome ${bank === "A" ? "Alex" : "Bob"} to your Dashboard`}</h2>
->>>>>>> bc77c118201d9bf3a5ce82dc0e741370f77c931c
             {
                 data.length <= 0 ?
                     <div className="rounded-xl py-20 w-11/12 mx-auto mt-10 drop-shadow-md bg-white">
