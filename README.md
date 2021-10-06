@@ -81,7 +81,7 @@
 
 * **Handling a large number of Requests**
     * **Load Balancing**
-        --> We will use the concept of Load Balancing for handling a large number of request
+        --> We will deploy the app on a kubernetes cluster and manage the load and traffic from there.
         
 </br>
 
@@ -101,12 +101,37 @@
   </br>
 * **Setting Up**
 ----  
-  * **Download the essential node modules**</br>
-    <pre>npm install</pre></br>
-     **Download and setup MongoDB**</br>
-     [MongoDB](https://www.mongodb.com/)</br>
-     
-     <br>`Setup .env file` </br>
-     </br>**Start the Server**</br>
-    <pre>npm start server.js </pre>
+  
+## Setup
+
+- Install and setup [`Nodejs`](https://nodejs.org/en/)
+- Install and setup [`Mongodb`](https://www.mongodb.com/)
+- Install ans setup [`r3Corda`](https://www.r3.com/corda-platform/)
+- Fork and Clone the repository
+
+```sh
+https://github.com/reapedjuggler/AmexHack
+```
+
+- Start the r3Corda server and deploy the nodes
+
+- Move into the project folder
+
+```sh
+cd server
+```
+
+- Setup `.env` file
+
+- Start the server
+
+```sh
+npm start server.js
+```
+
+The output should be
+
+```sh
+Server connected on Port 8000
+```
   
