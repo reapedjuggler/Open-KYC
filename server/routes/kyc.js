@@ -16,6 +16,8 @@ const middleware = require("../middlewares/checkRoles");
 //Only for testing puprose ///////////////********* Make sure to remove this *////////////////////////////
 const fileData1 = require("../data3.json");
 
+
+// Route for applying for KYC 
 router.post("/apply", async (req, res, next) => {
 	try {
 		// whether this email already exists in corda
@@ -23,7 +25,7 @@ router.post("/apply", async (req, res, next) => {
 
 		const { bank, email, aadhar, pan } = req.body;
 		if (!bank || !email || !aadhar || !pan) {
-			console.log("Pranav ke side se error");
+			console.log("Error from front-end in fetching body details");
 		}
 		// whether this email exists or not in mongo
 
@@ -75,12 +77,16 @@ router.post("/apply", async (req, res, next) => {
 	}
 });
 
+
+// Route for checking status for a user's KYC 
 router.post("/status", async (req, res) => {
 	try {
 		let email = req.body.email;
+
 		if (!email) {
-			console.log("Pranav ke side se error");
+			console.log("Error in Front-end");
 		}
+
 		//find user A or B from mongo
 		let dataMongo = await userModel.findOne({ email: email });
 		dataMongo = dataMongo.name;
@@ -121,6 +127,7 @@ router.post("/status", async (req, res) => {
 	}
 });
 
+// Route for approving a user's KYC 
 router.post("/approve", async (req, res) => {
 	try {
 		let data =
@@ -130,7 +137,7 @@ router.post("/approve", async (req, res) => {
 
 		let email = req.body.email;
 		if (!email || !req.body.bank) {
-			console.log("Pranav ke side se error");
+			console.log("Error in Front-end");
 		}
 		let resp = await bankService.getUserDatafromCorda(data);
 		resp = resp.message;
@@ -184,7 +191,6 @@ router.post("/approve", async (req, res) => {
 					});
 				} else {
 					//approve call approveUsertoCorda etc
-
 					res.send({ success: true, message: "User approved by Bank" });
 				}
 			}
@@ -194,8 +200,8 @@ router.post("/approve", async (req, res) => {
 	}
 });
 
-// ----------------------------------------check-----------------------------
 
+// Route for getting a user's consent 
 router.post("/consent", async (req, res) => {
 	// making approval attribute as "request" for consent form
 	try {
@@ -206,7 +212,7 @@ router.post("/consent", async (req, res) => {
 
 		let email = req.body.email;
 		if (!req.body.bank || !email) {
-			console.log("Pranav ke side se error");
+			console.log("Error in Front-end");
 		}
 		let resp = await bankService.getUserDatafromCorda(data);
 		resp = resp.message;
@@ -270,6 +276,8 @@ router.post("/consent", async (req, res) => {
 	}
 });
 
+
+// Route for getting a user's details 
 router.post("/getdetails", async (req, res) => {
 	try {
 		let email = req.body.email;
@@ -279,7 +287,7 @@ router.post("/getdetails", async (req, res) => {
 				: process.env.bankSec || 50033;
 
 		if (!req.body.bank || !email) {
-			console.log("Pranav ke side se error");
+			console.log("Front-end Error ");
 		}
 
 		let resp = await bankService.getUserDatafromCorda(data);
@@ -304,7 +312,7 @@ router.post("/getdetails", async (req, res) => {
 				for (let i = 0; i < resp.length; i++) {
 					temp.push(resp[i].state.data);
 				}
-				console.log("Iam temp in /getdetails\n", temp);
+				// console.log("Iam temp in /getdetails\n", temp);
 				let getLatestTransaction = await userService.getLatestTransaction(
 					temp,
 					email
@@ -326,6 +334,8 @@ router.post("/getdetails", async (req, res) => {
 		res.send({ success: false, message: err.message });
 	}
 });
+
+// Getting user details from other bank
 router.post("/getdetails2", async (req, res) => {
 	try {
 		// y tab hit hota hai jab user already apply kar chuka hai atleast ek bank mai or dobara apply karne ja raha hai dusre
@@ -337,7 +347,7 @@ router.post("/getdetails2", async (req, res) => {
 				? process.env.bankFirst || 50033
 				: process.env.bankSec || 50006;
 		if (!req.body.bank || !email) {
-			console.log("Pranav ke side se error");
+			console.log("Front-end error");
 		}
 		let resp = await bankService.getUserDatafromCorda(data);
 
@@ -383,6 +393,8 @@ router.post("/getdetails2", async (req, res) => {
 		res.send({ success: false, message: err.message });
 	}
 });
+
+// Getting user's KYC details for a Bank
 router.post("/getapprovals", async (req, res) => {
 	try {
 		let data =
@@ -392,7 +404,7 @@ router.post("/getapprovals", async (req, res) => {
 
 		let respFromCorda = await bankService.getUserDatafromCorda(data);
 		if (!req.body.bank) {
-			console.log("Pranav ke side se error");
+			console.log("Front-end error");
 		}
 		// let respFromCorda = []; // To test locally, **** Comment this****
 
@@ -444,13 +456,6 @@ router.post("/getapprovals", async (req, res) => {
 
 					respFromCordaFromUser = respFromCordaFromUser.message;
 
-					// console.log(
-					// 	respFromCordaFromUser,
-					// 	" \nUser\n",
-					// 	respFromCorda,
-					// 	"\nFrom Corda\n"
-					// );
-
 					if (
 						respFromCordaFromUser != undefined &&
 						respFromCordaFromUser.length == 0
@@ -465,14 +470,11 @@ router.post("/getapprovals", async (req, res) => {
 
 					if (temp1 == []) continue;
 
-					console.log(userEmail);
 					let respData = await bankService.getApprovalLists(
 						temp,
 						temp1,
 						userEmail
 					);
-
-					// console.log("Iam temp in /getapprovals", respData.message.pending);
 
 					if (respData.success == false) {
 						throw new Error({
@@ -482,7 +484,6 @@ router.post("/getapprovals", async (req, res) => {
 					} else {
 						finalApproval = [...finalApproval, ...respData.message.approved];
 						finalPending = [...finalPending, ...respData.message.pending];
-						console.log(finalApproval, "aafaa", finalPending);
 
 						// for (let i = 0; i < respData.message.pending.length; i++)
 						// 	console.log(respData.message.pending[i].approved_by, "\n");
@@ -507,6 +508,7 @@ router.post("/getapprovals", async (req, res) => {
 	}
 });
 
+// Rejecting a users KYC
 router.post("/reject", async (req, res) => {
 	try {
 		// whether this email already exists in corda
@@ -534,7 +536,6 @@ router.post("/reject", async (req, res) => {
 		dataMongo = dataMongo.name;
 
 		let partyName = await userService.getPartyNameFromCorda(dataMongo);
-		// console.log("partyname",partyName)
 		if (partyName.success == false) {
 			res.send({
 				success: false,
@@ -543,7 +544,6 @@ router.post("/reject", async (req, res) => {
 		} else {
 			cordaData.partyName = partyName.message.me;
 
-			// console.log(cordaData, "dgsdgdgd");
 
 			let respFromCord = await bankService.sendBankDataToCorda(cordaData);
 
@@ -561,6 +561,7 @@ router.post("/reject", async (req, res) => {
 	}
 });
 
+// Creating the details for monitoring transactions
 router.post("/createtrackingdetails", async (req, res) => {
 	try {
 		let { bank, typeOfTransaction, email } = req.body;
@@ -589,16 +590,16 @@ router.post("/createtrackingdetails", async (req, res) => {
 			res.send({ success: false, message: "Error in /createtokenroute" });
 		}
 	} catch (err) {
-		// console.log(err);
 		res.send({ success: false, message: "Error in /trackandtrace" });
 	}
 });
 
+// Getting the details for monitoring transactions
 router.post("/getalltrackingdetails", async (req, res) => {
 	try {
 		let port = process.env.tokenPort || 50073;
 		if (!req.body.email) {
-			console.log("Pranav ke side se error");
+			console.log("Front-end error");
 		}
 		let data = { port: port, bank: req.body.email };
 
@@ -617,6 +618,7 @@ router.post("/getalltrackingdetails", async (req, res) => {
 	}
 });
 
+// Tracking a particular details
 router.post("/trackandtrace", async (req, res) => {
 	try {
 		let data = {
@@ -625,10 +627,10 @@ router.post("/trackandtrace", async (req, res) => {
 			userEmail: req.body.userEmail,
 		};
 		if (!req.body.bankEmail || !req.body.userEmail) {
-			console.log("Pranav ke side se error");
+			console.log("Front-end error");
 		}
+
 		let totalResp = await tokenService.getAllTrackingDetails(data);
-		console.log(totalResp.message);
 		let resp = await tokenService.getTrackingDetails(totalResp.message, data);
 
 		if (resp.success == true) {
@@ -640,7 +642,6 @@ router.post("/trackandtrace", async (req, res) => {
 			});
 		}
 	} catch (err) {
-		console.log(err);
 		res.send({ success: false, message: "Error in /trackandtrace route" });
 	}
 });

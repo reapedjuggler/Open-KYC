@@ -9,6 +9,8 @@ const userModel = require("../models/userModel");
 const userService = require("../service/userServices");
 const utilService = require("../service/utilService");
 
+
+// Signup route for User in MONGOdb
 router.post("/signup", async (req, res) => {
 	try {
 		var { name, email, password } = req.body;
@@ -63,6 +65,8 @@ router.post("/signup", async (req, res) => {
 // 	}
 // });
 
+
+// Signup route for User in MONGOdb
 router.post("/login", async (req, res) => {
 	try {
 		var { email, password } = req.body;
