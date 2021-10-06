@@ -52,16 +52,14 @@ class Bank {
 	sendBankDataToCorda = async data => {
 		try {
 			url = `http://localhost:${data.bank}/create-iou`;
-			console.log("senBankToCorPartyname", data.partyName)
+			console.log("senBankToCorPartyname", data.partyName);
 			const params = new URLSearchParams();
 			params.append("email", data.email);
 			params.append("pan", data.pan);
 			params.append("aadhar", data.aadhar);
 			params.append("approval", data.approval);
 			params.append("timestamp", "date");
-			params.append("partyName",
-				data.partyName 
-			);
+			params.append("partyName", data.partyName);
 			params.append("iouValue", 17);
 			const config = {
 				headers: {
@@ -89,7 +87,11 @@ class Bank {
 	// 	}
 	// };
 
-	getApprovalLists = async (respFromCorda, respFromCordaFromUser,userEmail) => {
+	getApprovalLists = async (
+		respFromCorda,
+		respFromCordaFromUser,
+		userEmail
+	) => {
 		try {
 			let visSet = new Set();
 
@@ -158,8 +160,12 @@ class Bank {
 			let approved = [],
 				pending = [];
 			// console.log("ans", ans);
-			approved = ans.filter(ele => ele.approval == "true" && ele.email == userEmail);
-			pending = ans.filter(ele => ele.approval == "false" && ele.email == userEmail);
+			approved = ans.filter(
+				ele => ele.approval == "true" && ele.email == userEmail
+			);
+			pending = ans.filter(
+				ele => ele.approval == "false" && ele.email == userEmail
+			);
 
 			// console.log(approved, "\n\n");
 			// console.log(pending, "\n\n");
@@ -168,7 +174,6 @@ class Bank {
 				message: {
 					approved: approved,
 					pending: pending,
-					
 				},
 			};
 		} catch (err) {
