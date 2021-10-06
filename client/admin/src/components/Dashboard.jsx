@@ -121,17 +121,18 @@ export default function Dashboard() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2">
                 {
-                    (data === undefined || data.length <= 0 ) ? <div className="">No data found !</div>
+                    (data === undefined || data.length <= 0 ) ? <div className="text-center text-gray-700 text-2xl">No data found !</div>
                     :
-                    <div className="grid grid-cols-2 md:grid-cols-4">
+                    <div className="grid grid-cols-2 md:grid-cols-4 w-10/12 mx-auto">
                         {
                             data.map((val, idx) => {
+                                let date = new Date(val.state.data.timestamp);
                                 return (
-                                    <div className="rounded-xl m-4 drop-shadow-md bg-white w-10/12 mx-auto">
-                                        <p className="text-gray-600">{val.state.data.email}</p>
-                                        <p className="text-gray-600">{val.state.data.type_of_transaction}</p>
-                                        <p className="text-gray-600">{val.state.data.timestamp}</p>
-                                        <p className="text-gray-600">{val.state.data.bank}</p>
+                                    <div className="rounded-xl m-4 drop-shadow-md bg-white p-4 mx-auto">
+                                        <p className="text-gray-600 my-2">{`Email: ${val.state.data.email}`}</p>
+                                        <p className="text-gray-600 my-2">{`State: ${val.state.data.type_of_transaction}`}</p>
+                                        <p className="text-gray-600 my-2">{`Date: ${date.getDate()}/${date.getMonth()}/${date.getFullYear()}, ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`}</p>
+                                        <p className="text-gray-600 my-2">{`Bank Name: ${val.state.data.bank}`}</p>
                                     </div>
                                 );
                             })

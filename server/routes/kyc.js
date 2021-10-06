@@ -14,7 +14,7 @@ const tokenService = require("../service/tokenService");
 //Middlewares
 const middleware = require("../middlewares/checkRoles");
 
-// const fileData = require("../data.json");
+const fileData1 = require("../data3.json");
 let arr = [process.env.userPort1 || 50011, process.env.userPort2 || 50071]; // User ports array
 let email_arr = ["test@test.com", "test3@test.com"];
 router.post("/apply", async (req, res, next) => {
@@ -154,6 +154,78 @@ router.post("/approve", async (req, res) => {
 			} else {
 				let userDetails = await userModel.findOne({ email: email });
 
+				let partyName = await userService.getPartyNameFromCorda(userDetails.name)
+
+				const cordaData = {
+					aadhar: getLatestTransaction[0].aadhar,
+					pan: getLatestTransaction[0].pan,
+					email: email,
+					bank: data,
+					partyName: partyName.message.me,
+					approval: "true",
+				};
+
+				let respFromCorda = await bankService.sendBankDataToCorda(cordaData);
+				console.log("respformmgagcor",respFromCorda)
+				// Service did not approved the user
+				if (respFromCorda.success == false) {
+					res.send({
+						success: false,
+						message:
+							"Error in api of getting latest transaction in /kyc/approve in service sendBankDataToCorda",
+					});
+				} else {
+					//approve call approveUsertoCorda etc
+
+					res.send({ success: true, message: "User approved by Bank" });
+				}
+			}
+		}
+	} catch (err) {
+		res.send({ success: false, message: err.message });
+	}
+});
+
+// ----------------------------------------check-----------------------------
+
+router.post("/consent", async (req, res) => {
+	// making approval attribute as "request" for consent form
+	try {
+		let data =
+			req.body.bank == "A"
+				? process.env.bankFirst || 50006
+				: process.env.bankSec || 50033;
+
+		let email = req.body.email;
+
+		let resp = await bankService.getUserDatafromCorda(data);
+		resp = resp.message;
+		// let resp = fileData;
+		let temp = [];
+
+		for (let i = 0; i < resp.length; i++) {
+			temp.push(resp[i].state.data);
+		}
+		// console.log("sfhsfhsfhshsh\n", temp);
+		let getLatestTransaction = await userService.getLatestTransaction(
+			temp,
+			email
+		);
+
+		if (getLatestTransaction.success == false) {
+			res.send({
+				success: false,
+				message: "Error in /kyc/approve and getLatestTransaction Service",
+			});
+		} else {
+			// console.log(getLatestTransaction, "  sad\n\n");
+			getLatestTransaction = getLatestTransaction.message;
+
+			if (getLatestTransaction == []) {
+				res.send({ success: false, message: "not applied for kyc" });
+			} else {
+				let userDetails = await userModel.findOne({ email: email });
+
 				let partyName =
 					userDetails.name == "A"
 						? process.env.userPort1 || 50011
@@ -165,7 +237,7 @@ router.post("/approve", async (req, res) => {
 					email: email,
 					bank: data,
 					partyName: partyName,
-					approval: "true",
+					approval: "request",
 				};
 
 				let respFromCorda = await bankService.sendBankDataToCorda(cordaData);
@@ -508,10 +580,10 @@ router.post("/getalltrackingdetails", async (req, res) => {
 
 		let data = { port: port, bank: req.body.email };
 
-		let respForTracking = await tokenService.getAllTrackingDetails(data);
-
+		// let respForTracking = await tokenService.getAllTrackingDetails(data);
+		let respForTracking = {success:true, message:fileData1}
 		if (respForTracking.success == true) {
-			res.send({ sucess: true, message: respForTracking.message });
+			res.send({ success: true, message: respForTracking });
 		} else {
 			return {
 				success: false,
@@ -528,12 +600,12 @@ router.post("/trackandtrace", async (req, res) => {
 		let data = {
 			port: process.env.tokenPort || 50073,
 			bankEmail: req.body.bankEmail,
-			user: req.body.userEmail,
+			userEmail: req.body.userEmail,
 		};
 
 		let totalResp = await tokenService.getAllTrackingDetails(data);
-
-		let resp = await tokenService.getTrackingDetails(totalResp, data);
+		console.log(totalResp.message)
+		let resp = await tokenService.getTrackingDetails(totalResp.message, data);
 
 		if (resp.success == true) {
 			res.send({ success: true, message: resp.message });
@@ -544,6 +616,7 @@ router.post("/trackandtrace", async (req, res) => {
 			});
 		}
 	} catch (err) {
+		console.log(err)
 		res.send({ success: false, message: "Error in /trackandtrace route" });
 	}
 });
