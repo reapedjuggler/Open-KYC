@@ -125,12 +125,12 @@ export default function Dashboard() {
                                                         {val.approval === "true" && <h3 className="text-green-600 pb-6 text-md md:text-lg lg:text-xl text-center">{"KYC Completed!"}</h3>}
                                                         {val.approval === "reject" && (
                                                             <div className="my-4 flex justify-center">
-                                                                <button onClick={() => history.push('/kyc')} className="ui primary button">Apply for KYC again!</button>}
+                                                                <button onClick={() => history.push('/kyc')} className="ui primary button">Apply for KYC again!</button>
                                                             </div>)
                                                         }
                                                         {val.approval === "request" && (
                                                             <div className="my-4 flex justify-center">
-                                                                <button onClick={() => history.push('/request')} className="ui primary button">Give consent for KYC</button>}
+                                                                <button onClick={() => history.push('/request')} className="ui primary button">Give consent for KYC</button>
                                                             </div>
                                                         )}
                                                     </div>
