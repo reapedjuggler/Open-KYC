@@ -50,8 +50,13 @@ export default function Detail() {
       }).then(response => response.json())
       .then(res => {
           if(res.success) {
-            setdata(res.message[0]);
             setisloading(false);
+              if(res.message.length <= 0){
+                setiserror(true);
+              }
+            else{
+                setdata(res.message[0]);
+            }
           }
           else{
             setisloading(false);
