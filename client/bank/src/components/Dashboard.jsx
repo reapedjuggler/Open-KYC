@@ -90,7 +90,7 @@ export default function Dashboard({approved}) {
 
     return (
         <div>
-            <h1 className="text-gray-800 text-center p-4">{`Welcome to Bank ${bankname} Dashboard`}</h1> 
+            <h1 className="text-gray-800 text-center p-4">{`Welcome to ${bankname==="A"?"HDFC Bank":"Bank of America"} Dashboard`}</h1> 
             <h1 className="text-gray-800 text-center p-4">{approved?'Approved Users':'Pending Approvals'}</h1> 
             <div>
                 {

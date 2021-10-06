@@ -114,7 +114,7 @@ export default function Dashboard() {
                                     return (
                                         <div className="rounded-xl m-4 drop-shadow-md bg-white w-10/12 mx-auto">
                                             <div >
-                                                <h1 className="text-gray-800 text-center text-2xl md:text-3xl p-4">{`${val.bank.split(",")[0]}, ${val.bank.split(",")[1].split("=")[1]}, ${val.bank.split(",")[2].split("=")[1]}`}</h1>
+                                                <h1 className="text-gray-800 text-center text-2xl md:text-3xl p-4">{`${val.bank.split(",")[0] === "BankA"?"HDFC":"Bank of America"}, ${val.bank.split(",")[1].split("=")[1]}, ${val.bank.split(",")[2].split("=")[1]}`}</h1>
                                                 <div>
                                                     {val.approval === "false" && <div className="h-1/2 w-1/2 md:h-1/4 md:w-1/4 mx-auto"><Inprogress /></div>}
                                                     {val.approval === "true" && <div className="h-1/2 w-1/2 md:h-1/4 md:w-1/4 mx-auto"><Completed /></div>}
