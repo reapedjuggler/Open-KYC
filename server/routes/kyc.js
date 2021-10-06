@@ -13,9 +13,8 @@ const tokenService = require("../service/tokenService");
 const r3Corda = require("../r3corda");
 //Middlewares
 const middleware = require("../middlewares/checkRoles");
-
 //Only for testing puprose ///////////////********* Make sure to remove this *////////////////////////////
-// const fileData1 = require("../data3.json");
+const fileData1 = require("../data3.json");
 
 router.post("/apply", async (req, res, next) => {
 	try {

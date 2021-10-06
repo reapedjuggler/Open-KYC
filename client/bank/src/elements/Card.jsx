@@ -45,7 +45,7 @@ export default function Card({data, bank}) {
                 (data !== undefined && data.approval === "false" && data.approved_by.length > 0) &&
                 <div className="absolute bottom-3 right-3 lg:bottom-5 lg:right-8 flex justify-between text-sm text-green-500 font-bold items-center">
                     <div><i className="check circle icon"></i></div>
-                    <p>{`${"Approved By " + data.approved_by[data.approved_by.length - 1].lender.split(',')[0].split('=')[1]} 
+                    <p>{`${"Approved By " + ((data.approved_by[data.approved_by.length - 1].lender.split(',')[0].split('=')[1])==="BankA"?"HDFC":"B.O.A.")} 
                        ${data.approved_by.length > 1 ? "and " : ""} ${data.approved_by.length > 1 ? data.approved_by.length-1 + "+ banks": ""}`}
                     </p>
                 </div>
