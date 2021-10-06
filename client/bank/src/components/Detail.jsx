@@ -39,19 +39,25 @@ export default function Detail() {
     }, [reject])
 
     useEffect(() => {
-        if(!email) return;
+        if(!email || !bank ) return;
         setisloading(true);
         fetch(`${url}/kyc/getdetails`,{
           method:'POST',
           headers:{'Content-Type':'application/json'},
           body: JSON.stringify({
             email: email,
+            bank: bank
           })
       }).then(response => response.json())
       .then(res => {
           if(res.success) {
-            setdata(res.message[0]);
             setisloading(false);
+              if(res.message.length <= 0){
+                setiserror(true);
+              }
+            else{
+                setdata(res.message[0]);
+            }
           }
           else{
             setisloading(false);

@@ -90,7 +90,7 @@ export default function Dashboard({approved,corp}) {
 
     return (
         <div>
-            <h1 className="text-gray-800 text-center p-4">{approved?'Approved Users':'Pending Approvals'}</h1> 
+            <h1 className="text-gray-800 text-center p-4">{corp?"Request by Users":approved?'Approved Users':'Pending Approvals'}</h1> 
             <div>
                 {
                     (data === undefined || data.length <= 0) ? <h2 className="text-gray-600 text-center">No data available</h2>
