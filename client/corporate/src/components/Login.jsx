@@ -60,7 +60,7 @@ export default function Loginform({setloggedin}) {
                         } = props;
                         return (
                             <Form>
-                                <h1 className="gray-600 text-3xl my-6 text-center font-bold">Corporate Login</h1>
+                                <h1 className="gray-600 text-3xl my-6 text-center font-bold">Auditor Login</h1>
                                 <Form.Input name="uuid" onChange={handleChange} onBlur={handleBlur} value={values.uuid} fluid label='Bank UUID' placeholder='Bank UUID' />
                                 <FormError name="uuid" />
                                 <div className="relative">
