@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 const axios = require("axios");
+const r3Corda = require("../r3corda");
 
 //Models
 const bankModel = require("../models/bankModel");
@@ -39,7 +40,7 @@ class Bank {
 
 	getPartyNameFromCorda = async data => {
 		try {
-			let val = data == "A" ? 50006 : 50033;
+			let val = data == r3Corda.bankFromBlockchain ? 50006 : 50033;
 			let url = `http://localhost:${val}/me`;
 
 			const resp = await axios({ method: "GET", url: url });
@@ -159,7 +160,7 @@ class Bank {
 
 			let approved = [],
 				pending = [];
-			// console.log("ans", ans);
+
 			approved = ans.filter(
 				ele => ele.approval == "true" && ele.email == userEmail
 			);
@@ -167,8 +168,6 @@ class Bank {
 				ele => ele.approval == "false" && ele.email == userEmail
 			);
 
-			// console.log(approved, "\n\n");
-			// console.log(pending, "\n\n");
 			return {
 				success: true,
 				message: {
@@ -177,7 +176,6 @@ class Bank {
 				},
 			};
 		} catch (err) {
-			// console.log(err);
 			return { success: false, message: err.message };
 		}
 	};

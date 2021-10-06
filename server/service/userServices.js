@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 const customError = require("../utils/customError");
+const r3Corda = require("../r3corda");
 
 // Models
 const userModel = require("../models/userModel");
@@ -27,7 +28,7 @@ class User {
 	};
 	getPartyNameFromCorda = async data => {
 		try {
-			let val = data == "A" ? 50011 : 50071;
+			let val = data == r3Corda.bankFromBlockchain ? 50011 : 50071;
 			let url = `http://localhost:${val}/me`;
 
 			const resp = await axios({ method: "GET", url: url });
