@@ -5,6 +5,14 @@
 [![Coverage Status](https://coveralls.io/repos/github/fastify/fastify/badge.svg?branch=main)](https://coveralls.io/github/fastify/fastify?branch=main)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://standardjs.com/)
 
+## Contributors of Open-Kyc
+Open-Kyc comprises of two parts a nodejs and a r3Corda app, **OPEN-Kyc** is solely developed by [Vibhav Tomar](https://github.com/reapedjuggler) [Purnashish Hazra](https://github.com/LobRockyl) [Pranav Agarwal](https://github.com/pranav2012)
+
+## Some Information on 15 Contributors
+In addition our project Open-Kyc consist of two parts in which one of the component relies upon r3Corda an **Open Source app for private blockchain** while submitting this application we were asked to push the source code to the repository so we had to push r3Corda's code and due to the this fact their are some **contributors other than us (who made r3Corda app**) being listed in our repository so please consider this fact that **Open-Kyc app is strictly developed** **by us** (**Contributors of Open-Kyc**) but due to the above reason there are some other r3Corda's contributors who are being listed, nevertheless this can be also verified by checking the Open-Kyc's commits array. 
+   
+<br> </br>   
+
 * **Title:**
    Open-KYC provides a solution for redudant kyc requests, all you need to do is sign-up once on the platform and get verified by any one of the Banks and 
    then save yourself from filling those troublesome forms again, simply apply for KYC with click of a button.Open-Kyc is an Open-Source decentralized application running on r3Corda
