@@ -10,6 +10,7 @@ import Register from "./Register";
 import Forget from "./Forget";
 import Reset from "./Reset";
 import KYC from "./KYC";
+import Video from "./Video";
 import UserConsent from "./Userconsent";
 import CorporateConsent from "./Corporateconsent";
 
@@ -28,6 +29,10 @@ export default function Routes({ loggedin, setloggedin }) {
 					<Route exact path="/register">
 						{loggedin && <Redirect to="/dashboard" />}
 						<Register setloggedin={setloggedin} />
+					</Route>
+					<Route exact path="/video">
+						{loggedin && <Redirect to="/dashboard" />}
+						<Video />
 					</Route>
 					<Route exact path="/forget">
 						{loggedin && <Redirect to="/dashboard" />}

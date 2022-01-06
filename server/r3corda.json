@@ -1,0 +1,156 @@
+[ {
+  "state" : {
+    "data" : {
+      "@class" : "net.corda.samples.example.states.IOUState",
+      "value" : 17,
+      "lender" : "O=UserA, L=London, C=GB",
+      "borrower" : "O=BankA, L=New York, C=US",
+      "linearId" : {
+        "externalId" : null,
+        "id" : "36c0556d-f8f5-458f-899e-4d6bee5da58b"
+      },
+      "aadhar" : "2232323232323",
+      "pan" : "2323232323",
+      "email" : "alice@gmail.com",
+      "approval" : "false",
+      "timestamp" : "2021-10-08T00:45:06.909",
+      "type_of_transaction" : "request",
+      "bank" : "A"
+    },
+    "contract" : "net.corda.samples.example.contracts.IOUContract",
+    "notary" : "O=Notary, L=London, C=GB",
+    "encumbrance" : null,
+    "constraint" : {
+      "@class" : "net.corda.core.contracts.SignatureAttachmentConstraint",
+      "key" : "aSq9DsNNvGhYxYyqA9wd2eduEAZ5AXWgJTbTEw3G5d2maAq8vtLE4kZHgCs5jcB1N31cx1hpsLeqG2ngSysVHqcXhbNts6SkRWDaV7xNcr6MtcbufGUchxredBb6"
+    }
+  },
+  "ref" : {
+    "txhash" : "6504FF9827A47DAAFB4C44B01092B37285B65F72E3B583E2CB382E92FD1BDF5D",
+    "index" : 0
+  }
+}, {
+  "state" : {
+    "data" : {
+      "@class" : "net.corda.samples.example.states.IOUState",
+      "value" : 17,
+      "lender" : "O=BankA, L=New York, C=US",
+      "borrower" : "O=UserA, L=London, C=GB",
+      "linearId" : {
+        "externalId" : null,
+        "id" : "7a35bf87-3120-4b36-9085-209886eec6be"
+      },
+      "aadhar" : "2232323232323",
+      "pan" : "2323232323",
+      "email" : "alice@gmail.com",
+      "approval" : "true",
+      "timestamp" : "2021-10-08T00:45:44.510",
+      "type_of_transaction" : "approved",
+      "bank" : "A"
+    },
+    "contract" : "net.corda.samples.example.contracts.IOUContract",
+    "notary" : "O=Notary, L=London, C=GB",
+    "encumbrance" : null,
+    "constraint" : {
+      "@class" : "net.corda.core.contracts.SignatureAttachmentConstraint",
+      "key" : "aSq9DsNNvGhYxYyqA9wd2eduEAZ5AXWgJTbTEw3G5d2maAq8vtLE4kZHgCs5jcB1N31cx1hpsLeqG2ngSysVHqcXhbNts6SkRWDaV7xNcr6MtcbufGUchxredBb6"
+    }
+  },
+  "ref" : {
+    "txhash" : "5124E5E0C8FE362604BF5D12C4593716584E88852A5B8A7B2BA0FD7B721C759C",
+    "index" : 0
+  }
+}, {
+  "state" : {
+    "data" : {
+      "@class" : "net.corda.samples.example.states.IOUState",
+      "value" : 17,
+      "lender" : "O=UserB, L=Bangalore, C=IN",
+      "borrower" : "O=BankA, L=New York, C=US",
+      "linearId" : {
+        "externalId" : null,
+        "id" : "49203b68-ef8d-48ba-9523-f83817fe72c9"
+      },
+      "aadhar" : "2424242442",
+      "pan" : "2424242424",
+      "email" : "bob@gmail.com",
+      "approval" : "false",
+      "timestamp" : "2021-10-08T00:49:15.803",
+      "type_of_transaction" : "request",
+      "bank" : "A"
+    },
+    "contract" : "net.corda.samples.example.contracts.IOUContract",
+    "notary" : "O=Notary, L=London, C=GB",
+    "encumbrance" : null,
+    "constraint" : {
+      "@class" : "net.corda.core.contracts.SignatureAttachmentConstraint",
+      "key" : "aSq9DsNNvGhYxYyqA9wd2eduEAZ5AXWgJTbTEw3G5d2maAq8vtLE4kZHgCs5jcB1N31cx1hpsLeqG2ngSysVHqcXhbNts6SkRWDaV7xNcr6MtcbufGUchxredBb6"
+    }
+  },
+  "ref" : {
+    "txhash" : "2FF840691173017A04419654D3D1203127A35DFF0665E139BB1C3DA7C7ADBD77",
+    "index" : 0
+  }
+}, {
+  "state" : {
+    "data" : {
+      "@class" : "net.corda.samples.example.states.IOUState",
+      "value" : 17,
+      "lender" : "O=BankA, L=New York, C=US",
+      "borrower" : "O=UserB, L=Bangalore, C=IN",
+      "linearId" : {
+        "externalId" : null,
+        "id" : "f0fb59a6-73a7-418d-a9c7-43805ed080e8"
+      },
+      "aadhar" : "2424242442",
+      "pan" : "2424242424",
+      "email" : "bob@gmail.com",
+      "approval" : "request",
+      "timestamp" : "2021-10-08T00:49:42.773",
+      "type_of_transaction" : "approved",
+      "bank" : "A"
+    },
+    "contract" : "net.corda.samples.example.contracts.IOUContract",
+    "notary" : "O=Notary, L=London, C=GB",
+    "encumbrance" : null,
+    "constraint" : {
+      "@class" : "net.corda.core.contracts.SignatureAttachmentConstraint",
+      "key" : "aSq9DsNNvGhYxYyqA9wd2eduEAZ5AXWgJTbTEw3G5d2maAq8vtLE4kZHgCs5jcB1N31cx1hpsLeqG2ngSysVHqcXhbNts6SkRWDaV7xNcr6MtcbufGUchxredBb6"
+    }
+  },
+  "ref" : {
+    "txhash" : "CF52ECAC440338EA102B209EE4D21E6828A2824A2F0259200044D0558A8E31AE",
+    "index" : 0
+  }
+}, {
+  "state" : {
+    "data" : {
+      "@class" : "net.corda.samples.example.states.IOUState",
+      "value" : 17,
+      "lender" : "O=UserB, L=Bangalore, C=IN",
+      "borrower" : "O=BankA, L=New York, C=US",
+      "linearId" : {
+        "externalId" : null,
+        "id" : "c2740eed-feb1-4b50-97ec-e28bfce0d212"
+      },
+      "aadhar" : "2424242442",
+      "pan" : "2424242424",
+      "email" : "bob@gmail.com",
+      "approval" : "false",
+      "timestamp" : "2021-10-08T00:50:10.629",
+      "type_of_transaction" : "request",
+      "bank" : "A"
+    },
+    "contract" : "net.corda.samples.example.contracts.IOUContract",
+    "notary" : "O=Notary, L=London, C=GB",
+    "encumbrance" : null,
+    "constraint" : {
+      "@class" : "net.corda.core.contracts.SignatureAttachmentConstraint",
+      "key" : "aSq9DsNNvGhYxYyqA9wd2eduEAZ5AXWgJTbTEw3G5d2maAq8vtLE4kZHgCs5jcB1N31cx1hpsLeqG2ngSysVHqcXhbNts6SkRWDaV7xNcr6MtcbufGUchxredBb6"
+    }
+  },
+  "ref" : {
+    "txhash" : "A8718A0311C1D78324FC1E6322D4727907E33D47505CAD6FB69BF2E3C1F68231",
+    "index" : 0
+  }
+} ]

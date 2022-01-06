@@ -282,7 +282,7 @@ router.post("/getdetails", async (req, res) => {
 	try {
 		let email = req.body.email;
 		let data =
-			req.body.bank == r3Corda.bankFromBlockchain
+			req.body.bank === r3Corda.bankFromBlockchain
 				? process.env.bankFirst || 50006
 				: process.env.bankSec || 50033;
 
@@ -292,7 +292,7 @@ router.post("/getdetails", async (req, res) => {
 
 		let resp = await bankService.getUserDatafromCorda(data);
 
-		if (resp.message.length == 0) {
+		if (resp.message.length === 0) {
 			res.send({
 				success: false,
 				message: [],
