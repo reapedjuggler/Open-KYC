@@ -3,7 +3,7 @@ import { url } from "../util/data";
 import Loading from "../shared/Loading";
 import { useHistory } from "react-router-dom";
 
-export default function Detail() {
+export default function Detail({video_status}) {
 	const history = useHistory();
 
 	const [email] = useState(localStorage.getItem("user_email") || "");
@@ -157,8 +157,15 @@ export default function Detail() {
 						<button
 							onClick={() => setapprove(true)}
 							className="ui primary button"
+							disabled={video_status}
 						>
 							Approve
+						</button>
+						<button
+							onClick={() => history.push("/video")}
+							className="ui primary button"
+						>
+							Video
 						</button>
 						<button onClick={() => setreject(true)} className="ui button">
 							Reject

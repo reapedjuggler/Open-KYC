@@ -1,6 +1,10 @@
-import React from 'react'
+import React from 'react';
 
-export default function Video() {
+export default function Video({setvideo_status}) {
+    React.useEffect(() => {
+       setvideo_status(true);
+    }, [setvideo_status]);
+
     return (
         <div className="">
             <iframe

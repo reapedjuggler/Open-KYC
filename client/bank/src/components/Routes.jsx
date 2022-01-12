@@ -10,9 +10,10 @@ import Register from "./Register";
 import Forget from "./Forget";
 import Reset from "./Reset";
 import Details from "./Detail";
+import Video from "./Video";
 import Header from "../components/Header";
 
-export default function Routes({ loggedin, setloggedin }) {
+export default function Routes({ loggedin, setloggedin, video_status, setvideo_status }) {
 	return (
 		<div>
 			<Router>
@@ -24,6 +25,10 @@ export default function Routes({ loggedin, setloggedin }) {
 					<Route exact path="/login">
 						{loggedin && <Redirect to="/dashboard" />}
 						<Login setloggedin={setloggedin} />
+					</Route>
+					<Route exact path="/video">
+						{loggedin && <Redirect to="/dashboard" />}
+						<Video setvideo_status={setvideo_status} />
 					</Route>
 					<Route exact path="/register">
 						{loggedin && <Redirect to="/dashboard" />}
@@ -47,7 +52,7 @@ export default function Routes({ loggedin, setloggedin }) {
 					</Route>
 					<Route exact path="/user/:userid">
 						{!loggedin && <Redirect to="/" />}
-						<Details />
+						<Details video_status={video_status} />
 					</Route>
 					<Route>
 						<Redirect to="/" />
