@@ -3,7 +3,7 @@ import { url } from "../util/data";
 import Loading from "../shared/Loading";
 import { useHistory } from "react-router-dom";
 
-export default function Detail({video_status}) {
+export default function Detail({video_status=false}) {
 	const history = useHistory();
 
 	const [email] = useState(localStorage.getItem("user_email") || "");
@@ -70,7 +70,7 @@ export default function Detail({video_status}) {
 				setisloading(false);
 				setiserror(true);
 			});
-	}, [email]);
+	}, [email,bank]);
 
 	useEffect(() => {
 		if (!approve || !bank) return;

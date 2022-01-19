@@ -67,7 +67,7 @@ export default function Card({data, bank}) {
                 {data.bio === undefined ?<BiCheckCircle className="mx-auto w-6 h-6" color={"green"}/>:<AiOutlineIssuesClose className="mx-auto w-6 h-6" color={"red"}/>}
             </div>
             <div className="flex flex-col lg:flex-row">
-                {
+                {/* {
                     data.approval === "false" &&
                     <div className="mx-auto my-4 mr-4 lg:my-0">
                         <button onClick={() => {setkycapprove(true);}}class="ui active blue button">
@@ -75,7 +75,7 @@ export default function Card({data, bank}) {
                             Approve
                         </button>
                     </div>
-                }
+                } */}
                 {
                 data.approval === "false" &&
                 <div className="mx-auto my-4 lg:my-0">
