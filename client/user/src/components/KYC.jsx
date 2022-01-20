@@ -50,8 +50,7 @@ export default function RegisterformKYC() {
                         }).then(response => response.json())
                         .then(data => {
                             if(data.success){
-                                console.log("req ok")
-                                history.push('/video');
+                                history.push('/dashboard');
                             }
                             else{
                                 setiserror(true)

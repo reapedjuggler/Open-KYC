@@ -169,11 +169,20 @@ export default function Dashboard() {
 											)}
 											<div className="mt-12 flex justify-center">
 												{val.approval === "false" && (
+													<>
 													<h3 className="text-gray-800 pb-6 text-md md:text-lg lg:text-xl text-center">
 														{
-															"Your KYC details is being Verified. (Please wait for 2-3 buisness days)"
+															"Your KYC details is being Verified. (Please complete your video K.Y.C)"
 														}
 													</h3>
+													<button
+													className="mt4 fw6 f6 bn dim br1 ph3 pointer pv2 dib white"
+													style={{ background: "#6EB6FF" }}
+													onClick={() => history.push("/video")}
+												>
+													Start Video K.Y.C
+												</button>
+												</>
 												)}
 												{val.approval === "true" && (
 													<h3 className="text-green-600 pb-6 text-md md:text-lg lg:text-xl text-center">
